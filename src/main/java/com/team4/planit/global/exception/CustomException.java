@@ -8,10 +8,10 @@ import java.util.function.Supplier;
 @Getter
 @AllArgsConstructor
 public class CustomException extends RuntimeException implements Supplier<ErrorCode> {
-   private final ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
-   @Override
-   public ErrorCode get() {
-      return errorCode;
-   }
+    @Override
+    public ErrorCode get() {
+        return errorCode;
+    }
 }

@@ -1,8 +1,6 @@
 package com.team4.planit.member;
 
 
-import com.team4.planit.global.exception.CustomException;
-import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.jwt.RefreshToken;
 import com.team4.planit.global.jwt.RefreshTokenRepository;
 import com.team4.planit.global.jwt.TokenDto;
@@ -18,27 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final TokenProvider tokenProvider;
-
     private final RefreshTokenRepository refreshTokenRepository;
     private final Check check;
+
     @Transactional
-    public ResponseEntity<?>creatMember(MemberRequestDto requestDto) {
-        if (null != isPresentMember(requestDto.getEmail())) {
-            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
-        }
+    public ResponseEntity<?> creatMember(MemberRequestDto requestDto) {
+        check.checkEmail(requestDto.getEmail());
         Member member;
         member = Member.builder()
                 .email(requestDto.getEmail())
@@ -46,70 +37,36 @@ public class MemberService {
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .build();
         memberRepository.save(member);
-        return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
-        Member member = isPresentMember(requestDto.getEmail());
-        if (member == null) {
-            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);}
-        if (!member.validatePassword(passwordEncoder, requestDto.getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
-        }
-        String nickname =member.getNickname();
+        Member member = check.isPresentMember(requestDto.getEmail());
+        check.checkMember(member);
+        check.checkPassword(passwordEncoder, requestDto.getPassword(),member);
+        String nickname = member.getNickname();
         String photoUrl = member.getProfilePhoto();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(nickname,photoUrl);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(nickname, photoUrl);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
-        tokenToHeaders(tokenDto, response);
-        return new ResponseEntity<>(Message.success(loginResponseDto),HttpStatus.OK);
+        check.tokenToHeaders(tokenDto, response);
+        return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> checkEmail(String email) {
+        check.checkEmail(email);
+        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
+    }
 
-    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-       tokenProvider.validateToken(request.getHeader("Refresh-Token"));
-        Member requestingMember = check.validateMember(request);
-       long accessTokenExpire = Long.parseLong(request.getHeader("Access-Token-Expire-Time"));
-        long now = (new Date().getTime());
-        if (now>accessTokenExpire){
-            tokenProvider.deleteRefreshToken(requestingMember);
-            throw new CustomException(ErrorCode.INVALID_TOKEN);}
-
+    public ResponseEntity<?> refreshToken(MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
+        tokenProvider.validateToken(request.getHeader("Refresh-Token"));
+        Member requestingMember = memberRepository.findByEmail(requestDto.getEmail()).orElse(null);
+        check.checkRequestingMember(requestingMember);
+        long accessTokenExpiration = Long.parseLong(request.getHeader("Access-Token-Expire-Time"));
+        check.checkAccessTokenExpiration(accessTokenExpiration, requestingMember);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(requestingMember).orElse(null);
-        if (refreshTokenConfirm == null) {
-            throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
-        }
-        if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh-Token"))) {
-            TokenDto tokenDto = tokenProvider.generateAccessToken(requestingMember);
-            accessTokenToHeaders(tokenDto, response);
-            return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
-        } else {
-            tokenProvider.deleteRefreshToken(requestingMember);
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-    }
-    public void accessTokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
-        response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
-    }
-
-    @Transactional(readOnly = true)
-    public Member isPresentMember(String email) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElse(null);
-    }
-
-    @Transactional(readOnly = true)
-    public ResponseEntity<?> emailCheck(String email){
-        if (null != isPresentMember(email)) {
-            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);}
-        return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
-    }
-
-    public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
-        response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
-        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
+        return check.reissueAccessToken(request, response, requestingMember, refreshTokenConfirm);
     }
 
 
