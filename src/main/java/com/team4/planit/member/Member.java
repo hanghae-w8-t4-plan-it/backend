@@ -2,7 +2,6 @@ package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team4.planit.global.shared.Timestamped;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,6 @@ import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class Member extends Timestamped {
 
@@ -43,25 +41,24 @@ public class Member extends Timestamped {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
-        this.profilePhoto ="https://springbucketss.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+        this.profilePhoto = "https://springbucketss.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
     }
 
     @Builder
-    public Member(String email, String password,String profilePhoto, String nickname, Long kakaoId) {
+    public Member(String email, String password, String profilePhoto, String nickname, Long kakaoId) {
         this.id = getId();
         this.email = email;
         this.password = password;
-        this.profilePhoto =profilePhoto;
+        this.profilePhoto = profilePhoto;
         this.nickname = nickname;
         this.kakaoId = kakaoId;
     }
 
 
-
-
-    public boolean validatePassword(PasswordEncoder passwordEncoder, String password){
-        return passwordEncoder.matches(password,this.password);
+    public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
     }
+
 
     @Override
     public boolean equals(Object o) {
