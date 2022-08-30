@@ -1,6 +1,5 @@
 package com.team4.planit.category;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ public class CategoryRequestDto {
     private String categoryColor;
     private Boolean isPublic;
 
-    @Builder
     public CategoryRequestDto(String categoryName, String categoryColor, Boolean isPublic) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
