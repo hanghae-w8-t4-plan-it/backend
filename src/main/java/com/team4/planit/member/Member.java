@@ -1,6 +1,7 @@
 package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team4.planit.category.Category;
 import com.team4.planit.global.shared.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,7 +27,7 @@ public class Member extends Timestamped {
     @Column(unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
     @JsonIgnore
@@ -36,6 +38,9 @@ public class Member extends Timestamped {
 
     @Column(unique = true)
     private Long kakaoId;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Category> categoryList;
 
     @Builder
     public Member(String email, String nickname, String password) {

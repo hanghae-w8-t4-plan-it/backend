@@ -1,6 +1,7 @@
 package com.team4.planit.category;
 
 import com.team4.planit.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -18,25 +19,24 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column
+    @Column(nullable = false)
     private String categoryName;
 
-    @Column
+    @Column(nullable = false)
     private String categoryColor;
 
-    @Column
+    @Column(nullable = false)
     private Boolean isPublic;
 
-    public Category(Member member, String categoryName, String categoryColor, Boolean isPublic) {
+    @Column(nullable = false)
+    private Boolean isEnd;
+
+    @Builder
+    public Category(Member member, String categoryName, String categoryColor, Boolean isPublic, Boolean isEnd) {
         this.member = member;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.isPublic = isPublic;
-    }
-
-    public Category(String categoryName, String categoryColor, Boolean isPublic) {
-        this.categoryName = categoryName;
-        this.categoryColor = categoryColor;
-        this.isPublic = isPublic;
+        this.isEnd = isEnd;
     }
 }
