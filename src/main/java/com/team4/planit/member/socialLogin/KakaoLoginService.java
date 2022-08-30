@@ -39,6 +39,7 @@ public class KakaoLoginService {
 
     @Value("${myKaKaoRestAplKey}")
     private String myKaKaoRestAplKey;
+
     public TokenDto kakaoLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
@@ -61,7 +62,7 @@ public class KakaoLoginService {
 
             String profilePhoto = kakaoMemberInfo.getProfilePhoto();
             String nickname = kakaoMemberInfo.getNickname();
-            kakaoMember = new Member(email,encodedPassword,profilePhoto, nickname, kakaoMember.getKakaoId());
+            kakaoMember = new Member(email, encodedPassword, profilePhoto, nickname, kakaoMember.getKakaoId());
             memberRepository.save(kakaoMember);
         }
 
@@ -70,7 +71,7 @@ public class KakaoLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Member member = check.isPresentLoginId(kakaoMember.getEmail());
+        Member member = check.isPresentEmail(kakaoMember.getEmail());
         return tokenProvider.generateTokenDto(member);
 
     }
@@ -125,13 +126,13 @@ public class KakaoLoginService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
+        String nickname = jsonNode.get("kakao_account").get("profile")
                 .get("nickname").asText();
-        String name = jsonNode.get("properties")
+        String name = jsonNode.get("kakao_account")
                 .get("name").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
-        String profilePhoto = jsonNode.get("properties").get("profile_image").asText();
+        String profilePhoto = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
         return new KakaoMemberInfoDto(email, profilePhoto, name, nickname);
     }

@@ -19,23 +19,23 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> signup(@RequestBody MemberRequestDto requestDto){
+    public ResponseEntity<?> signup(@RequestBody MemberRequestDto requestDto) {
         return memberService.creatMember(requestDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?>login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response){
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
         return memberService.login(requestDto, response);
     }
 
     @PostMapping("/register/check-email")
-    public ResponseEntity<?> emailCheck(@RequestBody String email){
-        return memberService.emailCheck(email);
+    public ResponseEntity<?> checkEmail(@RequestBody MemberRequestDto requestDto) {
+        return memberService.checkEmail(requestDto.getEmail());
     }
 
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshTokenCheck( HttpServletRequest request, HttpServletResponse response){
-        return memberService.refreshToken(request, response);
+    public ResponseEntity<?> refreshTokenCheck(@RequestBody MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
+        return memberService.refreshToken(requestDto, request, response);
     }
 }
