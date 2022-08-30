@@ -39,4 +39,11 @@ public class Category {
         this.isPublic = isPublic;
         this.isEnd = isEnd;
     }
+
+    public void update(CategoryRequestDto requestDto) {
+        if(requestDto.getCategoryName()!=null) this.categoryName = requestDto.getCategoryName();
+        if(requestDto.getCategoryColor()!=null) this.categoryColor = requestDto.getCategoryColor();
+        if(requestDto.getIsPublic()!=null) this.isPublic = requestDto.getIsPublic();
+        if(requestDto.getIsEnd()!=null) this.isEnd = requestDto.getIsEnd();
+    }
 }

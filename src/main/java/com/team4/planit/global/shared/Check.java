@@ -1,5 +1,7 @@
 package com.team4.planit.global.shared;
 
+import com.team4.planit.category.Category;
+import com.team4.planit.category.CategoryRepository;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.jwt.RefreshToken;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,25 +25,29 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class Check {
+    private final CategoryRepository categoryRepository;
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
 
     public void checkMember(Member member) {
         if (member == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
-
+    public void categoryCheck(Category category) {
+        if (null == category) throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
+    }
+    public void categoryAuthorCheck(Member member, Category category) {
+        if (!category.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+    }
     public void checkEmail(String email) {
         if (null != isPresentMember(email)) {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
     }
-
     public void checkPassword(PasswordEncoder passwordEncoder, String password,Member member) {
         if (!member.validatePassword(passwordEncoder, password)) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }
     }
-
     public void checkAccessTokenExpiration(long accessTokenExpiration, Member requestingMember) {
         long now = (new Date().getTime());
         if (now < accessTokenExpiration) {
@@ -48,10 +55,15 @@ public class Check {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
     }
-
     public void accessTokenCheck(HttpServletRequest request, Member member) {
         if (null == request.getHeader("Authorization")) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         if (null == member) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+    }
+
+    @Transactional(readOnly = true)
+    public Category isPresentCategory(Long id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        return optionalCategory.orElse(null);
     }
 
 
