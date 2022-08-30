@@ -51,7 +51,7 @@ public class MemberService {
 
     @Transactional
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
-        Member member = isPresentMember(requestDto.getLoginId());
+        Member member = isPresentMember(requestDto.getEmail());
         if (member == null) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);}
         if (!member.validatePassword(passwordEncoder, requestDto.getPassword())) {
