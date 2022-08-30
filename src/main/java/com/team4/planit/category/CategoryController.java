@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -21,5 +21,15 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> getCategory(HttpServletRequest request) {
         return categoryService.getCategory(request);
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<?> updateCategory(@RequestBody CategoryRequestDto requestDto, @PathVariable Long categoryId, HttpServletRequest request) {
+        return categoryService.updateCategory(requestDto, categoryId, request);
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId, HttpServletRequest request) {
+        return categoryService.deleteCategory(categoryId, request);
     }
 }

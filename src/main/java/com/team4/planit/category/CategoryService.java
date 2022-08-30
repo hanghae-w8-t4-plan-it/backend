@@ -60,4 +60,30 @@ public class CategoryService {
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
+
+    @Transactional
+    public ResponseEntity<?> updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        Category category = check.isPresentCategory(categoryId);
+        check.accessTokenCheck(request, member);
+        check.categoryCheck(category);
+        check.categoryAuthorCheck(member, category);
+        category.update(requestDto);
+        return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
+                .id(category.getId())
+                .categoryName(category.getCategoryName())
+                .categoryColor(category.getCategoryColor())
+                .isPublic(category.getIsPublic())
+                .isEnd(category.getIsEnd())
+                .build()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteCategory(Long categoryId, HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        Category category = check.isPresentCategory(categoryId);
+        check.categoryCheck(category);
+        check.categoryAuthorCheck(member, category);
+        categoryRepository.delete(category);
+        return new ResponseEntity<>(Message.success("delete success"), HttpStatus.OK);
+    }
 }
