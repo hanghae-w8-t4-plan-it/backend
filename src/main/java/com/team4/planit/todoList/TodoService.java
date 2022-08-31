@@ -50,10 +50,8 @@ public class TodoService {
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         check.accessTokenCheck(request, member);
-        Todo todo = isPresentTodo(todoId);
-        if (todo == null) {
-            return new ResponseEntity<>(Message.fail("NOT_FOUND", "존재하지 않는 todo 입니다."), HttpStatus.NOT_FOUND);
-        }
+        Todo todo = todoRepository.findById(todoId).orElse(null);
+        check.checkTodo(todo);
         todo.updateTodo(requestDto);
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
@@ -68,17 +66,9 @@ public class TodoService {
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         check.accessTokenCheck(request, member);
-        Todo todo = isPresentTodo(todoId);
-        if (todo == null) {
-            return new ResponseEntity<>(Message.fail("NOT_FOUND", "존재하지 않는 todo 입니다."), HttpStatus.NOT_FOUND);
-        }
+        Todo todo = todoRepository.findById(todoId).orElse(null);
+        check.checkTodo(todo);
         todoRepository.delete(todo);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
-    }
-
-    @Transactional(readOnly = true)
-    public Todo isPresentTodo(Long todoId) {
-        Optional<Todo> optionalTodo = todoRepository.findById(todoId);
-        return optionalTodo.orElse(null);
     }
 }
