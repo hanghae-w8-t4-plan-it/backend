@@ -1,5 +1,7 @@
 package com.team4.planit.todoList;
 
+import com.team4.planit.category.Category;
+import com.team4.planit.category.CategoryRepository;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
@@ -16,14 +18,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TodoService {
 
+    private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
     private final Check check;
 
     @Transactional
-    public ResponseEntity<?> createTodo(TodoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         check.checkAccessToken(request, member);
-        Todo todo = new Todo(member, requestDto.getTitle());
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        check.categoryCheck(category);
+        Todo todo = Todo.builder()
+                .member(member)
+                .category(category)
+                .title(requestDto.getTitle())
+                .memo(requestDto.getMemo())
+                .isAchieved(false)
+                .build();
         todoRepository.save(todo);
         return new ResponseEntity<>(Message.success(new TodoResponseDto(todo.getTitle())), HttpStatus.OK);
     }
@@ -39,29 +50,25 @@ public class TodoService {
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         check.checkAccessToken(request, member);
-        Todo todo = isPresentTodo(todoId);
-        if (todo == null) {
-            return new ResponseEntity<>(Message.fail("NOT_FOUND", "존재하지 않는 todo 입니다."), HttpStatus.NOT_FOUND);
-        }
-        todo.updateTodo(requestDto.getTitle(), requestDto.getMemo());
-        return new ResponseEntity<>(Message.success(new TodoResponseDto(todo.getTitle(), todo.getMemo())), HttpStatus.OK);
+        Todo todo = todoRepository.findById(todoId).orElse(null);
+        check.checkTodo(todo);
+        todo.updateTodo(requestDto);
+        return new ResponseEntity<>(Message.success(
+                TodoResponseDto.builder()
+                    .title(todo.getTitle())
+                    .memo(todo.getMemo())
+                    .isAchieved(todo.getIsAchieved())
+                    .build()
+        ), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         check.checkAccessToken(request, member);
-        Todo todo = isPresentTodo(todoId);
-        if (todo == null) {
-            return new ResponseEntity<>(Message.fail("NOT_FOUND", "존재하지 않는 todo 입니다."), HttpStatus.NOT_FOUND);
-        }
+        Todo todo = todoRepository.findById(todoId).orElse(null);
+        check.checkTodo(todo);
         todoRepository.delete(todo);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
-    }
-
-    @Transactional(readOnly = true)
-    public Todo isPresentTodo(Long todoId) {
-        Optional<Todo> optionalTodo = todoRepository.findById(todoId);
-        return optionalTodo.orElse(null);
     }
 }

@@ -10,27 +10,26 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/categories/todos")
 public class TodoController {
 
     private final TodoService todoService;
 
-    @PostMapping()
-    public ResponseEntity<?> createTodo(@RequestBody TodoRequestDto requestDto, HttpServletRequest request) {
-        return todoService.createTodo(requestDto, request);
+    @PostMapping("/categories/{categoryId}/todos")
+    public ResponseEntity<?> createTodo(@PathVariable Long categoryId, @RequestBody TodoRequestDto requestDto, HttpServletRequest request) {
+        return todoService.createTodo(categoryId, requestDto, request);
     }
 
-    @GetMapping()
+    @GetMapping("/categories/todos")
     public ResponseEntity<?> getAllTodos(HttpServletRequest request) {
         return todoService.getAllTodos(request);
     }
 
-    @PatchMapping("/{todoId}")
+    @PatchMapping("/categories/todos/{todoId}")
     public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto, HttpServletRequest request) {
         return todoService.updateTodo(todoId, requestDto, request);
     }
 
-    @DeleteMapping("/{todoId}")
+    @DeleteMapping("/categories/todos/{todoId}")
     public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, HttpServletRequest request) {
         return todoService.deleteTodo(todoId, request);
     }
