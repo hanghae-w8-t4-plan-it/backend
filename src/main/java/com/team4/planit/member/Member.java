@@ -1,7 +1,6 @@
 package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.team4.planit.category.Category;
 import com.team4.planit.global.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
