@@ -3,6 +3,7 @@ package com.team4.planit.category;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-
     private final Check check;
     private final CategoryRepository categoryRepository;
+    private final TodoRepository todoRepository;
 
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
@@ -29,7 +30,7 @@ public class CategoryService {
                 .categoryName(requestDto.getCategoryName())
                 .categoryColor(requestDto.getCategoryColor())
                 .isPublic(false)
-                .isEnd(false)
+                .categoryStatues(CategoryStatusCode.NOT_STOP)
                 .build();
         categoryRepository.save(category);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
@@ -37,7 +38,7 @@ public class CategoryService {
                         .categoryName(category.getCategoryName())
                         .categoryColor(category.getCategoryColor())
                         .isPublic(category.getIsPublic())
-                        .isEnd(category.getIsEnd())
+                        .categoryStatues(category.getCategoryStatues())
                 .build()), HttpStatus.OK);
     }
 
@@ -48,15 +49,17 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-            categoryResponseDtoList.add(
-                    CategoryResponseDto.builder()
-                            .id(category.getId())
-                            .categoryName(category.getCategoryName())
-                            .categoryColor(category.getCategoryColor())
-                            .isPublic(category.getIsPublic())
-                            .isEnd(category.getIsEnd())
-                            .build()
-            );
+//            if(!category.getCategoryStatues().equals(CategoryStatusCode.ACHIEVE)||equals(CategoryStatusCode.EXPIRE)||equals(CategoryStatusCode.STOP)) {
+                categoryResponseDtoList.add(
+                        CategoryResponseDto.builder()
+                                .id(category.getId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatues(category.getCategoryStatues())
+                                .build()
+                );
+//            } else { throw new CustomException(ErrorCode.CATEGORY_END); }
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
@@ -74,7 +77,7 @@ public class CategoryService {
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
                 .isPublic(category.getIsPublic())
-                .isEnd(category.getIsEnd())
+                .categoryStatues(category.getCategoryStatues())
                 .build()), HttpStatus.OK);
     }
 
@@ -84,6 +87,6 @@ public class CategoryService {
         check.checkCategory(category);
         check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
-        return new ResponseEntity<>(Message.success("delete success"), HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
