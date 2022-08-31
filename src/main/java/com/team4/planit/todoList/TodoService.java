@@ -25,7 +25,7 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Category category = categoryRepository.findById(categoryId).orElse(null);
         check.categoryCheck(category);
         Todo todo = Todo.builder()
@@ -42,14 +42,14 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> getAllTodos(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         return new ResponseEntity<>(Message.success(todoRepository.findAll()), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Todo todo = todoRepository.findById(todoId).orElse(null);
         check.checkTodo(todo);
         todo.updateTodo(requestDto);
@@ -65,7 +65,7 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Todo todo = todoRepository.findById(todoId).orElse(null);
         check.checkTodo(todo);
         todoRepository.delete(todo);

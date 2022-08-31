@@ -30,12 +30,7 @@ public class MemberService {
     @Transactional
     public ResponseEntity<?> creatMember(MemberRequestDto requestDto) {
         check.checkEmail(requestDto.getEmail());
-        Member member;
-        member = Member.builder()
-                .email(requestDto.getEmail())
-                .nickname(requestDto.getNickname())
-                .password(passwordEncoder.encode(requestDto.getPassword()))
-                .build();
+        Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), passwordEncoder.encode(requestDto.getPassword()));
         memberRepository.save(member);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
@@ -44,7 +39,7 @@ public class MemberService {
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkMember(member);
-        check.checkPassword(passwordEncoder, requestDto.getPassword(),member);
+        check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
         String nickname = member.getNickname();
         String photoUrl = member.getProfilePhoto();
         LoginResponseDto loginResponseDto = new LoginResponseDto(nickname, photoUrl);
@@ -61,13 +56,11 @@ public class MemberService {
 
     public ResponseEntity<?> refreshToken(MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
         tokenProvider.validateToken(request.getHeader("Refresh-Token"));
-        Member requestingMember = memberRepository.findByEmail(requestDto.getEmail()).orElse(null);
-        check.checkRequestingMember(requestingMember);
+        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElse(null);
+        check.checkRequestingMember(member);
         long accessTokenExpiration = Long.parseLong(request.getHeader("Access-Token-Expire-Time"));
-        check.checkAccessTokenExpiration(accessTokenExpiration, requestingMember);
-        RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(requestingMember).orElse(null);
-        return check.reissueAccessToken(request, response, requestingMember, refreshTokenConfirm);
+        check.checkAccessTokenExpiration(accessTokenExpiration, member);
+        RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member).orElse(null);
+        return check.reissueAccessToken(request, response, member, refreshTokenConfirm);
     }
-
-
 }
