@@ -6,15 +6,15 @@ import lombok.Getter;
 @Getter
 public class KakaoMemberInfoDto {
     private final String nickname;
-    private final String name;
     private final String email;
     private final String profilePhoto;
+    private final Long id;
 
-    public KakaoMemberInfoDto(String nickname, String name, String email, String profilePhoto){
+    public KakaoMemberInfoDto(String nickname, String email, String profilePhoto, Long id){
         this.nickname=nickname;
-        this.name=name;
         this.email=email;
         this.profilePhoto=profilePhoto;
+        this.id=id;
 
     }
 }

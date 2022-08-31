@@ -54,7 +54,6 @@ public class KakaoLoginService {
         if (kakaoMember == null) {
             // 회원가입
             // username: kakao nickname
-            String name = kakaoMemberInfo.getName();
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
@@ -62,7 +61,8 @@ public class KakaoLoginService {
 
             String profilePhoto = kakaoMemberInfo.getProfilePhoto();
             String nickname = kakaoMemberInfo.getNickname();
-            kakaoMember = new Member(email, encodedPassword, profilePhoto, nickname, kakaoMember.getKakaoId());
+            Long kakaoId= kakaoMemberInfo.getId();
+            kakaoMember = new Member(email, encodedPassword, profilePhoto, nickname, kakaoId);
             memberRepository.save(kakaoMember);
         }
 
@@ -125,16 +125,20 @@ public class KakaoLoginService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+        System.out.println(responseBody);
         Long id = jsonNode.get("id").asLong();
         String nickname = jsonNode.get("kakao_account").get("profile")
                 .get("nickname").asText();
-        String name = jsonNode.get("kakao_account")
-                .get("name").asText();
+//        String name = jsonNode.get("kakao_account")
+//                .get("name").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
+//        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
         String profilePhoto = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
-        return new KakaoMemberInfoDto(email, profilePhoto, name, nickname);
+
+        System.out.println("카카오 사용자 정보: " + id + ", " + nickname);
+        return new KakaoMemberInfoDto(nickname, email, profilePhoto, id);
     }
 }
 
