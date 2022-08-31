@@ -61,7 +61,7 @@ public class KakaoLoginService {
 
             String profilePhoto = kakaoMemberInfo.getProfilePhoto();
             String nickname = kakaoMemberInfo.getNickname();
-            Long kakaoId= kakaoMember.getKakaoId();
+            Long kakaoId= kakaoMemberInfo.getId();
             kakaoMember = new Member(email, encodedPassword, profilePhoto, nickname, kakaoId);
             memberRepository.save(kakaoMember);
         }
