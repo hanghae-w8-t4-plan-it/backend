@@ -54,7 +54,6 @@ public class KakaoLoginService {
         if (kakaoMember == null) {
             // 회원가입
             // username: kakao nickname
-            String name = kakaoMemberInfo.getName();
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
@@ -129,13 +128,13 @@ public class KakaoLoginService {
         Long id = jsonNode.get("id").asLong();
         String nickname = jsonNode.get("kakao_account").get("profile")
                 .get("nickname").asText();
-        String name = jsonNode.get("kakao_account")
-                .get("name").asText();
+//        String name = jsonNode.get("kakao_account")
+//                .get("name").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
         String profilePhoto = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
-        return new KakaoMemberInfoDto(email, profilePhoto, name, nickname);
+        return new KakaoMemberInfoDto(email, profilePhoto,  nickname);
     }
 }
 
