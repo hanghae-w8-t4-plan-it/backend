@@ -1,5 +1,7 @@
 package com.team4.planit.category;
 
+import com.team4.planit.global.exception.CustomException;
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
@@ -19,7 +21,6 @@ import java.util.List;
 public class CategoryService {
     private final Check check;
     private final CategoryRepository categoryRepository;
-    private final TodoRepository todoRepository;
 
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
@@ -49,17 +50,19 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-//            if(!category.getCategoryStatues().equals(CategoryStatusCode.ACHIEVE)||equals(CategoryStatusCode.EXPIRE)||equals(CategoryStatusCode.STOP)) {
-                categoryResponseDtoList.add(
-                        CategoryResponseDto.builder()
-                                .id(category.getId())
-                                .categoryName(category.getCategoryName())
-                                .categoryColor(category.getCategoryColor())
-                                .isPublic(category.getIsPublic())
-                                .categoryStatues(category.getCategoryStatues())
-                                .build()
-                );
-//            } else { throw new CustomException(ErrorCode.CATEGORY_END); }
+            if(check.countByCategory(category) == 0&&category.getCategoryStatues().equals(CategoryStatusCode.ACHIEVE)||
+                    category.getCategoryStatues().equals(CategoryStatusCode.EXPIRE)||category.getCategoryStatues().equals(CategoryStatusCode.STOP)) {
+                break;
+            }
+            categoryResponseDtoList.add(
+                    CategoryResponseDto.builder()
+                            .id(category.getId())
+                            .categoryName(category.getCategoryName())
+                            .categoryColor(category.getCategoryColor())
+                            .isPublic(category.getIsPublic())
+                            .categoryStatues(category.getCategoryStatues())
+                            .build()
+            );
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
