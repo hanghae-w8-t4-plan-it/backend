@@ -10,13 +10,13 @@ public class CategoryRequestDto {
     private String categoryName;
     private String categoryColor;
     private Boolean isPublic;
-    private Boolean isEnd;
+    private CategoryStatusCode categoryStatues;
 
     @Builder
-    public CategoryRequestDto(String categoryName, String categoryColor, Boolean isPublic, Boolean isEnd) {
+    public CategoryRequestDto(String categoryName, String categoryColor, Boolean isPublic, CategoryStatusCode categoryStatues) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.isPublic = isPublic;
-        this.isEnd = isEnd;
+        this.categoryStatues = categoryStatues;
     }
 }

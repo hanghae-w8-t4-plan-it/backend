@@ -12,14 +12,14 @@ public class CategoryResponseDto {
     private String categoryName;
     private String categoryColor;
     private Boolean isPublic;
-    private Boolean isEnd;
+    private CategoryStatusCode categoryStatues;
 
     @Builder
-    public CategoryResponseDto(Long id, String categoryName, String categoryColor, Boolean isPublic, Boolean isEnd) {
+    public CategoryResponseDto(Long id, String categoryName, String categoryColor, Boolean isPublic, CategoryStatusCode categoryStatues) {
         this.id = id;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.isPublic = isPublic;
-        this.isEnd = isEnd;
+        this.categoryStatues = categoryStatues;
     }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-
     private final Check check;
     private final CategoryRepository categoryRepository;
 
@@ -29,7 +28,7 @@ public class CategoryService {
                 .categoryName(requestDto.getCategoryName())
                 .categoryColor(requestDto.getCategoryColor())
                 .isPublic(false)
-                .isEnd(false)
+                .categoryStatues(CategoryStatusCode.NOT_STOP)
                 .build();
         categoryRepository.save(category);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
@@ -37,7 +36,7 @@ public class CategoryService {
                         .categoryName(category.getCategoryName())
                         .categoryColor(category.getCategoryColor())
                         .isPublic(category.getIsPublic())
-                        .isEnd(category.getIsEnd())
+                        .categoryStatues(category.getCategoryStatues())
                 .build()), HttpStatus.OK);
     }
 
@@ -54,7 +53,7 @@ public class CategoryService {
                             .categoryName(category.getCategoryName())
                             .categoryColor(category.getCategoryColor())
                             .isPublic(category.getIsPublic())
-                            .isEnd(category.getIsEnd())
+                            .categoryStatues(category.getCategoryStatues())
                             .build()
             );
         }
@@ -74,7 +73,7 @@ public class CategoryService {
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
                 .isPublic(category.getIsPublic())
-                .isEnd(category.getIsEnd())
+                .categoryStatues(category.getCategoryStatues())
                 .build()), HttpStatus.OK);
     }
 

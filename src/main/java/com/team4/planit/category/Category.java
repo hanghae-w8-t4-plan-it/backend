@@ -29,21 +29,21 @@ public class Category {
     private Boolean isPublic;
 
     @Column(nullable = false)
-    private Boolean isEnd;
+    private CategoryStatusCode categoryStatues;
 
     @Builder
-    public Category(Member member, String categoryName, String categoryColor, Boolean isPublic, Boolean isEnd) {
+    public Category(Member member, String categoryName, String categoryColor, Boolean isPublic, CategoryStatusCode categoryStatues) {
         this.member = member;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.isPublic = isPublic;
-        this.isEnd = isEnd;
+        this.categoryStatues = categoryStatues;
     }
 
     public void update(CategoryRequestDto requestDto) {
         if(requestDto.getCategoryName()!=null) this.categoryName = requestDto.getCategoryName();
         if(requestDto.getCategoryColor()!=null) this.categoryColor = requestDto.getCategoryColor();
         if(requestDto.getIsPublic()!=null) this.isPublic = requestDto.getIsPublic();
-        if(requestDto.getIsEnd()!=null) this.isEnd = requestDto.getIsEnd();
+        if(requestDto.getCategoryStatues()!=null) this.categoryStatues = requestDto.getCategoryStatues();
     }
 }
