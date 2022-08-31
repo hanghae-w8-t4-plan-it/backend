@@ -9,6 +9,7 @@ import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
+import com.team4.planit.todoList.Todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,9 @@ public class Check {
     }
     public void categoryAuthorCheck(Member member, Category category) {
         if (!category.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+    }
+    public void checkTodo(Todo todo) {
+        if (null == todo) throw new CustomException(ErrorCode.TODO_NOT_FOUND);
     }
     public void checkEmail(String email) {
         if (null != isPresentMember(email)) {
