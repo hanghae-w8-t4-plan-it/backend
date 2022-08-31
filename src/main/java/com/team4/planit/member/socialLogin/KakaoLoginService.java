@@ -61,7 +61,7 @@ public class KakaoLoginService {
 
             String profilePhoto = kakaoMemberInfo.getProfilePhoto();
             String nickname = kakaoMemberInfo.getNickname();
-            Long kakaoId= kakaoMember.getKakaoId();
+            Long kakaoId= kakaoMemberInfo.getId();
             kakaoMember = new Member(email, encodedPassword, profilePhoto, nickname, kakaoId);
             memberRepository.save(kakaoMember);
         }
@@ -131,9 +131,9 @@ public class KakaoLoginService {
                 .get("nickname").asText();
 //        String name = jsonNode.get("kakao_account")
 //                .get("name").asText();
-//        String email = jsonNode.get("kakao_account")
-//                .get("email").asText();
-        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
+        String email = jsonNode.get("kakao_account")
+                .get("email").asText();
+//        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
         String profilePhoto = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
 
