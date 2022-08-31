@@ -36,7 +36,7 @@ public class SecurityConfiguration {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -62,12 +62,11 @@ public class SecurityConfiguration {
                 .authorizeRequests()
 
                 .antMatchers("/members/**").permitAll()
-//                .antMatchers("/cards/**").permitAll()
+                .antMatchers("/categories/**").permitAll()
 //                .antMatchers("/comments/**").permitAll()
 //                .antMatchers("/profiles/**").permitAll()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
-
 
 
                 .and()
