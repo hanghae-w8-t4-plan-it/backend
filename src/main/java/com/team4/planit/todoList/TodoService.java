@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class TodoService {
         Member member = check.validateMember(request);
         check.checkAccessToken(request, member);
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        check.categoryCheck(category);
+        check.checkCategory(category);
         Todo todo = Todo.builder()
                 .member(member)
                 .category(category)
