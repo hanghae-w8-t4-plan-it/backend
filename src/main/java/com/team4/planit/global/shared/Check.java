@@ -10,6 +10,7 @@ import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
 import com.team4.planit.todoList.Todo;
+import com.team4.planit.todoList.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,10 @@ public class Check {
     private final CategoryRepository categoryRepository;
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
+    private final TodoRepository todoRepository;
+    public Integer countByCategory(Category category){
+        return todoRepository.countAllByCategory(category);
+    }
 
     public void checkMember(Member member) {
         if (member == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
