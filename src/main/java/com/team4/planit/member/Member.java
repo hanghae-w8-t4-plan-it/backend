@@ -37,9 +37,6 @@ public class Member extends Timestamped {
     @Column(unique = true)
     private Long kakaoId;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Category> categoryList;
-
     @Builder
     public Member(String email, String nickname, String password) {
         this.id = getId();

@@ -3,6 +3,7 @@ package com.team4.planit.category;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CategoryService {
     private final Check check;
     private final CategoryRepository categoryRepository;
+    private final TodoRepository todoRepository;
 
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
