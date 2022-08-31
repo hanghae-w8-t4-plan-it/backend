@@ -19,7 +19,7 @@ public class KakaoLoginController {
 
     private final KakaoLoginService kakaoLoginService;
 
-    @GetMapping("/members/login/kakao")
+    @GetMapping("/members/login/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
         kakaoLoginService.kakaoLogin(code);
