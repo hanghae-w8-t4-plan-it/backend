@@ -50,8 +50,6 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-            // 카테고리가 종료가 되고 todo가 없을 때 메세지를 보내주고 카테고리가 종료가 되고 todo가 있을 때 데이터를 보내주고
-            // 카테고리가 종료가 되지 않으면 데이터를 보내준다.
             if(check.countByCategory(category) == 0&&category.getCategoryStatues().equals(CategoryStatusCode.ACHIEVE)||
                     category.getCategoryStatues().equals(CategoryStatusCode.EXPIRE)||category.getCategoryStatues().equals(CategoryStatusCode.STOP)) {
                 break;
