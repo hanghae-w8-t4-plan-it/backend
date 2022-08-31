@@ -31,11 +31,8 @@ public class MemberService {
     public ResponseEntity<?> creatMember(MemberRequestDto requestDto) {
         check.checkEmail(requestDto.getEmail());
         Member member;
-        member = Member.builder()
-                .email(requestDto.getEmail())
-                .nickname(requestDto.getNickname())
-                .password(passwordEncoder.encode(requestDto.getPassword()))
-                .build();
+        member = new Member(requestDto.getEmail(), requestDto.getNickname(),passwordEncoder.encode(requestDto.getPassword()));
+
         memberRepository.save(member);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
@@ -44,7 +41,7 @@ public class MemberService {
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkMember(member);
-        check.checkPassword(passwordEncoder, requestDto.getPassword(),member);
+        check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
         String nickname = member.getNickname();
         String photoUrl = member.getProfilePhoto();
         LoginResponseDto loginResponseDto = new LoginResponseDto(nickname, photoUrl);
