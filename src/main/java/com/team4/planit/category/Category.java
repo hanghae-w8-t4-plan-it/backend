@@ -4,6 +4,7 @@ import com.team4.planit.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity

@@ -1,6 +1,6 @@
 package com.team4.planit.category;
 
-import com.team4.planit.Message;
+import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import lombok.RequiredArgsConstructor;
