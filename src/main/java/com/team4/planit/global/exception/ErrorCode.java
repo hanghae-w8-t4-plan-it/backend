@@ -20,7 +20,7 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C001", "해당 카테고리를 찾을 수 없습니다."),
 
     //TODO
-    CARD_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "T001", "해당 투두가 없습니다."),
+    TODO_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "T001", "해당 투두가 없습니다."),
 
     //FILE
     FILE_TYPE_INVALID(HttpStatus.BAD_REQUEST.value(), "F001", "잘못된 파일 형식입니다."),
