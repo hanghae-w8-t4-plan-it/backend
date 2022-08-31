@@ -4,6 +4,7 @@ import com.team4.planit.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
@@ -41,9 +42,9 @@ public class Category {
     }
 
     public void update(CategoryRequestDto requestDto) {
-        if(requestDto.getCategoryName()!=null) this.categoryName = requestDto.getCategoryName();
-        if(requestDto.getCategoryColor()!=null) this.categoryColor = requestDto.getCategoryColor();
-        if(requestDto.getIsPublic()!=null) this.isPublic = requestDto.getIsPublic();
-        if(requestDto.getIsEnd()!=null) this.isEnd = requestDto.getIsEnd();
+        if (requestDto.getCategoryName() != null) this.categoryName = requestDto.getCategoryName();
+        if (requestDto.getCategoryColor() != null) this.categoryColor = requestDto.getCategoryColor();
+        if (requestDto.getIsPublic() != null) this.isPublic = requestDto.getIsPublic();
+        if (requestDto.getIsEnd() != null) this.isEnd = requestDto.getIsEnd();
     }
 }

@@ -32,22 +32,27 @@ public class Check {
     public void checkMember(Member member) {
         if (member == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
-    public void categoryCheck(Category category) {
+
+    public void checkCategory(Category category) {
         if (null == category) throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
     }
-    public void categoryAuthorCheck(Member member, Category category) {
+
+    public void checkCategoryAuthor(Member member, Category category) {
         if (!category.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
+
     public void checkEmail(String email) {
         if (null != isPresentMember(email)) {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
     }
-    public void checkPassword(PasswordEncoder passwordEncoder, String password,Member member) {
+
+    public void checkPassword(PasswordEncoder passwordEncoder, String password, Member member) {
         if (!member.validatePassword(passwordEncoder, password)) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }
     }
+
     public void checkAccessTokenExpiration(long accessTokenExpiration, Member requestingMember) {
         long now = (new Date().getTime());
         if (now < accessTokenExpiration) {
@@ -55,7 +60,8 @@ public class Check {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
     }
-    public void accessTokenCheck(HttpServletRequest request, Member member) {
+
+    public void checkAccessToken(HttpServletRequest request, Member member) {
         if (null == request.getHeader("Authorization")) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         if (null == member) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
@@ -97,12 +103,6 @@ public class Check {
         return tokenProvider.getMemberFromAuthentication();
     }
 
-    public Member validateMemberByRefreshToken(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-            return null;
-        }
-        return tokenProvider.getMemberFromAuthentication();
-    }
     public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
@@ -110,7 +110,7 @@ public class Check {
     }
 
     public void checkRequestingMember(Member requestingMember) {
-        if(requestingMember==null)throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
+        if (requestingMember == null) throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.team4.planit.category;
 
-import com.team4.planit.Message;
+import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class CategoryService {
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Category category = Category.builder()
                 .member(member)
                 .categoryName(requestDto.getCategoryName())
@@ -44,7 +44,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getCategory(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
@@ -65,9 +65,9 @@ public class CategoryService {
     public ResponseEntity<?> updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        check.accessTokenCheck(request, member);
-        check.categoryCheck(category);
-        check.categoryAuthorCheck(member, category);
+        check.checkAccessToken(request, member);
+        check.checkCategory(category);
+        check.checkCategoryAuthor(member, category);
         category.update(requestDto);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
                 .id(category.getId())
@@ -81,8 +81,8 @@ public class CategoryService {
     public ResponseEntity<?> deleteCategory(Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        check.categoryCheck(category);
-        check.categoryAuthorCheck(member, category);
+        check.checkCategory(category);
+        check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
         return new ResponseEntity<>(Message.success("delete success"), HttpStatus.OK);
     }

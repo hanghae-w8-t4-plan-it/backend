@@ -22,7 +22,7 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> createTodo(TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Todo todo = new Todo(member, requestDto.getTitle());
         todoRepository.save(todo);
         return new ResponseEntity<>(Message.success(new TodoResponseDto(todo.getTitle())), HttpStatus.OK);
@@ -31,14 +31,14 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> getAllTodos(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         return new ResponseEntity<>(Message.success(todoRepository.findAll()), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Todo todo = isPresentTodo(todoId);
         if (todo == null) {
             return new ResponseEntity<>(Message.fail("NOT_FOUND", "존재하지 않는 todo 입니다."), HttpStatus.NOT_FOUND);
@@ -50,7 +50,7 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Todo todo = isPresentTodo(todoId);
         if (todo == null) {
             return new ResponseEntity<>(Message.fail("NOT_FOUND", "존재하지 않는 todo 입니다."), HttpStatus.NOT_FOUND);
