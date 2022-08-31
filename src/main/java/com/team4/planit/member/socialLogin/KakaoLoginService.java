@@ -131,14 +131,14 @@ public class KakaoLoginService {
                 .get("nickname").asText();
 //        String name = jsonNode.get("kakao_account")
 //                .get("name").asText();
-//        String email = jsonNode.get("kakao_account")
-//                .get("email").asText();
-        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
+        String email = jsonNode.get("kakao_account")
+                .get("email").asText();
+//        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
         String profilePhoto = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
 
         System.out.println("카카오 사용자 정보: " + id + ", " + nickname);
-        return new KakaoMemberInfoDto(email, profilePhoto,  nickname,id);
+        return new KakaoMemberInfoDto(nickname, email, profilePhoto, id);
     }
 }
 
