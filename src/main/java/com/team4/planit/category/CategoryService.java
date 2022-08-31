@@ -22,7 +22,7 @@ public class CategoryService {
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         Category category = Category.builder()
                 .member(member)
                 .categoryName(requestDto.getCategoryName())
@@ -43,19 +43,21 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getCategory(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.accessTokenCheck(request, member);
+        check.checkAccessToken(request, member);
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-            categoryResponseDtoList.add(
-                    CategoryResponseDto.builder()
-                            .id(category.getId())
-                            .categoryName(category.getCategoryName())
-                            .categoryColor(category.getCategoryColor())
-                            .isPublic(category.getIsPublic())
-                            .categoryStatues(category.getCategoryStatues())
-                            .build()
-            );
+//            if(!category.getCategoryStatues().equals(CategoryStatusCode.ACHIEVE)||equals(CategoryStatusCode.EXPIRE)||equals(CategoryStatusCode.STOP)) {
+                categoryResponseDtoList.add(
+                        CategoryResponseDto.builder()
+                                .id(category.getId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatues(category.getCategoryStatues())
+                                .build()
+                );
+//            } else { throw new CustomException(ErrorCode.CATEGORY_END); }
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
@@ -64,9 +66,9 @@ public class CategoryService {
     public ResponseEntity<?> updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        check.accessTokenCheck(request, member);
-        check.categoryCheck(category);
-        check.categoryAuthorCheck(member, category);
+        check.checkAccessToken(request, member);
+        check.checkCategory(category);
+        check.checkCategoryAuthor(member, category);
         category.update(requestDto);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
                 .id(category.getId())
@@ -80,9 +82,9 @@ public class CategoryService {
     public ResponseEntity<?> deleteCategory(Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        check.categoryCheck(category);
-        check.categoryAuthorCheck(member, category);
+        check.checkCategory(category);
+        check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
-        return new ResponseEntity<>(Message.success("delete success"), HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }

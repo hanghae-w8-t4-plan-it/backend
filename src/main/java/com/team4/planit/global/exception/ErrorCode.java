@@ -18,6 +18,7 @@ public enum ErrorCode {
 
     //CATEGORY
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C001", "해당 카테고리를 찾을 수 없습니다."),
+    CATEGORY_END(HttpStatus.BAD_REQUEST.value(), "COO2", "해당 카테고리는 종료되었습니다."),
 
     //TODO
     CARD_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "T001", "해당 투두가 없습니다."),
