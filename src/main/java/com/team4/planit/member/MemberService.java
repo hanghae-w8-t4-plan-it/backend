@@ -40,9 +40,10 @@ public class MemberService {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkMember(member);
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
+        String email = member.getEmail();
         String nickname = member.getNickname();
         String photoUrl = member.getProfilePhoto();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(nickname, photoUrl);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(email,nickname, photoUrl);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
@@ -55,10 +56,10 @@ public class MemberService {
     }
 
     public ResponseEntity<?> refreshToken(MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
-        tokenProvider.validateToken(request.getHeader("Refresh-Token"));
+        tokenProvider.validateToken(request.getHeader("RefreshToken"));
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElse(null);
         check.checkRequestingMember(member);
-        long accessTokenExpiration = Long.parseLong(request.getHeader("Access-Token-Expire-Time"));
+        long accessTokenExpiration = Long.parseLong(request.getHeader("AccessTokenExpireTime"));
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member).orElse(null);
         return check.reissueAccessToken(request, response, member, refreshTokenConfirm);
