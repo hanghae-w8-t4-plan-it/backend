@@ -60,7 +60,7 @@ jobs:
       run: cp ./scripts/*.sh ./deploy
 
     - name: Make zip file
-      run: zip -r ./coinTalk.zip ./deploy
+      run: zip -r ./planit.zip ./deploy
       shell: bash
           
     - name: Configure AWS credentials
