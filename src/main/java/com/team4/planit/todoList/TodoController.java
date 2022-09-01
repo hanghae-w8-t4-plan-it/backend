@@ -15,7 +15,8 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping("/categories/{categoryId}/todos")
-    public ResponseEntity<?> createTodo(@PathVariable Long categoryId, @RequestBody TodoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> createTodo(@PathVariable Long categoryId, @RequestBody TodoRequestDto requestDto,
+                                        HttpServletRequest request) {
         return todoService.createTodo(categoryId, requestDto, request);
     }
 
@@ -25,7 +26,8 @@ public class TodoController {
     }
 
     @PatchMapping("/categories/todos/{todoId}")
-    public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto,
+                                        HttpServletRequest request) {
         return todoService.updateTodo(todoId, requestDto, request);
     }
 

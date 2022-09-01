@@ -13,7 +13,15 @@ public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "todo_id")
     private Long todoId;
+
+    @ManyToOne
+    @JoinColumn(name = "todo_list_id")
+    private TodoList todoList;
+
+    @Column(name = "due_date")
+    private String dueDate;
 
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,17 +37,16 @@ public class Todo {
     @Column
     private String memo;
 
-//    @Column(nullable = false)
-//    private String dueDate;
-
     @Column(nullable = false)
     private Boolean isAchieved;
 
     @Builder
-    public Todo(Member member, Category category, String title,
-                String memo, Boolean isAchieved) {
+    public Todo(Member member, Category category, TodoList todoList, String dueDate,
+                String title, String memo, Boolean isAchieved) {
         this.member = member;
         this.category = category;
+        this.todoList = todoList;
+        this.dueDate = dueDate;
         this.title = title;
         this.memo = memo;
         this.isAchieved = isAchieved;
