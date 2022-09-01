@@ -5,7 +5,6 @@ import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

@@ -23,11 +23,6 @@ public class Follow {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member followedMember;
 
-    public Follow(Member followingMember, Member followedMember) {
-        this.followingMember = followingMember;
-        this.followedMember = followedMember;
-    }
-
     public Follow(FollowRequestDto requestDto) {
         this.followingMember = requestDto.getFollowingMember();
         this.followedMember = requestDto.getFollowedMember();
