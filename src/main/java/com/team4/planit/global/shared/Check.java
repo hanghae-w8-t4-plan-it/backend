@@ -85,7 +85,7 @@ public class Check {
         if (refreshTokenConfirm == null) {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
         }
-        if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh-Token"))) {
+        if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("RefreshToken"))) {
             tokenProvider.deleteRefreshToken(requestingMember);
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
@@ -113,8 +113,8 @@ public class Check {
 
     public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
-        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
+        response.addHeader("RefreshToken", tokenDto.getRefreshToken());
+        response.addHeader("AccessTokenExpireTime", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
     public void checkRequestingMember(Member requestingMember) {

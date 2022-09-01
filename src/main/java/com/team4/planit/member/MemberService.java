@@ -55,10 +55,10 @@ public class MemberService {
     }
 
     public ResponseEntity<?> refreshToken(MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
-        tokenProvider.validateToken(request.getHeader("Refresh-Token"));
+        tokenProvider.validateToken(request.getHeader("RefreshToken"));
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElse(null);
         check.checkRequestingMember(member);
-        long accessTokenExpiration = Long.parseLong(request.getHeader("Access-Token-Expire-Time"));
+        long accessTokenExpiration = Long.parseLong(request.getHeader("AccessTokenExpireTime"));
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member).orElse(null);
         return check.reissueAccessToken(request, response, member, refreshTokenConfirm);
