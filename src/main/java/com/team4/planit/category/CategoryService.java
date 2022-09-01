@@ -1,11 +1,8 @@
 package com.team4.planit.category;
 
-import com.team4.planit.global.exception.CustomException;
-import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
-import com.team4.planit.todoList.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +28,7 @@ public class CategoryService {
                 .categoryName(requestDto.getCategoryName())
                 .categoryColor(requestDto.getCategoryColor())
                 .isPublic(false)
-                .categoryStatues(CategoryStatusCode.NOT_STOP)
+                .categoryStatus(CategoryStatusCode.NOT_STOP)
                 .build();
         categoryRepository.save(category);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
@@ -39,7 +36,7 @@ public class CategoryService {
                         .categoryName(category.getCategoryName())
                         .categoryColor(category.getCategoryColor())
                         .isPublic(category.getIsPublic())
-                        .categoryStatues(category.getCategoryStatues())
+                        .categoryStatus(category.getCategoryStatus())
                 .build()), HttpStatus.OK);
     }
 
@@ -50,15 +47,15 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-            if(check.countByCategory(category) != 0||category.getCategoryStatues().equals(CategoryStatusCode.NOT_STOP)||
-                    category.getCategoryStatues().equals(CategoryStatusCode.RESTART)) {
+            if(check.countByCategory(category) != 0||category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)||
+                    category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
                                 .id(category.getId())
                                 .categoryName(category.getCategoryName())
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
-                                .categoryStatues(category.getCategoryStatues())
+                                .categoryStatus(category.getCategoryStatus())
                                 .build()
                 );
             }
@@ -80,7 +77,7 @@ public class CategoryService {
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
                 .isPublic(category.getIsPublic())
-                .categoryStatues(category.getCategoryStatues())
+                .categoryStatus(category.getCategoryStatus())
                 .build()), HttpStatus.OK);
     }
 
