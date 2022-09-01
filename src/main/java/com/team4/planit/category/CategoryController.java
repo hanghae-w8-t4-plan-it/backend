@@ -18,8 +18,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getCategory(HttpServletRequest request) {
-        return categoryService.getCategory(request);
+    public ResponseEntity<?> getAllCategories(HttpServletRequest request) {
+        return categoryService.getAllCategories(request);
     }
 
     @PatchMapping("/{categoryId}")
