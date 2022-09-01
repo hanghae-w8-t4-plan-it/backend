@@ -1,6 +1,7 @@
 package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team4.planit.follow.Follow;
 import com.team4.planit.global.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +36,9 @@ public class Member extends Timestamped {
 
     @Column(unique = true)
     private Long kakaoId;
+
+    @OneToMany(mappedBy = "member")
+    private List<Follow> followings;
 
     @Builder
     public Member(String email, String nickname, String password) {

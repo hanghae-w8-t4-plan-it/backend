@@ -44,25 +44,25 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getCategory(HttpServletRequest request) {
+    public ResponseEntity<?> getAllCategories(HttpServletRequest request) {
         Member member = check.validateMember(request);
         check.checkAccessToken(request, member);
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-            if(check.countByCategory(category) == 0&&category.getCategoryStatues().equals(CategoryStatusCode.ACHIEVE)||
-                    category.getCategoryStatues().equals(CategoryStatusCode.EXPIRE)||category.getCategoryStatues().equals(CategoryStatusCode.STOP)) {
-                break;
+            if(check.countByCategory(category) != 0||category.getCategoryStatues().equals(CategoryStatusCode.NOT_STOP)||
+                    category.getCategoryStatues().equals(CategoryStatusCode.RESTART)) {
+                categoryResponseDtoList.add(
+                        CategoryResponseDto.builder()
+                                .id(category.getId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatues(category.getCategoryStatues())
+                                .build()
+                );
             }
-            categoryResponseDtoList.add(
-                    CategoryResponseDto.builder()
-                            .id(category.getId())
-                            .categoryName(category.getCategoryName())
-                            .categoryColor(category.getCategoryColor())
-                            .isPublic(category.getIsPublic())
-                            .categoryStatues(category.getCategoryStatues())
-                            .build()
-            );
+
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
