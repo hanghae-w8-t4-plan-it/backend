@@ -10,6 +10,7 @@ import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
 import com.team4.planit.todoList.Todo;
+import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,9 @@ public class Check {
 
     public void checkCategoryAuthor(Member member, Category category) {
         if (!category.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+    }
+    public void checkTodoList(TodoList todoList) {
+        if (null == todoList) throw new CustomException(ErrorCode.TODO_LIST_NOT_FOUND);
     }
     public void checkTodo(Todo todo) {
         if (null == todo) throw new CustomException(ErrorCode.TODO_NOT_FOUND);

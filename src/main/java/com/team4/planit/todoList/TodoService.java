@@ -19,6 +19,7 @@ public class TodoService {
 
     private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
+    private final TodoListRepository todoListRepository;
     private final Check check;
 
     @Transactional
@@ -27,15 +28,21 @@ public class TodoService {
         check.checkAccessToken(request, member);
         Category category = categoryRepository.findById(categoryId).orElse(null);
         check.checkCategory(category);
+        TodoList todoList = todoListRepository
+            .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
+        if (todoList == null) todoList = todoListRepository.save(new TodoList(member, requestDto.getDueDate()));
         Todo todo = Todo.builder()
                 .member(member)
+                .todoList(todoList)
+                .dueDate(requestDto.getDueDate())
                 .category(category)
                 .title(requestDto.getTitle())
                 .memo(requestDto.getMemo())
                 .isAchieved(false)
                 .build();
         todoRepository.save(todo);
-        return new ResponseEntity<>(Message.success(new TodoResponseDto(todo.getTitle())), HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(
+                new TodoResponseDto(todo.getTitle(), todo.getTodoList())), HttpStatus.OK);
     }
 
     @Transactional

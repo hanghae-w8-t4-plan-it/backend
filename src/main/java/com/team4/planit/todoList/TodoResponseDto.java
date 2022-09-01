@@ -18,8 +18,11 @@ public class TodoResponseDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isAchieved;
 
-    public TodoResponseDto(String title) {
+    private TodoList todoList;
+
+    public TodoResponseDto(String title, TodoList todoList) {
         this.title = title;
+        this.todoList = todoList;
     }
 
     @Builder
