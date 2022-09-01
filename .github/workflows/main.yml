@@ -23,13 +23,13 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     
-#     - name: Setup MySQL
-#       uses: samin/mysql-action@v1
-#       with:
-#           character set server: 'utf8' 
-#           mysql database: planit
-#           mysql user: whddlrs
-# #           mysql password: ${{ secrets.MYSQL_PASSWORD }}
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+          character set server: 'utf8' 
+          mysql database: planit
+          mysql user: whddlrs
+          mysql password: ${{ secrets.MYSQL_PASSWORD }}
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -50,14 +50,39 @@ jobs:
       shell: bash
           
 
+    # appspec.yml 파일 복사
+    - name: Copy appspec.yml
+      run: cp appspec.yml ./deploy
+
+
+    # script files 복사
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+
+    - name: Make zip file
+      run: zip -r ./planit.zip ./deploy
+      shell: bash
           
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.IAMACCESSKEY }}
         aws-secret-access-key: ${{ secrets.IAMSECRETKEY }}
-        bucketName : springbucketss
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./coinTalk.zip s3://$S3_BUCKET_NAME/
+      run: aws s3 cp --region ap-northeast-2 ./planit.zip s3://$S3_BUCKET_NAME/
+      
+      
+    # Deploy
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.IAMACCESSKEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.IAMSECRETKEY }}
+      run: 
+        aws deploy create-deployment 
+        --application-name planit
+        --deployment-group-name planit
+        --file-exists-behavior OVERWRITE 
+        --s3-location bucket=springbucketss,bundleType=zip,key=planit.zip
+        --region ap-northeast-2
