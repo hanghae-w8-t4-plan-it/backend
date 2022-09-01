@@ -1,6 +1,8 @@
 package com.team4.planit.global.jwt;
 
 
+import com.team4.planit.global.exception.CustomException;
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.member.Member;
 import com.team4.planit.global.shared.Authority;
 import io.jsonwebtoken.*;
@@ -24,7 +26,8 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            //30분
+    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000* 10 ;
+        //  60  * 30;            //30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;     //7일
 
     private final Key key;
@@ -88,6 +91,7 @@ public class TokenProvider {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
