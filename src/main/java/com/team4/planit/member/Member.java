@@ -37,9 +37,6 @@ public class Member extends Timestamped {
     @Column(unique = true)
     private Long kakaoId;
 
-    @OneToMany(mappedBy = "member")
-    private List<Follow> followings;
-
     @Builder
     public Member(String email, String nickname, String password) {
         this.id = getId();

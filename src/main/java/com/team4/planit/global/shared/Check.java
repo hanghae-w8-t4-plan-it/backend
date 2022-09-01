@@ -104,6 +104,13 @@ public class Check {
         return optionalMember.orElse(null);
     }
 
+    public Member isPresentMemberFollow(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        return optionalMember.orElseThrow(
+                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+    }
+
     public Member validateMember(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             return null;
