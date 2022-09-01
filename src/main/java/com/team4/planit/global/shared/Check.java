@@ -70,7 +70,8 @@ public class Check {
     }
 
     public void checkAccessToken(HttpServletRequest request, Member member) {
-        if (null == request.getHeader("Authorization")) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
+        if (!tokenProvider.validateToken(request.getHeader("Authorization").substring(7)))
+            throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         if (null == member) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
 

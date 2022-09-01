@@ -40,9 +40,10 @@ public class MemberService {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkMember(member);
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
+        String email = member.getEmail();
         String nickname = member.getNickname();
         String photoUrl = member.getProfilePhoto();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(nickname, photoUrl);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(email,nickname, photoUrl);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
