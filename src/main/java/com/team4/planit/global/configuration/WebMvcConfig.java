@@ -11,7 +11,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("*")
-                .exposedHeaders("Authorization", "Refresh-Token")
+                .exposedHeaders("Authorization", "RefreshToken")
                 .allowCredentials(true)//make client read header("jwt-token")
         ;
     }
