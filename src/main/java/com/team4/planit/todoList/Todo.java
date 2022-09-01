@@ -7,7 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-//@IdClass(TodoMultiID.class)
 @Getter
 @NoArgsConstructor
 public class Todo {
@@ -16,14 +15,6 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "todo_id")
     private Long todoId;
-
-//    @Id
-//    @ManyToOne
-//    @JoinColumns(value = {
-//            @JoinColumn(name = "todo_list_id", referencedColumnName = "todo_list_id"),
-//            @JoinColumn(name = "due_date", referencedColumnName = "due_date")
-//    })
-//    private TodoList todoList;
 
     @ManyToOne
     @JoinColumn(name = "todo_list_id")

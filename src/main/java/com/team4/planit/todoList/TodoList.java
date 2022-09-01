@@ -4,10 +4,8 @@ import com.team4.planit.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-//@IdClass(TodoListMultiID.class)
 @Getter
 @NoArgsConstructor
 public class TodoList {
@@ -17,7 +15,6 @@ public class TodoList {
     @Column(name = "todo_list_id")
     private Long todoListId;
 
-//    @Id
     @Column(name = "due_date")
     private String dueDate;
 
