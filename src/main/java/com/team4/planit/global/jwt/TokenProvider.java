@@ -1,8 +1,8 @@
 package com.team4.planit.global.jwt;
 
 
-import com.team4.planit.member.Member;
 import com.team4.planit.global.shared.Authority;
+import com.team4.planit.member.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,7 +24,8 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            //30분
+    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000* 10 ;
+        //  60  * 30;            //30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;     //7일
 
     private final Key key;
