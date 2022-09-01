@@ -79,7 +79,7 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.IAMACCESSKEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.IAMSECRETKEY }}
-      run: |
+      run: 
         aws deploy create-deployment 
         --file-exists-behavior OVERWRITE 
         --s3-location bucket=springbucketss,bundleType=zip,key=planit.zip
