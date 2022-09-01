@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  S3_BUCKET_NAME: springbootss
+  S3_BUCKET_NAME: springbucketss
 
 jobs:
   build:
@@ -27,4 +27,13 @@ jobs:
       run: chmod +x gradlew
     
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew clean build 
+          
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        iamAccessKey: ${{ secrets.IAMACCESSKEY }}
+        iamSecretKey: ${{ secrets.IAMSECRETKEY }}
+        bucketName : springbucketss
+        cloud.aws.region.static : ap-northeast-2
+        aws-region: ap-northeast-2
