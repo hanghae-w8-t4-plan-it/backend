@@ -30,12 +30,6 @@ jobs:
           mysql database: planit
           mysql user: whddlrs
           mysql password: ${{ secrets.MYSQL_PASSWORD }}
-        
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    
-    - name: Build with Gradle
-      run: ./gradlew clean build 
           
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -45,3 +39,10 @@ jobs:
         bucketName : springbucketss
         cloud.aws.region.static : ap-northeast-2
         aws-region: ap-northeast-2
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Build with Gradle
+      run: ./gradlew clean build 
+          
