@@ -1,17 +1,13 @@
 package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.team4.planit.follow.Follow;
 import com.team4.planit.global.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -55,6 +51,12 @@ public class Member extends Timestamped {
         this.nickname = nickname;
         this.kakaoId = kakaoId;
     }
+    public void update(MemberRequestDto requestDto, String imgUrl) {
+        if(requestDto.getEmail()!=null) this.email = requestDto.getEmail();
+        if(requestDto.getPassword()!=null) this.password = requestDto.getPassword();
+        if(requestDto.getNickname()!=null) this.nickname = requestDto.getNickname();
+        if(imgUrl!=null) this.profilePhoto=imgUrl;
+    }
 
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
@@ -62,16 +64,4 @@ public class Member extends Timestamped {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Member member = (Member) o;
-        return id != null && Objects.equals(id, member.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

@@ -32,29 +32,26 @@ public class Check {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
-    public Integer countByCategory(Category category){
+
+    public Integer countByCategory(Category category) {
         return todoRepository.countAllByCategory(category);
     }
 
-    public void checkMember(Member member) {
-        if (member == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-    }
-
-    public void checkCategory(Category category) {
-        if (null == category) throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-    }
 
     public void checkCategoryAuthor(Member member, Category category) {
-        if (!category.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+        if (!category.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
+
     public void checkTodoList(TodoList todoList) {
         if (null == todoList) throw new CustomException(ErrorCode.TODO_LIST_NOT_FOUND);
     }
+
     public void checkTodo(Todo todo) {
         if (null == todo) throw new CustomException(ErrorCode.TODO_NOT_FOUND);
     }
+
     public void checkEmail(String email) {
-        if (null != isPresentMember(email)) {
+        if (null != memberRepository.findByEmail(email).orElse(null)) {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
     }
@@ -65,18 +62,12 @@ public class Check {
         }
     }
 
-    public void checkAccessTokenExpiration(long accessTokenExpiration, Member requestingMember) {
+    public void checkAccessTokenExpiration(long accessTokenExpiration, Member member) {
         long now = (new Date().getTime());
         if (now < accessTokenExpiration) {
-            tokenProvider.deleteRefreshToken(requestingMember);
+            tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-    }
-
-    public void checkAccessToken(HttpServletRequest request, Member member) {
-        if (!tokenProvider.validateToken(request.getHeader("Authorization").substring(7)))
-            throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
-        if (null == member) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
 
     @Transactional(readOnly = true)
@@ -86,27 +77,22 @@ public class Check {
     }
 
 
-    public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member requestingMember, RefreshToken refreshTokenConfirm) {
+    public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
         if (refreshTokenConfirm == null) {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
         }
         if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("RefreshToken"))) {
-            tokenProvider.deleteRefreshToken(requestingMember);
+            tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        TokenDto tokenDto = tokenProvider.generateAccessToken(requestingMember);
+        TokenDto tokenDto = tokenProvider.generateAccessToken(member);
         tokenToHeaders(tokenDto, response);
         return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
     }
 
-    public Member isPresentEmail(String email) {
-        Optional<Member> optionalLoginId = memberRepository.findByEmail(email);
-        return optionalLoginId.orElse(null);
-    }
-
     public Member isPresentMember(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElse(null);
+        return optionalMember.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public Member isPresentMemberFollow(Long memberId) {
@@ -118,7 +104,7 @@ public class Check {
 
     public Member validateMember(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
-            return null;
+            throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         }
         return tokenProvider.getMemberFromAuthentication();
     }
@@ -129,9 +115,6 @@ public class Check {
         response.addHeader("AccessTokenExpireTime", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
-    public void checkRequestingMember(Member requestingMember) {
-        if (requestingMember == null) throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
-    }
 }
 
 

@@ -19,7 +19,6 @@ public class FollowService {
 
     public ResponseEntity<?> upDownFollow(Long memberId, HttpServletRequest request) {
         Member followingMember = check.validateMember(request);
-        check.checkAccessToken(request, followingMember);
         Member followedMember = check.isPresentMemberFollow(memberId);
         Optional<Follow> findFollowing = followRepository.findByFollowingMemberAndFollowedMember(followingMember, followedMember);
         if(findFollowing.isEmpty()) {
