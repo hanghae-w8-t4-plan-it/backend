@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -24,9 +22,7 @@ public class FileService {
 
    @Autowired
    AmazonS3Client amazonS3Client;
-   public List<String> getImgUrlList(MultipartFile[] multipartFileList) throws IOException {
-      List<String> imagePathList = new ArrayList<>();
-
+   public String getImgUrl(MultipartFile[] multipartFileList) throws IOException {
       for(MultipartFile multipartFile: multipartFileList) {
          String originalName = multipartFile.getOriginalFilename(); // 파일 이름
          long size = multipartFile.getSize();  // 파일 크기
@@ -44,9 +40,8 @@ public class FileService {
                          .withCannedAcl(CannedAccessControlList.PublicRead)
          );
 
-         String imagePath = amazonS3Client.getUrl(S3Bucket, originalName).toString(); // 접근가능한 URL 가져오기
-         imagePathList.add(imagePath);
+         return amazonS3Client.getUrl(S3Bucket, originalName).toString();
       }
-      return imagePathList;
+      return null;
    }
 }

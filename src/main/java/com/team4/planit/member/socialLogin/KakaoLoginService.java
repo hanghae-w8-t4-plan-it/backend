@@ -71,7 +71,7 @@ public class KakaoLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Member member = check.isPresentEmail(kakaoMember.getEmail());
+        Member member = check.isPresentMember(kakaoMember.getEmail());
         return tokenProvider.generateTokenDto(member);
 
     }

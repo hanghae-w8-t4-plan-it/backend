@@ -1,6 +1,8 @@
 package com.team4.planit.global.jwt;
 
 
+import com.team4.planit.global.exception.CustomException;
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Authority;
 import com.team4.planit.member.Member;
 import io.jsonwebtoken.*;
@@ -75,7 +77,7 @@ public class TokenProvider {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
                 isAssignableFrom(authentication.getClass())) {
-            return null;
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
         return ((UserDetailsImpl) authentication.getPrincipal()).getMember();
     }

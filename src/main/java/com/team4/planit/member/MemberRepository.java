@@ -11,5 +11,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
 
     @Query(value = "SELECT * FROM member order by RAND() LIMIT 3", nativeQuery = true)
-    List<Member> findAll();
+    List<Member> findSuggestMember();
 }
