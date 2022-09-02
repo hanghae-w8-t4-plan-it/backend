@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +65,18 @@ public class MemberService {
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member).orElse(null);
         return check.reissueAccessToken(request, response, member, refreshTokenConfirm);
+    }
+
+    public ResponseEntity<?> suggestMemebers() {
+        List<Member> memberList = memberRepository.findAll();
+        List<MembersResponsDto> membersResponsDtoList = new ArrayList<>();
+        for (Member member : memberList) {
+            membersResponsDtoList.add(MembersResponsDto.builder()
+                    .id(member.getId())
+                    .nickname(member.getNickname())
+                    .profileImgUrl(member.getProfilePhoto())
+                    .build());
+        }
+        return new ResponseEntity<>(Message.success(membersResponsDtoList), HttpStatus.OK);
     }
 }
