@@ -47,7 +47,7 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
-            if(check.countByCategory(category) != 0||category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)||
+            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
                     category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
@@ -56,10 +56,10 @@ public class CategoryService {
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
+
                                 .build()
                 );
             }
-
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }

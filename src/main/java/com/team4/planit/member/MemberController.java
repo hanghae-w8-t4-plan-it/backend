@@ -3,10 +3,7 @@ package com.team4.planit.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +30,13 @@ public class MemberController {
         return memberService.checkEmail(requestDto.getEmail());
     }
 
-
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshTokenCheck(@RequestBody MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
         return memberService.refreshToken(requestDto, request, response);
+    }
+
+    @GetMapping("/suggest")
+    public ResponseEntity<?> suggestMembers() {
+        return memberService.suggestMemebers();
     }
 }
