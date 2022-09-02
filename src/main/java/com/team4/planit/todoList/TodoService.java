@@ -77,4 +77,11 @@ public class TodoService {
         todoRepository.delete(todo);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
+
+    public ResponseEntity<?> getRemainTodoCnt(HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        check.checkAccessToken(request, member);
+        Todo todo = todoRepository.;
+
+    }
 }
