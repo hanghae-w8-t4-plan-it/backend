@@ -18,7 +18,6 @@ public class TimerService {
 
     public ResponseEntity<?> createTimer(TimerRequestDto timerRequestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         Timer timer = new Timer(timerRequestDto.getSetTime(), timerRequestDto.getRemainTime(), member);
         timerRepository.save(timer);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);

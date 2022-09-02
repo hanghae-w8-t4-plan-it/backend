@@ -25,9 +25,8 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        check.checkCategory(category);
+        check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository
             .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
         if (todoList == null) todoList = todoListRepository.save(new TodoList(member, requestDto.getDueDate()));
@@ -48,14 +47,12 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> getAllTodos(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         return new ResponseEntity<>(Message.success(todoRepository.findAll()), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         Todo todo = todoRepository.findById(todoId).orElse(null);
         check.checkTodo(todo);
         todo.updateTodo(requestDto);
@@ -71,7 +68,6 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         Todo todo = todoRepository.findById(todoId).orElse(null);
         check.checkTodo(todo);
         todoRepository.delete(todo);
