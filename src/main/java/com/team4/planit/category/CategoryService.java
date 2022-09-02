@@ -22,7 +22,6 @@ public class CategoryService {
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         Category category = Category.builder()
                 .member(member)
                 .categoryName(requestDto.getCategoryName())
@@ -43,7 +42,6 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAllCategories(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        check.checkAccessToken(request, member);
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
@@ -68,8 +66,6 @@ public class CategoryService {
     public ResponseEntity<?> updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        check.checkAccessToken(request, member);
-        check.checkCategory(category);
         check.checkCategoryAuthor(member, category);
         category.update(requestDto);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
@@ -84,7 +80,6 @@ public class CategoryService {
     public ResponseEntity<?> deleteCategory(Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        check.checkCategory(category);
         check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
