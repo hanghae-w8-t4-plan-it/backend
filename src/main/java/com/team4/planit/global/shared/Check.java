@@ -103,6 +103,7 @@ public class Check {
     }
 
     public Member validateMember(HttpServletRequest request) {
+        if(request.getHeader("Authorization").length()<8){throw new CustomException(ErrorCode.INVALID_TOKEN);}
         if (!tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         }
