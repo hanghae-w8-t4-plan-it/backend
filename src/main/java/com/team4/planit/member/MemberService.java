@@ -104,4 +104,17 @@ public class MemberService {
         memberRepository.save(member);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
+
+    public ResponseEntity<?> memberProfile(HttpServletRequest request, Long memberId) {
+        check.validateMember(request);
+        Member member = memberRepository.findByMemberId(memberId).orElseThrow(null);
+        MemberProfileResponseDto memberProfileResponseDto = MemberProfileResponseDto.builder()
+                .memberId(member.getMemberId())
+                .nickname(member.getNickname())
+                .profileImgUrl(member.getProfileImgUrl())
+                .followerCnt()
+                .followingCnt()
+                .build();
+        return new ResponseEntity<>(Message.success(memberProfileResponseDto), HttpStatus.OK);
+    }
 }
