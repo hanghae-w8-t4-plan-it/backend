@@ -51,4 +51,9 @@ public class MemberController {
                                               @RequestPart(required = false) MultipartFile[] image) throws IOException {
         return memberService.modifyMemberInfo(request,requestDto,image);
     }
+
+    @GetMapping("/{memberId}/status")
+    public ResponseEntity<?> memberProfile(HttpServletRequest request, @PathVariable Long memberId) {
+        return memberService.memberProfile(request, memberId);
+    }
 }
