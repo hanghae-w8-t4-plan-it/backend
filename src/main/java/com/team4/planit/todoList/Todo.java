@@ -20,9 +20,6 @@ public class Todo {
     @JoinColumn(name = "todo_list_id")
     private TodoList todoList;
 
-    @Column(name = "due_date")
-    private String dueDate;
-
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -31,13 +28,16 @@ public class Todo {
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @Column(nullable = false)
+    @Column(name = "todo_due_date")
+    private String dueDate;
+
+    @Column(name = "todo_title", nullable = false)
     private String title;
 
-    @Column
+    @Column(name = "todo_memo")
     private String memo;
 
-    @Column(nullable = false)
+    @Column(name = "todo_is_achieved", nullable = false)
     private Boolean isAchieved;
 
     @Builder

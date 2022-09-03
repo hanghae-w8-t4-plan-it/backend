@@ -12,13 +12,14 @@ import javax.persistence.*;
 public class Timer {
 
     @Id
+    @Column(name = "timer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long timerId;
 
-    @Column(nullable = false)
+    @Column(name = "timer_set_time", nullable = false)
     private String setTime;
 
-    @Column(nullable = false)
+    @Column(name = "timer_remain_time", nullable = false)
     private String remainTime;
 
     @JoinColumn(name = "member_id", nullable = false)

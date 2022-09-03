@@ -31,7 +31,7 @@ public class CategoryService {
                 .build();
         categoryRepository.save(category);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
-                .id(category.getId())
+                .id(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
                 .isPublic(category.getIsPublic())
@@ -49,7 +49,7 @@ public class CategoryService {
                     category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
-                                .id(category.getId())
+                                .id(category.getCategoryId())
                                 .categoryName(category.getCategoryName())
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
@@ -68,7 +68,7 @@ public class CategoryService {
         check.checkCategoryAuthor(member, category);
         category.update(requestDto);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
-                .id(category.getId())
+                .id(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
                 .isPublic(category.getIsPublic())
