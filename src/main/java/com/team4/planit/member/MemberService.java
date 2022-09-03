@@ -76,7 +76,7 @@ public class MemberService {
         List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
         for (Member member : memberList) {
             memberResponseDtoList.add(MemberResponseDto.builder()
-                    .id(member.getId())
+                    .id(member.getMemberId())
                     .nickname(member.getNickname())
                     .profileImgUrl(member.getProfileImgUrl())
                     .build());
@@ -86,7 +86,7 @@ public class MemberService {
 
     public ResponseEntity<?> deleteMembers(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        memberRepository.deleteById(member.getId());
+        memberRepository.deleteById(member.getMemberId());
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
