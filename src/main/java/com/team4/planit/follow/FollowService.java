@@ -1,5 +1,6 @@
 package com.team4.planit.follow;
 
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
@@ -22,6 +23,7 @@ public class FollowService {
     public ResponseEntity<?> upDownFollow(Long memberId, HttpServletRequest request) {
         Member followingMember = check.validateMember(request);
         Member followedMember = check.isPresentMemberByMemberId(memberId);
+        if(followingMember.getMemberId().equals(memberId)) { return new ResponseEntity<>(Message.success(ErrorCode.FOLLOW_SELF_ERROR), HttpStatus.OK); }
         Optional<Follow> findFollowing = followRepository.findByMemberAndFollowedMember(followingMember, followedMember);
         if(findFollowing.isEmpty()) {
             FollowRequestDto followRequestDto = new FollowRequestDto(followingMember, followedMember);
@@ -30,6 +32,7 @@ public class FollowService {
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         } else {
             followRepository.deleteById(findFollowing.get().getFollowId());
+
             return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
         }
     }

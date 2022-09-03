@@ -2,6 +2,7 @@ package com.team4.planit.member;
 
 
 import com.team4.planit.file.FileService;
+import com.team4.planit.follow.FollowRepository;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.jwt.RefreshToken;
@@ -34,6 +35,7 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final Check check;
     private final FileService fileService;
+    private final FollowRepository followRepository;
 
     @Transactional
     public ResponseEntity<?> creatMember(MemberRequestDto requestDto) {
@@ -112,8 +114,8 @@ public class MemberService {
                 .memberId(member.getMemberId())
                 .nickname(member.getNickname())
                 .profileImgUrl(member.getProfileImgUrl())
-                .followerCnt()
-                .followingCnt()
+                .followerCnt(followRepository.countAllByFollowedMember(member))
+                .followingCnt(followRepository.countAllByMember(member))
                 .build();
         return new ResponseEntity<>(Message.success(memberProfileResponseDto), HttpStatus.OK);
     }

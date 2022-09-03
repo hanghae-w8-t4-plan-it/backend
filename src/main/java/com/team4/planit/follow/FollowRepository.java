@@ -16,4 +16,9 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     @Query(value = "select DISTINCT m from Follow m left join fetch m.followedMember where (m.member in :member)")
     List<Follow> findAllByMember(@Param("member") Member member);
+
+    Long countAllByFollowedMember(Member member);
+
+    Long countAllByMember(Member member);
+
 }
