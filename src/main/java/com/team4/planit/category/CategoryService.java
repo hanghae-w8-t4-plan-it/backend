@@ -31,17 +31,17 @@ public class CategoryService {
                 .build();
         categoryRepository.save(category);
         return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
-                        .id(category.getId())
-                        .categoryName(category.getCategoryName())
-                        .categoryColor(category.getCategoryColor())
-                        .isPublic(category.getIsPublic())
-                        .categoryStatus(category.getCategoryStatus())
+                .id(category.getId())
+                .categoryName(category.getCategoryName())
+                .categoryColor(category.getCategoryColor())
+                .isPublic(category.getIsPublic())
+                .categoryStatus(category.getCategoryStatus())
                 .build()), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAllCategories(HttpServletRequest request) {
-        Member member = check.validateMember(request);
+        check.validateMember(request);
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categoryList) {
@@ -54,7 +54,6 @@ public class CategoryService {
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
-
                                 .build()
                 );
             }

@@ -8,12 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/follow")
+@RequestMapping("/follow/{memberId}")
 public class FollowController {
     private final FollowService followService;
 
-    @PostMapping("/{memberId}")
+    @PostMapping
     public ResponseEntity<?> follow(@PathVariable Long memberId, HttpServletRequest request) {
         return followService.upDownFollow(memberId, request);
+    }
+
+    @GetMapping("/followers")
+    public ResponseEntity<?> getFollowers(@PathVariable Long memberId, HttpServletRequest request) {
+        return followService.getFollowers(memberId, request);
+    }
+
+    @GetMapping("/followings")
+    public ResponseEntity<?> getFollowings(@PathVariable Long memberId, HttpServletRequest request) {
+        return followService.getFollowings(memberId, request);
     }
 }
