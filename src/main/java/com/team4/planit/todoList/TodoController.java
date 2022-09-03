@@ -1,8 +1,6 @@
 package com.team4.planit.todoList;
 
-import com.team4.planit.global.shared.Message;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +33,4 @@ public class TodoController {
     public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, HttpServletRequest request) {
         return todoService.deleteTodo(todoId, request);
     }
-
 }
