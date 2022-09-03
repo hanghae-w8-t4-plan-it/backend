@@ -47,10 +47,10 @@ public class MemberService {
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
-        String email = member.getEmail();
+        Long memberId = member.getMemberId();
         String nickname = member.getNickname();
         String photoUrl = member.getProfileImgUrl();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(email, nickname, photoUrl);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(memberId, nickname, photoUrl);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
@@ -62,9 +62,9 @@ public class MemberService {
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> refreshToken(MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> refreshToken(RefreshRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
         tokenProvider.validateToken(request.getHeader("RefreshToken"));
-        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_INFO));
+        Member member = memberRepository.findByMemberId(requestDto.getMemberId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_INFO));
         long accessTokenExpiration = Long.parseLong(request.getHeader("AccessTokenExpireTime"));
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member).orElse(null);
