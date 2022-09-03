@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface FollowRepository extends JpaRepository<Follow, Long> {
     Optional<Follow> findByMemberAndFollowedMember(Member followingmember, Member followedmember);
 
-    @Query(value = "select DISTINCT m from Follow m left join fetch m.member where (m.member in :member)")
+    @Query(value = "select DISTINCT m from Follow m left join fetch m.member where (m.followedMember in :member)")
     List<Follow> findAllByFollowedMember(@Param("member") Member member);
 
-    @Query(value = "select DISTINCT m from Follow m left join fetch m.member where (m.followedMember in :member)")
+    @Query(value = "select DISTINCT m from Follow m left join fetch m.followedMember where (m.member in :member)")
     List<Follow> findAllByMember(@Param("member") Member member);
 }
