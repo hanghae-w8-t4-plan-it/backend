@@ -33,7 +33,7 @@ public class MemberController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshTokenCheck(@RequestBody MemberRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> refreshTokenCheck(@RequestBody RefreshRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
         return memberService.refreshToken(requestDto, request, response);
     }
 
@@ -50,5 +50,10 @@ public class MemberController {
                                               @RequestPart MemberRequestDto requestDto,
                                               @RequestPart(required = false) MultipartFile[] image) throws IOException {
         return memberService.modifyMemberInfo(request,requestDto,image);
+    }
+
+    @GetMapping("/{memberId}/status")
+    public ResponseEntity<?> memberProfile(HttpServletRequest request, @PathVariable Long memberId) {
+        return memberService.memberProfile(request, memberId);
     }
 }

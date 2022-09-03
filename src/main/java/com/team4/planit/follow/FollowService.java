@@ -1,5 +1,6 @@
 package com.team4.planit.follow;
 
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
@@ -22,6 +23,7 @@ public class FollowService {
     public ResponseEntity<?> upDownFollow(Long memberId, HttpServletRequest request) {
         Member followingMember = check.validateMember(request);
         Member followedMember = check.isPresentMemberByMemberId(memberId);
+        if(followingMember.getMemberId().equals(memberId)) { return new ResponseEntity<>(Message.success(ErrorCode.FOLLOW_SELF_ERROR), HttpStatus.OK); }
         Optional<Follow> findFollowing = followRepository.findByMemberAndFollowedMember(followingMember, followedMember);
         if(findFollowing.isEmpty()) {
             FollowRequestDto followRequestDto = new FollowRequestDto(followingMember, followedMember);
@@ -30,6 +32,7 @@ public class FollowService {
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         } else {
             followRepository.deleteById(findFollowing.get().getFollowId());
+
             return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
         }
     }
@@ -51,7 +54,7 @@ public class FollowService {
         List<Follow> followList = followRepository.findAllByMember(member);
         List<FollowingResponseDto> followingResponseDtoList = new ArrayList<>();
         for(Follow follow : followList) {
-            followingResponseDtoList.add(new FollowingResponseDto(follow.getMember().getMemberId(), follow.getMember().getNickname(), follow.getMember().getProfileImgUrl()));
+            followingResponseDtoList.add(new FollowingResponseDto(follow.getFollowedMember().getMemberId(), follow.getFollowedMember().getNickname(), follow.getFollowedMember().getProfileImgUrl()));
         }
         return new ResponseEntity<>(Message.success(followingResponseDtoList), HttpStatus.OK);
     }
