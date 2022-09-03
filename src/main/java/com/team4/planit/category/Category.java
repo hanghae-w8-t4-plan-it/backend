@@ -14,22 +14,22 @@ public class Category {
     @Id
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long categoryId;
 
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column(nullable = false)
+    @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @Column(nullable = false)
+    @Column(name = "category_color", nullable = false)
     private String categoryColor;
 
-    @Column(nullable = false)
+    @Column(name = "category_is_public", nullable = false)
     private Boolean isPublic;
 
-    @Column(nullable = false)
+    @Column(name = "category_status", nullable = false)
     private CategoryStatusCode categoryStatus;
 
     @Builder
