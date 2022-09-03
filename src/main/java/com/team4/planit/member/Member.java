@@ -1,6 +1,7 @@
 package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team4.planit.follow.Follow;
 import com.team4.planit.global.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor

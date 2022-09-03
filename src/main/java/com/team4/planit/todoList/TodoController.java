@@ -33,9 +33,4 @@ public class TodoController {
     public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, HttpServletRequest request) {
         return todoService.deleteTodo(todoId, request);
     }
-
-    @GetMapping("/calendar")
-    public ResponseEntity<?> getRemainTodoCnt(HttpServletRequest request) {
-        return todoService.getRemainTodoCnt(request);
-    }
 }
