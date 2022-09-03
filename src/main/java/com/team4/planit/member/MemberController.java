@@ -52,7 +52,7 @@ public class MemberController {
         return memberService.modifyMemberInfo(request,requestDto,image);
     }
 
-    @GetMapping("{memberId}/status")
+    @GetMapping("/{memberId}/status")
     public ResponseEntity<?> memberProfile(HttpServletRequest request, @PathVariable Long memberId) {
         return memberService.memberProfile(request, memberId);
     }
