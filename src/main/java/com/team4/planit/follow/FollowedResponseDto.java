@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 public class FollowedResponseDto {
     private Long followedMember;
     private String nickname;
-    private String profilePhoto;
+    private String profileImgUrl;
 
-    public FollowedResponseDto(Long followedMember, String nickname, String profilePhoto) {
+    public FollowedResponseDto(Long followedMember, String nickname, String profileImgUrl) {
         this.followedMember = followedMember;
         this.nickname = nickname;
-        this.profilePhoto = profilePhoto;
+        this.profileImgUrl = profileImgUrl;
     }
 }

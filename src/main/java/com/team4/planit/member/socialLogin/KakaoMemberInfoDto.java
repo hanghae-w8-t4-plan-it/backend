@@ -7,13 +7,13 @@ import lombok.Getter;
 public class KakaoMemberInfoDto {
     private final String nickname;
     private final String email;
-    private final String profilePhoto;
+    private final String profileImgUrl;
     private final Long id;
 
-    public KakaoMemberInfoDto(String nickname, String email, String profilePhoto, Long id){
+    public KakaoMemberInfoDto(String nickname, String email, String profileImgUrl, Long id){
         this.nickname=nickname;
         this.email=email;
-        this.profilePhoto=profilePhoto;
+        this.profileImgUrl = profileImgUrl;
         this.id=id;
 
     }

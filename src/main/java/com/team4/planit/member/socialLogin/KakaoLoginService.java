@@ -59,10 +59,10 @@ public class KakaoLoginService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            String profilePhoto = kakaoMemberInfo.getProfilePhoto();
+            String profileImgUrl = kakaoMemberInfo.getProfileImgUrl();
             String nickname = kakaoMemberInfo.getNickname();
             Long kakaoId= kakaoMemberInfo.getId();
-            kakaoMember = new Member(email, encodedPassword, profilePhoto, nickname, kakaoId);
+            kakaoMember = new Member(email, encodedPassword, profileImgUrl, nickname, kakaoId);
             memberRepository.save(kakaoMember);
         }
 
@@ -134,11 +134,11 @@ public class KakaoLoginService {
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 //        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
-        String profilePhoto = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
+        String profileImgUrl = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
 
         System.out.println("카카오 사용자 정보: " + id + ", " + nickname);
-        return new KakaoMemberInfoDto(nickname, email, profilePhoto, id);
+        return new KakaoMemberInfoDto(nickname, email, profileImgUrl, id);
     }
 }
 

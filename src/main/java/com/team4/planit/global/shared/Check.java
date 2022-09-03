@@ -95,7 +95,7 @@ public class Check {
         return optionalMember.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    public Member isPresentMemberFollow(Long memberId) {
+    public Member isPresentMemberByMemberId(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         return optionalMember.orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)

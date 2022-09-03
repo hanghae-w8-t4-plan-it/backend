@@ -1,7 +1,6 @@
 package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.team4.planit.follow.Follow;
 import com.team4.planit.global.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -30,7 +28,7 @@ public class Member extends Timestamped {
     private String password;
 
     @Column(nullable = false)
-    private String profilePhoto;
+    private String profileImgUrl;
 
     @Column(unique = true)
     private Long kakaoId;
@@ -41,15 +39,15 @@ public class Member extends Timestamped {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
-        this.profilePhoto = "https://springbucketss.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+        this.profileImgUrl = "https://springbucketss.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
     }
 
     @Builder
-    public Member(String email, String password, String profilePhoto, String nickname, Long kakaoId) {
+    public Member(String email, String password, String profileImgUrl, String nickname, Long kakaoId) {
         this.id = getId();
         this.email = email;
         this.password = password;
-        this.profilePhoto = profilePhoto;
+        this.profileImgUrl = profileImgUrl;
         this.nickname = nickname;
         this.kakaoId = kakaoId;
     }
@@ -57,7 +55,7 @@ public class Member extends Timestamped {
         if(requestDto.getEmail()!=null) this.email = requestDto.getEmail();
         if(requestDto.getPassword()!=null) this.password = requestDto.getPassword();
         if(requestDto.getNickname()!=null) this.nickname = requestDto.getNickname();
-        if(imgUrl!=null) this.profilePhoto=imgUrl;
+        if(imgUrl!=null) this.profileImgUrl =imgUrl;
     }
 
 

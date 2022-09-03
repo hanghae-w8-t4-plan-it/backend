@@ -6,12 +6,12 @@ import lombok.Getter;
 public class LoginResponseDto {
     private final String email;
     private final String nickname;
-    private final String profilePhoto;
+    private final String profileImgUrl;
 
 
-    public LoginResponseDto(String email, String nickname, String profilePhoto) {
+    public LoginResponseDto(String email, String nickname, String profileImgUrl) {
         this.email=email;
         this.nickname = nickname;
-        this.profilePhoto = profilePhoto;
+        this.profileImgUrl = profileImgUrl;
     }
 }

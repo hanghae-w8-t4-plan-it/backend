@@ -49,7 +49,7 @@ public class MemberService {
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
         String email = member.getEmail();
         String nickname = member.getNickname();
-        String photoUrl = member.getProfilePhoto();
+        String photoUrl = member.getProfileImgUrl();
         LoginResponseDto loginResponseDto = new LoginResponseDto(email, nickname, photoUrl);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
@@ -78,7 +78,7 @@ public class MemberService {
             memberResponseDtoList.add(MemberResponseDto.builder()
                     .id(member.getId())
                     .nickname(member.getNickname())
-                    .profileImgUrl(member.getProfilePhoto())
+                    .profileImgUrl(member.getProfileImgUrl())
                     .build());
         }
         return new ResponseEntity<>(Message.success(memberResponseDtoList), HttpStatus.OK);

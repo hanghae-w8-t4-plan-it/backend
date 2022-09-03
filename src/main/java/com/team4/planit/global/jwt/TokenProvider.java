@@ -101,7 +101,7 @@ public class TokenProvider {
     @Transactional(readOnly = true)
     public RefreshToken isPresentRefreshToken(Member member) {
         Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByMember(member);
-        return optionalRefreshToken.orElse(null);
+        return optionalRefreshToken.orElseThrow( ()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
     }
 
     @Transactional
