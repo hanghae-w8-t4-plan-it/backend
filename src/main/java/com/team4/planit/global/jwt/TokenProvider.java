@@ -58,7 +58,7 @@ public class TokenProvider {
 
 
         RefreshToken refreshTokenObject = RefreshToken.builder()
-                .id(member.getId())
+                .refreshTokenId(member.getMemberId())
                 .member(member)
                 .value(refreshToken)
                 .build();

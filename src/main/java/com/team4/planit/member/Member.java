@@ -15,27 +15,28 @@ import javax.persistence.*;
 public class Member extends Timestamped {
 
     @Id
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
 
-    @Column(unique = true)
+    @Column(name = "member_email", unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "member_nickname", nullable = false)
     private String nickname;
-    @Column(nullable = false)
+    @Column(name = "member_password", nullable = false)
     @JsonIgnore
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "member_profile_img_url", nullable = false)
     private String profileImgUrl;
 
-    @Column(unique = true)
+    @Column(name = "member_kakao_id", unique = true)
     private Long kakaoId;
 
     @Builder
     public Member(String email, String nickname, String password) {
-        this.id = getId();
+        this.memberId = getMemberId();
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -44,24 +45,22 @@ public class Member extends Timestamped {
 
     @Builder
     public Member(String email, String password, String profileImgUrl, String nickname, Long kakaoId) {
-        this.id = getId();
+        this.memberId = getMemberId();
         this.email = email;
         this.password = password;
         this.profileImgUrl = profileImgUrl;
         this.nickname = nickname;
         this.kakaoId = kakaoId;
     }
+
     public void update(MemberRequestDto requestDto, String imgUrl) {
         if(requestDto.getEmail()!=null) this.email = requestDto.getEmail();
         if(requestDto.getPassword()!=null) this.password = requestDto.getPassword();
         if(requestDto.getNickname()!=null) this.nickname = requestDto.getNickname();
-        if(imgUrl!=null) this.profileImgUrl =imgUrl;
+        if(imgUrl!=null) this.profileImgUrl = imgUrl;
     }
-
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
     }
-
-
 }

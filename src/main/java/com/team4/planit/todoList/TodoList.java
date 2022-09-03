@@ -15,7 +15,7 @@ public class TodoList {
     @Column(name = "todo_list_id")
     private Long todoListId;
 
-    @Column(name = "due_date")
+    @Column(name = "todo_list_due_date")
     private String dueDate;
 
     @JoinColumn(name = "member_id", nullable = false)

@@ -29,7 +29,7 @@ public class FollowService {
             followRepository.save(follow);
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         } else {
-            followRepository.deleteById(findFollowing.get().getId());
+            followRepository.deleteById(findFollowing.get().getFollowId());
             return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
         }
     }
@@ -40,7 +40,7 @@ public class FollowService {
         List<Follow> followList = followRepository.findAllByFollowedMember(member);
         List<FollowedResponseDto> followedResponseDtoList = new ArrayList<>();
         for(Follow follow : followList) {
-            followedResponseDtoList.add(new FollowedResponseDto(follow.getMember().getId(), follow.getMember().getNickname(), follow.getMember().getProfileImgUrl()));
+            followedResponseDtoList.add(new FollowedResponseDto(follow.getMember().getMemberId(), follow.getMember().getNickname(), follow.getMember().getProfileImgUrl()));
         }
         return new ResponseEntity<>(Message.success(followedResponseDtoList), HttpStatus.OK);
     }
@@ -51,8 +51,7 @@ public class FollowService {
         List<Follow> followList = followRepository.findAllByMember(member);
         List<FollowingResponseDto> followingResponseDtoList = new ArrayList<>();
         for(Follow follow : followList) {
-            followingResponseDtoList.add(new FollowingResponseDto(
-                    follow.getMember().getId(), follow.getMember().getNickname(), follow.getMember().getProfileImgUrl()));
+            followingResponseDtoList.add(new FollowingResponseDto(follow.getMember().getMemberId(), follow.getMember().getNickname(), follow.getMember().getProfileImgUrl()));
         }
         return new ResponseEntity<>(Message.success(followingResponseDtoList), HttpStatus.OK);
     }
