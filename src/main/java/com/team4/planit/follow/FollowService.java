@@ -51,7 +51,7 @@ public class FollowService {
         List<Follow> followList = followRepository.findAllByMember(member);
         List<FollowingResponseDto> followingResponseDtoList = new ArrayList<>();
         for(Follow follow : followList) {
-            followingResponseDtoList.add(new FollowingResponseDto(follow.getMember().getMemberId(), follow.getMember().getNickname(), follow.getMember().getProfileImgUrl()));
+            followingResponseDtoList.add(new FollowingResponseDto(follow.getFollowedMember().getMemberId(), follow.getFollowedMember().getNickname(), follow.getFollowedMember().getProfileImgUrl()));
         }
         return new ResponseEntity<>(Message.success(followingResponseDtoList), HttpStatus.OK);
     }
