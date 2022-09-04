@@ -31,10 +31,8 @@ public class TodoService {
             .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
         if (todoList == null) todoList = todoListRepository.save(new TodoList(member, requestDto.getDueDate()));
         Todo todo = Todo.builder()
-                .member(member)
                 .todoList(todoList)
                 .dueDate(requestDto.getDueDate())
-                .category(category)
                 .title(requestDto.getTitle())
                 .memo(requestDto.getMemo())
                 .isAchieved(false)

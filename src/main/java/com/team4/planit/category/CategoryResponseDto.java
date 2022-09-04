@@ -1,6 +1,7 @@
 package com.team4.planit.category;
 
 import com.team4.planit.todoList.Todo;
+import com.team4.planit.todoList.TodoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,11 @@ public class CategoryResponseDto {
     private String categoryColor;
     private Boolean isPublic;
     private CategoryStatusCode categoryStatus;
-    private List<Todo> todos;
+    private List<TodoResponseDto> todos;
 
     @Builder
     public CategoryResponseDto(Long categoryId, String categoryName, String categoryColor,
-                               Boolean isPublic, CategoryStatusCode categoryStatus, List<Todo> todos) {
+                               Boolean isPublic, CategoryStatusCode categoryStatus, List<TodoResponseDto> todos) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;

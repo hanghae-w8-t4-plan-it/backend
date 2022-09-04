@@ -6,6 +6,7 @@ import com.team4.planit.member.Member;
 import com.team4.planit.todoList.Todo;
 import com.team4.planit.todoList.TodoRepository;
 import com.team4.planit.todoList.TodoRepositorySupport;
+import com.team4.planit.todoList.TodoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class CategoryService {
     private final Check check;
     private final CategoryRepository categoryRepository;
     private final CategoryRepositorySupport categoryRepositorySupport;
-    private final TodoRepository todoRepository;
+    private final TodoRepositorySupport todoRepositorySupport;
 
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
@@ -52,7 +53,6 @@ public class CategoryService {
         for (Category category : categories) {
             if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
                     category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
-                List<Todo> todos = todoRepository.findAllByCategory(category);
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
                                 .categoryId(category.getCategoryId())
@@ -60,7 +60,7 @@ public class CategoryService {
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
-                                .todos(todos)
+                                .todos(todoRepositorySupport.findAllTodos(category))
                                 .build()
                 );
             }
