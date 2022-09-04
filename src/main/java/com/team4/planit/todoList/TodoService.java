@@ -41,7 +41,14 @@ public class TodoService {
                 .build();
         todoRepository.save(todo);
         return new ResponseEntity<>(Message.success(
-                new TodoResponseDto(todo.getTitle(), todo.getTodoList())), HttpStatus.OK);
+                TodoResponseDto.builder()
+                        .todoListId(todo.getTodoList().getTodoListId())
+                        .title(todo.getTitle())
+                        .memo(todo.getMemo())
+                        .dueDate(todo.getDueDate())
+                        .isAchieved(todo.getIsAchieved())
+                        .build()
+        ), HttpStatus.OK);
     }
 
     @Transactional

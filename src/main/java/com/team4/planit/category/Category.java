@@ -1,10 +1,12 @@
 package com.team4.planit.category;
 
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.Todo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
