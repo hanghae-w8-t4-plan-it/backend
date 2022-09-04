@@ -2,6 +2,7 @@ package com.team4.planit.todoList;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.team4.planit.category.Category;
 import com.team4.planit.category.CategoryResponseDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -20,22 +21,18 @@ public class TodoRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<CategoryResponseDto> findAllCategoriesAndTodos() {
+    public List<TodoResponseDto> findAllTodos(Category category) {
         return queryFactory
                 .select(Projections.fields(
-                        CategoryResponseDto.class,
-                        category.categoryId,
-                        category.categoryName,
-                        category.categoryColor,
-                        category.isPublic,
-                        category.categoryStatus,
-                        todo
+                        TodoResponseDto.class,
+                        todo.todoList.todoListId,
+                        todo.dueDate,
+                        todo.title,
+                        todo.memo,
+                        todo.isAchieved
                 ))
                 .from(todo)
-                .leftJoin(category)
-                .on(category.categoryId.eq(todo.category.categoryId))
-                .where(category.categoryId.eq(todo.category.categoryId))
-                .groupBy(category)
+                .where(todo.category.eq(category))
                 .fetch();
     }
 
