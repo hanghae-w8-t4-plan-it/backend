@@ -40,12 +40,6 @@ public class Todo {
     @Column(name = "todo_is_achieved", nullable = false)
     private Boolean isAchieved;
 
-    public void updateTodo(TodoRequestDto requestDto) {
-        if (requestDto.getTitle() != null) this.title = requestDto.getTitle();
-        if (requestDto.getMemo() != null) this.memo = requestDto.getMemo();
-        if (requestDto.getIsAchieved() != this.isAchieved) this.isAchieved = requestDto.getIsAchieved();
-    }
-
     @Builder
     public Todo(Member member, Category category, TodoList todoList, String dueDate,
                 String title, String memo, Boolean isAchieved) {
@@ -58,13 +52,9 @@ public class Todo {
         this.isAchieved = isAchieved;
     }
 
-    @Builder
-    public Todo(TodoList todoList, String dueDate,
-                String title, String memo, Boolean isAchieved) {
-        this.todoList = todoList;
-        this.dueDate = dueDate;
-        this.title = title;
-        this.memo = memo;
-        this.isAchieved = isAchieved;
+    public void updateTodo(TodoRequestDto requestDto) {
+        if (requestDto.getTitle() != null) this.title = requestDto.getTitle();
+        if (requestDto.getMemo() != null) this.memo = requestDto.getMemo();
+        if (requestDto.getIsAchieved() != this.isAchieved) this.isAchieved = requestDto.getIsAchieved();
     }
 }

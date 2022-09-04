@@ -5,7 +5,7 @@ import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import com.team4.planit.todoList.Todo;
 import com.team4.planit.todoList.TodoRepository;
-import com.team4.planit.todoList.TodoResponseDto;
+import com.team4.planit.todoList.TodoRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,27 +47,27 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAllCategories(HttpServletRequest request) {
         check.validateMember(request);
-//        List<Category> categories = categoryRepositorySupport.findAllCategories();
-//        List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
-//        for (Category category : categories) {
-//            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
-//                    category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
-//                List<Todo> todos = todoRepository.findAllByCategory(category);
-//                categoryResponseDtoList.add(
-//                        CategoryResponseDto.builder()
-//                                .categoryId(category.getCategoryId())
-//                                .categoryName(category.getCategoryName())
-//                                .categoryColor(category.getCategoryColor())
-//                                .isPublic(category.getIsPublic())
-//                                .categoryStatus(category.getCategoryStatus())
-//                                .todos(todos)
-//                                .build()
-//                );
-//            }
-//        }
-//        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
+        for (Category category : categories) {
+            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
+                    category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
+                List<Todo> todos = todoRepository.findAllByCategory(category);
+                categoryResponseDtoList.add(
+                        CategoryResponseDto.builder()
+                                .categoryId(category.getCategoryId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatus(category.getCategoryStatus())
+                                .todos(todos)
+                                .build()
+                );
+            }
+        }
+        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
 
-        return new ResponseEntity<>(Message.success(categoryRepositorySupport.findAllCategories()), HttpStatus.OK);
+//        return new ResponseEntity<>(Message.success(categoryRepositorySupport.findAllCategories()), HttpStatus.OK);
     }
 
     @Transactional

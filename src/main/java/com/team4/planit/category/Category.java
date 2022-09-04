@@ -1,12 +1,10 @@
 package com.team4.planit.category;
 
 import com.team4.planit.member.Member;
-import com.team4.planit.todoList.Todo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -35,7 +33,8 @@ public class Category {
     private CategoryStatusCode categoryStatus;
 
     @Builder
-    public Category(Member member, String categoryName, String categoryColor, Boolean isPublic, CategoryStatusCode categoryStatus) {
+    public Category(Member member, String categoryName, String categoryColor,
+                    Boolean isPublic, CategoryStatusCode categoryStatus) {
         this.member = member;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
