@@ -21,7 +21,6 @@ import java.util.List;
 public class CategoryService {
     private final Check check;
     private final CategoryRepository categoryRepository;
-    private final CategoryRepositorySupport categoryRepositorySupport;
     private final TodoRepositorySupport todoRepositorySupport;
     private final TodoListRepository todoListRepository;
 
