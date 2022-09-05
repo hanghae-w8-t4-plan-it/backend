@@ -57,7 +57,7 @@ public class Check {
     }
 
     public void checkPassword(PasswordEncoder passwordEncoder, String password, Member member) {
-        if (!member.validatePassword(passwordEncoder, password)) {
+        if (!member.validatePassword(passwordEncoder, password)||member.getMemberStatus().equals("deleted")) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }
     }

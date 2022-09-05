@@ -47,9 +47,9 @@ public class MemberController {
     }
     @PatchMapping
     public ResponseEntity<?> modifyMemberInfo(HttpServletRequest request,
-                                              @RequestPart MemberRequestDto requestDto,
+                                              @RequestPart MemberRequestDto data,
                                               @RequestPart(required = false) MultipartFile[] image) throws IOException {
-        return memberService.modifyMemberInfo(request,requestDto,image);
+        return memberService.modifyMemberInfo(request,data,image);
     }
 
     @GetMapping("/{memberId}/status")

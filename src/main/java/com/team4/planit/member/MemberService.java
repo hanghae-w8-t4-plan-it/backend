@@ -49,10 +49,7 @@ public class MemberService {
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
-        Long memberId = member.getMemberId();
-        String nickname = member.getNickname();
-        String photoUrl = member.getProfileImgUrl();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(memberId, nickname, photoUrl);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl());
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
@@ -88,7 +85,8 @@ public class MemberService {
 
     public ResponseEntity<?> deleteMembers(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        memberRepository.deleteById(member.getMemberId());
+        member.updateStatus();
+        memberRepository.save(member);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
