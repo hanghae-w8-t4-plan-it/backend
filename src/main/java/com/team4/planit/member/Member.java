@@ -42,6 +42,7 @@ public class Member extends Timestamped {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
+        this.memberStatus="normal";
         this.profileImgUrl = "https://springbucketss.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
     }
 

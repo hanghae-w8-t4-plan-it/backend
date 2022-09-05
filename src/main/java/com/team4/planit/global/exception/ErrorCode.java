@@ -22,7 +22,6 @@ public enum ErrorCode {
 
     //TODO_LIST
     TODO_LIST_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "T001", "해당 투두 리스트가 없습니다."),
-
     //TODO
     TODO_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "T001", "해당 투두가 없습니다."),
 
