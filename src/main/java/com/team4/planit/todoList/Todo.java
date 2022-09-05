@@ -52,6 +52,15 @@ public class Todo {
         this.isAchieved = isAchieved;
     }
 
+    @Builder
+    public Todo(TodoList todoList, String dueDate, String title, String memo, Boolean isAchieved) {
+        this.todoList = todoList;
+        this.dueDate = dueDate;
+        this.title = title;
+        this.memo = memo;
+        this.isAchieved = isAchieved;
+    }
+
     public void updateTodo(TodoRequestDto requestDto) {
         if (requestDto.getTitle() != null) this.title = requestDto.getTitle();
         if (requestDto.getMemo() != null) this.memo = requestDto.getMemo();

@@ -34,6 +34,8 @@ public class Member extends Timestamped {
     @Column(name = "member_kakao_id", unique = true)
     private Long kakaoId;
 
+    @Column(name = "member_status")
+    private String memberStatus;
     @Builder
     public Member(String email, String nickname, String password) {
         this.memberId = getMemberId();
@@ -58,6 +60,9 @@ public class Member extends Timestamped {
         if(requestDto.getPassword()!=null) this.password = requestDto.getPassword();
         if(requestDto.getNickname()!=null) this.nickname = requestDto.getNickname();
         if(imgUrl!=null) this.profileImgUrl = imgUrl;
+    }
+    public void updateStatus(){
+        this.memberStatus="deleted";
     }
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {

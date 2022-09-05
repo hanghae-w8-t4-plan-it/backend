@@ -31,17 +31,22 @@ public class TodoService {
             .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
         if (todoList == null) todoList = todoListRepository.save(new TodoList(member, requestDto.getDueDate()));
         Todo todo = Todo.builder()
-                .member(member)
                 .todoList(todoList)
                 .dueDate(requestDto.getDueDate())
-                .category(category)
                 .title(requestDto.getTitle())
                 .memo(requestDto.getMemo())
                 .isAchieved(false)
                 .build();
         todoRepository.save(todo);
         return new ResponseEntity<>(Message.success(
-                new TodoResponseDto(todo.getTitle(), todo.getTodoList())), HttpStatus.OK);
+                TodoResponseDto.builder()
+                        .todoListId(todo.getTodoList().getTodoListId())
+                        .title(todo.getTitle())
+                        .memo(todo.getMemo())
+                        .dueDate(todo.getDueDate())
+                        .isAchieved(todo.getIsAchieved())
+                        .build()
+        ), HttpStatus.OK);
     }
 
     @Transactional

@@ -33,7 +33,8 @@ public class Category {
     private CategoryStatusCode categoryStatus;
 
     @Builder
-    public Category(Member member, String categoryName, String categoryColor, Boolean isPublic, CategoryStatusCode categoryStatus) {
+    public Category(Member member, String categoryName, String categoryColor,
+                    Boolean isPublic, CategoryStatusCode categoryStatus) {
         this.member = member;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;

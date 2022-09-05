@@ -9,26 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TodoResponseDto {
 
+    private Long todoListId;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String memo;
 
+    private String dueDate;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isAchieved;
 
-    private TodoList todoList;
-
-    public TodoResponseDto(String title, TodoList todoList) {
-        this.title = title;
-        this.todoList = todoList;
-    }
-
     @Builder
-    public TodoResponseDto(String title, String memo, Boolean isAchieved) {
+    public TodoResponseDto(Long todoListId, String title, String dueDate, String memo, Boolean isAchieved) {
+        this.todoListId = todoListId;
         this.title = title;
         this.memo = memo;
+        this.dueDate = dueDate;
         this.isAchieved = isAchieved;
     }
 }
