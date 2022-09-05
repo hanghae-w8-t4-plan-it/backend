@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
-    Optional<Follow> findByMemberAndFollowedMember(Member followingmember, Member followedmember);
+    Optional<Follow> findByMemberAndFollowedMember(Member followingMember, Member followedMember);
 
     @Query(value = "select DISTINCT m from Follow m left join fetch m.member where (m.followedMember in :member)")
     List<Follow> findAllByFollowedMember(@Param("member") Member member);
