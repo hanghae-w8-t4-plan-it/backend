@@ -10,6 +10,7 @@ import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
 import com.team4.planit.todoList.TodoList;
+import com.team4.planit.todoList.TodoListRepository;
 import com.team4.planit.todoList.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class Check {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
+    private final TodoListRepository todoListRepository;
 
     public Integer countByCategory(Category category) {
         return todoRepository.countAllByCategory(category);
@@ -39,11 +41,6 @@ public class Check {
     public void checkCategoryAuthor(Member member, Category category) {
         if (!category.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
-
-    public void checkTodoList(TodoList todoList) {
-        if (null == todoList) throw new CustomException(ErrorCode.TODO_LIST_NOT_FOUND);
-    }
-
 
     public void checkEmail(String email) {
         if (null != memberRepository.findByEmail(email).orElse(null)) {
@@ -65,7 +62,6 @@ public class Check {
         }
     }
 
-
     public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
         if (refreshTokenConfirm == null) {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
@@ -86,6 +82,11 @@ public class Check {
     @Transactional(readOnly = true)
     public Category isPresentCategory(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public TodoList isPresentTodoList(Long id) {
+        return todoListRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
     }
 
     public Member isPresentMemberByMemberId(Long memberId) {

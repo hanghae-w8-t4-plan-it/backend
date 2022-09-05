@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class FollowService {
     private final Check check;
     private final FollowRepository followRepository;
 
+    @Transactional
     public ResponseEntity<?> upDownFollow(Long memberId, HttpServletRequest request) {
         Member followingMember = check.validateMember(request);
         Member followedMember = check.isPresentMemberByMemberId(memberId);
@@ -32,6 +34,7 @@ public class FollowService {
             return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> getFollowers(Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);
@@ -43,6 +46,7 @@ public class FollowService {
         return new ResponseEntity<>(Message.success(followedResponseDtoList), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> getFollowings(Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);
