@@ -21,7 +21,7 @@ public class TodoRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<TodoResponseDto> findAllTodos(Category category) {
+    public List<TodoResponseDto> findAllTodosByDueDate(Category category, String dueDate) {
         return queryFactory
                 .select(Projections.fields(
                         TodoResponseDto.class,
@@ -32,7 +32,7 @@ public class TodoRepositorySupport extends QuerydslRepositorySupport {
                         todo.isAchieved
                 ))
                 .from(todo)
-                .where(todo.category.eq(category))
+                .where(todo.category.eq(category), todo.dueDate.eq(dueDate))
                 .fetch();
     }
 

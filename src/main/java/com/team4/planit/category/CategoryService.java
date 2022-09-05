@@ -46,9 +46,9 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getAllCategories(HttpServletRequest request) {
-        check.validateMember(request);
-        List<Category> categories = categoryRepository.findAll();
+    public ResponseEntity<?> getAllCategories(String dueDate, HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
             if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
@@ -60,7 +60,7 @@ public class CategoryService {
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
-                                .todos(todoRepositorySupport.findAllTodos(category))
+                                .todos(todoRepositorySupport.findAllTodosByDueDate(category, dueDate))
                                 .build()
                 );
             }
