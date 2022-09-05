@@ -27,9 +27,10 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
                         category.categoryName,
                         category.categoryColor,
                         category.isPublic,
-                        category.categoryStatus
+                        category.categoryStatus,
+                        todo
                 ))
-                .from(category, todo)
+                .from(category)
                 .leftJoin(todo)
                 .on(category.categoryId.eq(todo.category.categoryId))
                 .where(category.categoryId.eq(todo.category.categoryId))
