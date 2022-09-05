@@ -42,10 +42,6 @@ public class Check {
         if (!category.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
 
-    public void checkTodoList(TodoList todoList) {
-        if (null == todoList) throw new CustomException(ErrorCode.TODO_LIST_NOT_FOUND);
-    }
-
     public void checkEmail(String email) {
         if (null != memberRepository.findByEmail(email).orElse(null)) {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
