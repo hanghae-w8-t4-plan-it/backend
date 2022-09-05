@@ -25,7 +25,7 @@ public class LikesService {
         TodoList todoList = check.isPresentTodoList(todoListId);
         Optional<Likes> findLike = likesRepository.findByMemberAndAndTodoList(member, todoList);
         if (findLike.isEmpty()) {
-            likesRepository.save(new Likes());
+            likesRepository.save(new Likes(member, todoList));
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         }
         likesRepository.deleteById(findLike.get().getLikesId());
