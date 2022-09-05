@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -100,8 +99,7 @@ public class TokenProvider {
 
     @Transactional(readOnly = true)
     public RefreshToken isPresentRefreshToken(Member member) {
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByMember(member);
-        return optionalRefreshToken.orElseThrow( ()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
+        return refreshTokenRepository.findByMember(member).orElseThrow( ()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
     }
 
     @Transactional
