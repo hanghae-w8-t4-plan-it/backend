@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,23 +20,21 @@ public class FollowService {
     private final Check check;
     private final FollowRepository followRepository;
 
+    @Transactional
     public ResponseEntity<?> upDownFollow(Long memberId, HttpServletRequest request) {
         Member followingMember = check.validateMember(request);
         Member followedMember = check.isPresentMemberByMemberId(memberId);
         if(followingMember.getMemberId().equals(memberId)) { return new ResponseEntity<>(Message.success(ErrorCode.FOLLOW_SELF_ERROR), HttpStatus.OK); }
-        Optional<Follow> findFollowing = followRepository.findByMemberAndFollowedMember(followingMember, followedMember);
-        if(findFollowing.isEmpty()) {
-            FollowRequestDto followRequestDto = new FollowRequestDto(followingMember, followedMember);
-            Follow follow = new Follow(followRequestDto);
-            followRepository.save(follow);
+        Follow findFollowing = followRepository.findByMemberAndFollowedMember(followingMember, followedMember).orElse(null);
+        if(findFollowing==null) {
+            followRepository.save(new Follow(followingMember, followedMember));
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
-        } else {
-            followRepository.deleteById(findFollowing.get().getFollowId());
-
-            return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
         }
+            followRepository.deleteById(findFollowing.getFollowId());
+            return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> getFollowers(Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);
@@ -48,6 +46,7 @@ public class FollowService {
         return new ResponseEntity<>(Message.success(followedResponseDtoList), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> getFollowings(Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);

@@ -129,11 +129,8 @@ public class KakaoLoginService {
         Long id = jsonNode.get("id").asLong();
         String nickname = jsonNode.get("kakao_account").get("profile")
                 .get("nickname").asText();
-//        String name = jsonNode.get("kakao_account")
-//                .get("name").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
-//        String email = "kakao"+jsonNode.get("id")+"@kakao.com";
         String profileImgUrl = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
 
 

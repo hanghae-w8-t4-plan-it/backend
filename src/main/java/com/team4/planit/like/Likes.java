@@ -1,30 +1,32 @@
-package com.team4.planit.follow;
+package com.team4.planit.like;
 
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor
-public class Follow {
+public class Likes {
 
     @Id
+    @Column(name = "likes_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long followId;
+    private Long likesId;
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @JoinColumn(name = "followed_member_id")
+    @JoinColumn(name = "todo_list_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member followedMember;
+    private TodoList todoList;
 
-    public Follow(Member member, Member followedMember) {
+    public Likes(Member member, TodoList todoList) {
         this.member = member;
-        this.followedMember = followedMember;
+        this.todoList = todoList;
     }
 }

@@ -1,12 +1,11 @@
 package com.team4.planit.category;
 
-import com.team4.planit.global.shared.Message;
 import com.team4.planit.global.shared.Check;
+import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
-import com.team4.planit.todoList.Todo;
-import com.team4.planit.todoList.TodoRepository;
+import com.team4.planit.todoList.TodoList;
+import com.team4.planit.todoList.TodoListRepository;
 import com.team4.planit.todoList.TodoRepositorySupport;
-import com.team4.planit.todoList.TodoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,8 @@ import java.util.List;
 public class CategoryService {
     private final Check check;
     private final CategoryRepository categoryRepository;
-    private final CategoryRepositorySupport categoryRepositorySupport;
     private final TodoRepositorySupport todoRepositorySupport;
+    private final TodoListRepository todoListRepository;
 
     @Transactional
     public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
@@ -48,6 +47,9 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAllCategories(String dueDate, HttpServletRequest request) {
         Member member = check.validateMember(request);
+        if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
+           todoListRepository.save(new TodoList(member, dueDate));
+        }
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
@@ -60,7 +62,7 @@ public class CategoryService {
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
-                                .todos(todoRepositorySupport.findAllTodosByDueDate(category, dueDate))
+                                .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
                                 .build()
                 );
             }
