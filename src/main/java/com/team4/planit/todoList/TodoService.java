@@ -2,6 +2,8 @@ package com.team4.planit.todoList;
 
 import com.team4.planit.category.Category;
 import com.team4.planit.category.CategoryRepository;
+import com.team4.planit.global.exception.CustomException;
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
@@ -29,7 +31,6 @@ public class TodoService {
         check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository
             .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
-        if (todoList == null) todoList = todoListRepository.save(new TodoList(member, requestDto.getDueDate()));
         Todo todo = Todo.builder()
                 .todoList(todoList)
                 .dueDate(requestDto.getDueDate())
@@ -58,8 +59,8 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        Todo todo = todoRepository.findById(todoId).orElse(null);
-        check.checkTodo(todo);
+        Todo todo = todoRepository.findById(todoId).orElseThrow(
+                ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todo.updateTodo(requestDto);
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
@@ -73,8 +74,8 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        Todo todo = todoRepository.findById(todoId).orElse(null);
-        check.checkTodo(todo);
+        Todo todo = todoRepository.findById(todoId).orElseThrow(
+                ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todoRepository.delete(todo);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }

@@ -9,7 +9,6 @@ import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
-import com.team4.planit.todoList.Todo;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
 import com.team4.planit.todoList.TodoRepository;
@@ -24,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -44,8 +42,8 @@ public class Check {
         if (!category.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
 
-    public void checkTodo(Todo todo) {
-        if (null == todo) throw new CustomException(ErrorCode.TODO_NOT_FOUND);
+    public void checkTodoList(TodoList todoList) {
+        if (null == todoList) throw new CustomException(ErrorCode.TODO_LIST_NOT_FOUND);
     }
 
     public void checkEmail(String email) {
@@ -55,7 +53,7 @@ public class Check {
     }
 
     public void checkPassword(PasswordEncoder passwordEncoder, String password, Member member) {
-        if (!member.validatePassword(passwordEncoder, password)||member.getMemberStatus().equals("deleted")) {
+        if (!member.validatePassword(passwordEncoder, password) || member.getMemberStatus().equals("deleted")) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }
     }
@@ -67,18 +65,6 @@ public class Check {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
     }
-
-    @Transactional(readOnly = true)
-    public Category isPresentCategory(Long id) {
-        Optional<Category> optionalCategory = categoryRepository.findById(id);
-        return optionalCategory.orElse(null);
-    }
-
-    @Transactional(readOnly = true)
-    public TodoList isPresentTodoList(Long id) {
-        return todoListRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
-    }
-
 
     public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
         if (refreshTokenConfirm == null) {
@@ -94,19 +80,27 @@ public class Check {
     }
 
     public Member isPresentMember(String email) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        return memberRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public Category isPresentCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public TodoList isPresentTodoList(Long id) {
+        return todoListRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
     }
 
     public Member isPresentMemberByMemberId(Long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        return optionalMember.orElseThrow(
-                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        );
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public Member validateMember(HttpServletRequest request) {
-        if(request.getHeader("Authorization").length()<8){throw new CustomException(ErrorCode.INVALID_TOKEN);}
+        if (request.getHeader("Authorization").length() < 8) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
         if (!tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         }

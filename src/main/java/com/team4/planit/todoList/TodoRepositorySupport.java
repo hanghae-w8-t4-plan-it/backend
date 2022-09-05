@@ -3,13 +3,11 @@ package com.team4.planit.todoList;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team4.planit.category.Category;
-import com.team4.planit.category.CategoryResponseDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.team4.planit.category.QCategory.category;
 import static com.team4.planit.todoList.QTodo.todo;
 
 @Repository
@@ -21,7 +19,7 @@ public class TodoRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<TodoResponseDto> findAllTodosByDueDate(Category category, String dueDate) {
+    public List<TodoResponseDto> findAllTodosByCategoryAndDueDate(Category category, String dueDate) {
         return queryFactory
                 .select(Projections.fields(
                         TodoResponseDto.class,
