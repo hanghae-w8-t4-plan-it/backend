@@ -1,6 +1,5 @@
 package com.team4.planit.category;
 
-import com.team4.planit.todoList.Todo;
 import com.team4.planit.todoList.TodoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
