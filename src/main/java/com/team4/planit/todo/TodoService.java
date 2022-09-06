@@ -35,6 +35,8 @@ public class TodoService {
                                 ()->new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
         Todo todo = Todo.builder()
                 .todoList(todoList)
+                .member(member)
+                .category(category)
                 .dueDate(requestDto.getDueDate())
                 .title(requestDto.getTitle())
                 .memo(requestDto.getMemo())
@@ -44,6 +46,7 @@ public class TodoService {
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
                         .todoListId(todo.getTodoList().getTodoListId())
+                        .todoId(todo.getTodoId())
                         .title(todo.getTitle())
                         .memo(todo.getMemo())
                         .dueDate(todo.getDueDate())
