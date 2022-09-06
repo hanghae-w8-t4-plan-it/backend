@@ -68,8 +68,6 @@ public class CategoryService {
             }
         }
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
-
-//        return new ResponseEntity<>(Message.success(categoryRepositorySupport.findAllCategories()), HttpStatus.OK);
     }
 
     @Transactional
