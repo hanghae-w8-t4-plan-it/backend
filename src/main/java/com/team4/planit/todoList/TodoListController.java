@@ -2,9 +2,7 @@ package com.team4.planit.todoList;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,4 +16,12 @@ public class TodoListController {
                                          HttpServletRequest request) {
         return todoListService.getTodoListByYearAndMonth(year, month, request);
     }
+
+    @PostMapping("/todo-list/today")
+    public ResponseEntity<?> createTodoList(@RequestParam String dueDate,
+                                            @RequestParam(required = false) String planet,
+                                            HttpServletRequest request) {
+        return todoListService.createTodoList(dueDate, planet, request);
+    }
+
 }
