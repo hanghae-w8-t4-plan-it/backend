@@ -1,13 +1,11 @@
 package com.team4.planit.todoList;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.team4.planit.todoList.QTodo.todo;
 import static com.team4.planit.todoList.QTodoList.todoList;
 
 @Repository

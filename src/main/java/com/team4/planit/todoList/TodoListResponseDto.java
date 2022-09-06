@@ -1,6 +1,5 @@
 package com.team4.planit.todoList;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
