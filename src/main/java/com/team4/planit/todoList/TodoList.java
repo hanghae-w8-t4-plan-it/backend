@@ -33,7 +33,7 @@ public class TodoList {
         this.dueDate = dueDate;
         this.planet = planet;
     }
-    public void update(String planet){
-        this.planet=planet;
+    public void update(String planet) {
+        this.planet = planet;
     }
 }

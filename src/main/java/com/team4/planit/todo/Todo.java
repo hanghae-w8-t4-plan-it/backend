@@ -1,7 +1,8 @@
-package com.team4.planit.todoList;
+package com.team4.planit.todo;
 
 import com.team4.planit.category.Category;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoList;
 import lombok.*;
 
 import javax.persistence.*;
@@ -64,6 +65,6 @@ public class Todo {
     public void updateTodo(TodoRequestDto requestDto) {
         if (requestDto.getTitle() != null) this.title = requestDto.getTitle();
         if (requestDto.getMemo() != null) this.memo = requestDto.getMemo();
-        if (requestDto.getIsAchieved() != this.isAchieved) this.isAchieved = requestDto.getIsAchieved();
+        if (requestDto.getIsAchieved() != null) this.isAchieved = requestDto.getIsAchieved();
     }
 }

@@ -11,7 +11,7 @@ import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
-import com.team4.planit.todoList.TodoRepository;
+import com.team4.planit.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +43,8 @@ public class Check {
     }
 
     public void checkEmail(String email) {
-        if (null != memberRepository.findByEmail(email).orElse(null)) {
-            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
-        }
+        memberRepository.findByEmail(email).orElseThrow(
+                () -> new CustomException(ErrorCode.DUPLICATED_EMAIL));
     }
 
     public void checkPassword(PasswordEncoder passwordEncoder, String password, Member member) {

@@ -1,4 +1,4 @@
-package com.team4.planit.todoList;
+package com.team4.planit.todo;
 
 import com.team4.planit.category.Category;
 import com.team4.planit.category.CategoryRepository;
@@ -7,6 +7,8 @@ import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoList;
+import com.team4.planit.todoList.TodoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +29,14 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        Category category = categoryRepository.findById(categoryId).orElse(null);
-        check.isPresentCategory(categoryId);
+        Category category = check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository
-            .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
+                        .findByMemberAndDueDate(member, requestDto.getDueDate()).orElseThrow(
+                                ()->new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
         Todo todo = Todo.builder()
                 .todoList(todoList)
+                .member(member)
+                .category(category)
                 .dueDate(requestDto.getDueDate())
                 .title(requestDto.getTitle())
                 .memo(requestDto.getMemo())
@@ -42,6 +46,7 @@ public class TodoService {
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
                         .todoListId(todo.getTodoList().getTodoListId())
+                        .todoId(todo.getTodoId())
                         .title(todo.getTitle())
                         .memo(todo.getMemo())
                         .dueDate(todo.getDueDate())
@@ -58,16 +63,19 @@ public class TodoService {
 
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
-        Member member = check.validateMember(request);
+        check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todo.updateTodo(requestDto);
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
-                    .title(todo.getTitle())
-                    .memo(todo.getMemo())
-                    .isAchieved(todo.getIsAchieved())
-                    .build()
+                        .todoListId(todo.getTodoList().getTodoListId())
+                        .todoId(todo.getTodoId())
+                        .title(todo.getTitle())
+                        .memo(todo.getMemo())
+                        .dueDate(todo.getDueDate())
+                        .isAchieved(todo.getIsAchieved())
+                        .build()
         ), HttpStatus.OK);
     }
 

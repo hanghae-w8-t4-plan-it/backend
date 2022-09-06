@@ -1,4 +1,4 @@
-package com.team4.planit.todoList;
+package com.team4.planit.todo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class TodoResponseDto {
 
     private Long todoListId;
+
     private Long todoId;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

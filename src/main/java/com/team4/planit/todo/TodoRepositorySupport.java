@@ -1,4 +1,4 @@
-package com.team4.planit.todoList;
+package com.team4.planit.todo;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.team4.planit.todoList.QTodo.todo;
+import static com.team4.planit.todo.QTodo.todo;
 
 @Repository
 public class TodoRepositorySupport extends QuerydslRepositorySupport {

@@ -2,9 +2,10 @@ package com.team4.planit.todoList;
 
 import com.team4.planit.category.CategoryService;
 import com.team4.planit.global.shared.Check;
-import com.team4.planit.member.Member;
-import lombok.RequiredArgsConstructor;
 import com.team4.planit.global.shared.Message;
+import com.team4.planit.member.Member;
+import com.team4.planit.todo.TodoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,16 @@ public class TodoListService {
     private final CategoryService categoryService;
     private final TodoRepository todoRepository;
 
-    public ResponseEntity<?> getPlanet(TodoListRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> createTodoList(String dueDate, String planet, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        TodoList todoList=todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
-                .orElse(todoListRepository.save(new TodoList(member, requestDto.getDueDate(), requestDto.getPlanet())));
-        todoList.update(requestDto.getPlanet());
-        return categoryService.getAllCategories(requestDto.getDueDate(), request);
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElse(null);
+        if(todoList==null) {
+            todoListRepository.save(new TodoList(member, dueDate, planet));
+            return categoryService.getAllCategories(dueDate, request);
+        }
+        todoList.update(planet);
+        todoListRepository.save(todoList);
+        return categoryService.getAllCategories(dueDate, request);
     }
 
     @Transactional(readOnly = true)
