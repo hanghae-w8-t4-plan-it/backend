@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class TodoResponseDto {
 
     private Long todoListId;
+
     private Long todoId;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

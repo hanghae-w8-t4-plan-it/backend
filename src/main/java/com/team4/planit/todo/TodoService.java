@@ -63,16 +63,19 @@ public class TodoService {
 
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
-        Member member = check.validateMember(request);
+        check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todo.updateTodo(requestDto);
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
-                    .title(todo.getTitle())
-                    .memo(todo.getMemo())
-                    .isAchieved(todo.getIsAchieved())
-                    .build()
+                        .todoListId(todo.getTodoList().getTodoListId())
+                        .todoId(todo.getTodoId())
+                        .title(todo.getTitle())
+                        .memo(todo.getMemo())
+                        .dueDate(todo.getDueDate())
+                        .isAchieved(todo.getIsAchieved())
+                        .build()
         ), HttpStatus.OK);
     }
 

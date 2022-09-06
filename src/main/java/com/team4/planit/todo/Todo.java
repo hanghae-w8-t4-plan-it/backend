@@ -65,6 +65,6 @@ public class Todo {
     public void updateTodo(TodoRequestDto requestDto) {
         if (requestDto.getTitle() != null) this.title = requestDto.getTitle();
         if (requestDto.getMemo() != null) this.memo = requestDto.getMemo();
-        if (requestDto.getIsAchieved() != this.isAchieved) this.isAchieved = requestDto.getIsAchieved();
+        if (requestDto.getIsAchieved() != null) this.isAchieved = requestDto.getIsAchieved();
     }
 }
