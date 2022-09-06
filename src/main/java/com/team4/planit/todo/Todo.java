@@ -1,7 +1,8 @@
-package com.team4.planit.todoList;
+package com.team4.planit.todo;
 
 import com.team4.planit.category.Category;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoList;
 import lombok.*;
 
 import javax.persistence.*;

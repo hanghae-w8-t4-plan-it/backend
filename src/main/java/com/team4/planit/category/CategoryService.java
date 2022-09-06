@@ -5,7 +5,7 @@ import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
-import com.team4.planit.todoList.TodoRepositorySupport;
+import com.team4.planit.todo.TodoRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
