@@ -1,6 +1,6 @@
 package com.team4.planit.category;
 
-import com.team4.planit.todoList.TodoResponseDto;
+import com.team4.planit.todo.TodoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +26,5 @@ public class CategoryResponseDto {
         this.isPublic = isPublic;
         this.categoryStatus = categoryStatus;
         this.todos = todos;
-    }
+    } 
 }
