@@ -1,11 +1,6 @@
 package com.team4.planit.category;
 
-<<<<<<< Updated upstream
-import com.team4.planit.todoList.Todo;
-import com.team4.planit.todoList.TodoResponseDto;
-=======
 import com.team4.planit.todo.TodoResponseDto;
->>>>>>> Stashed changes
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
