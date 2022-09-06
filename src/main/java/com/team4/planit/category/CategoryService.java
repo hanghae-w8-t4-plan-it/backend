@@ -1,9 +1,10 @@
 package com.team4.planit.category;
 
+import com.team4.planit.global.exception.CustomException;
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
-import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
 import com.team4.planit.todoList.TodoRepositorySupport;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class CategoryService {
     public ResponseEntity<?> getAllCategories(String dueDate, HttpServletRequest request) {
         Member member = check.validateMember(request);
         if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
-           todoListRepository.save(new TodoList(member, dueDate));
+           throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
         }
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
