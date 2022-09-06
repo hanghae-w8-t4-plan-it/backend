@@ -24,10 +24,10 @@ public class TodoListService {
     private final CategoryService categoryService;
     private final TodoRepository todoRepository;
 
-    public ResponseEntity<?> getPlanet(TodoListRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> createTodoList(TodoListRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        TodoList todoList=todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
-                .orElse(todoListRepository.save(new TodoList(member, requestDto.getDueDate(), requestDto.getPlanet())));
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
+                .orElse(todoListRepository.save(new TodoList(member, requestDto.getDueDate())));
         todoList.update(requestDto.getPlanet());
         return categoryService.getAllCategories(requestDto.getDueDate(), request);
     }

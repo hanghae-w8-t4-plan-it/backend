@@ -29,10 +29,10 @@ public class TodoService {
     @Transactional
     public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        Category category = categoryRepository.findById(categoryId).orElse(null);
-        check.isPresentCategory(categoryId);
+        Category category = check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository
-            .findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
+                        .findByMemberAndDueDate(member, requestDto.getDueDate()).orElseThrow(
+                                ()->new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
         Todo todo = Todo.builder()
                 .todoList(todoList)
                 .dueDate(requestDto.getDueDate())
