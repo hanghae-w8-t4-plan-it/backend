@@ -45,7 +45,7 @@ public class CategoryService {
                 .build()), HttpStatus.OK);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ResponseEntity<?> getAllCategories(String dueDate, HttpServletRequest request) {
         Member member = check.validateMember(request);
         if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
