@@ -26,5 +26,5 @@ public class CategoryResponseDto {
         this.isPublic = isPublic;
         this.categoryStatus = categoryStatus;
         this.todos = todos;
-    }
+    } 
 }
