@@ -3,6 +3,7 @@ package com.team4.planit.todoList;
 import com.team4.planit.category.CategoryService;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
+import com.team4.planit.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import com.team4.planit.global.shared.Message;
 import org.springframework.http.HttpStatus;

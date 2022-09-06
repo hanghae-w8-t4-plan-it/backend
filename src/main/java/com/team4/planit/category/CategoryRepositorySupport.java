@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.team4.planit.category.QCategory.category;
-import static com.team4.planit.todoList.QTodo.todo;
+import static com.team4.planit.todo.QTodo.todo;
 
 @Repository
 public class CategoryRepositorySupport extends QuerydslRepositorySupport {

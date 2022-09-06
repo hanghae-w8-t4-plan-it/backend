@@ -1,4 +1,4 @@
-package com.team4.planit.todoList;
+package com.team4.planit.todo;
 
 import com.team4.planit.category.Category;
 import com.team4.planit.category.CategoryRepository;
@@ -7,6 +7,8 @@ import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.TodoList;
+import com.team4.planit.todoList.TodoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

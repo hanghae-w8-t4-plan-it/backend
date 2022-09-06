@@ -1,6 +1,5 @@
 package com.team4.planit.member;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
