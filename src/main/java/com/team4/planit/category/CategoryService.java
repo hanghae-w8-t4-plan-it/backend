@@ -49,13 +49,41 @@ public class CategoryService {
     public ResponseEntity<?> getAllCategories(String dueDate, HttpServletRequest request) {
         Member member = check.validateMember(request);
         if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
-           throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
+            throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
         }
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
             if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
                     category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
+                categoryResponseDtoList.add(
+                        CategoryResponseDto.builder()
+                                .categoryId(category.getCategoryId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatus(category.getCategoryStatus())
+                                .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
+                                .build()
+                );
+            }
+        }
+        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
+    }
+    @Transactional
+    public ResponseEntity<?> getAllCategoriesOfOther(String dueDate,Long memberId, HttpServletRequest request) {
+        check.validateMember(request);
+        Member member = check.isPresentMemberByMemberId(memberId);
+        if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
+            throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
+        }
+        List<Category> categories = categoryRepository.findAllByMember(member);
+        List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
+        for (Category category : categories) {
+            if (category.getIsPublic() && (check.countByCategory(category) != 0 ||
+                    category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
+                    category.getCategoryStatus().equals(CategoryStatusCode.RESTART))
+            ) {
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
                                 .categoryId(category.getCategoryId())
