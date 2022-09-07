@@ -27,6 +27,7 @@ public class TodoRepositorySupport extends QuerydslRepositorySupport {
                         todo.dueDate,
                         todo.title,
                         todo.memo,
+                        todo.todoId,
                         todo.isAchieved
                 ))
                 .from(todo)
