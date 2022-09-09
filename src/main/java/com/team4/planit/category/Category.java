@@ -1,5 +1,6 @@
 package com.team4.planit.category;
 
+import com.team4.planit.category.dto.CategoryRequestDto;
 import com.team4.planit.member.Member;
 import lombok.Builder;
 import lombok.Getter;

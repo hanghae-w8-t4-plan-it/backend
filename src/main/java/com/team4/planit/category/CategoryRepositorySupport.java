@@ -2,6 +2,7 @@ package com.team4.planit.category;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.team4.planit.category.dto.CategoryResponseDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 

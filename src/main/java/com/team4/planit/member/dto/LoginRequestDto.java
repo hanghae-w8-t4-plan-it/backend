@@ -1,4 +1,4 @@
-package com.team4.planit.member;
+package com.team4.planit.member.dto;
 
 import lombok.Getter;
 

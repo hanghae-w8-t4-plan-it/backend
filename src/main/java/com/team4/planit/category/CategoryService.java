@@ -1,5 +1,7 @@
 package com.team4.planit.category;
 
+import com.team4.planit.category.dto.CategoryRequestDto;
+import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
