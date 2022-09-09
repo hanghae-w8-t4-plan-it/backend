@@ -1,4 +1,4 @@
-package com.team4.planit.follow;
+package com.team4.planit.follow.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

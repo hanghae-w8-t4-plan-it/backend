@@ -2,6 +2,7 @@ package com.team4.planit.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team4.planit.global.shared.Timestamped;
+import com.team4.planit.member.dto.MemberRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

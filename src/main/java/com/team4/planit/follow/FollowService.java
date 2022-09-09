@@ -1,5 +1,7 @@
 package com.team4.planit.follow;
 
+import com.team4.planit.follow.dto.FollowedResponseDto;
+import com.team4.planit.follow.dto.FollowingResponseDto;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
