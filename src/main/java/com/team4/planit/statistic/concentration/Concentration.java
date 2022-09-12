@@ -1,6 +1,7 @@
 package com.team4.planit.statistic.concentration;
 
 import com.team4.planit.member.Member;
+import com.team4.planit.statistic.StatisticPeriodCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Concentration {
     private Member member;
 
     @Column(name = "conncentration_period")
-    private ConcentrationPeriodCode period;
+    private StatisticPeriodCode period;
 
     @Column(name = "conncentration_rate")
     private Float concentrationRate;
@@ -34,7 +35,7 @@ public class Concentration {
     private String startDate;
 
     @Builder
-    public Concentration(Member member, ConcentrationPeriodCode period, Float concentrationRate, Integer concentrationTime, String startDate) {
+    public Concentration(Member member, StatisticPeriodCode period, Float concentrationRate, Integer concentrationTime, String startDate) {
         this.member = member;
         this.period = period;
         this.concentrationRate = concentrationRate;

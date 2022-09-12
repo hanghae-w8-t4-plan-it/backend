@@ -1,6 +1,7 @@
 package com.team4.planit.statistic.concentration;
 
 import com.team4.planit.member.Member;
+import com.team4.planit.statistic.StatisticPeriodCode;
 import com.team4.planit.timer.Timer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class ConcentrationService {
         if (!startHour.equals(lastHour)) {
             Concentration concentrationFirst = Concentration.builder()
                     .member(member)
-                    .period(ConcentrationPeriodCode.DAY)
+                    .period(StatisticPeriodCode.DAY)
                     .concentrationRate(100f)
                     .concentrationTime(Math.round(startHour))
                     .startDate(timer.getStartDate())
@@ -32,7 +33,7 @@ public class ConcentrationService {
                 for (int i = 1; i < lastHour - startHour; i++) {
                     Concentration concentrationMiddle = Concentration.builder()
                             .member(member)
-                            .period(ConcentrationPeriodCode.DAY)
+                            .period(StatisticPeriodCode.DAY)
                             .concentrationRate(100f)
                             .concentrationTime(Math.round(startHour + i))
                             .startDate(timer.getStartDate())
@@ -49,7 +50,7 @@ public class ConcentrationService {
                     }
                     Concentration concentrationMiddle = Concentration.builder()
                             .member(member)
-                            .period(ConcentrationPeriodCode.DAY)
+                            .period(StatisticPeriodCode.DAY)
                             .concentrationRate(100f)
                             .concentrationTime(Math.round(maxHour))
                             .startDate(timer.getStartDate())
@@ -60,7 +61,7 @@ public class ConcentrationService {
             if (lastHour.equals(targetHour)) {
                 Concentration concentrationLast = Concentration.builder()
                         .member(member)
-                        .period(ConcentrationPeriodCode.DAY)
+                        .period(StatisticPeriodCode.DAY)
                         .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / targetMinute * 100))))
                         .concentrationTime(Math.round(lastHour))
                         .startDate(timer.getStartDate())
@@ -70,7 +71,7 @@ public class ConcentrationService {
                 // 시작 시간 != 끝난 시간 != 목표 시간
                 Concentration concentrationLast = Concentration.builder()
                         .member(member)
-                        .period(ConcentrationPeriodCode.DAY)
+                        .period(StatisticPeriodCode.DAY)
                         .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / 60 * 100))))
                         .concentrationTime(Math.round(lastHour))
                         .startDate(timer.getStartDate())
@@ -81,7 +82,7 @@ public class ConcentrationService {
             // 시작 시간 = 끝난 시간 != 목표 시간
             Concentration concentration = Concentration.builder()
                     .member(member)
-                    .period(ConcentrationPeriodCode.DAY)
+                    .period(StatisticPeriodCode.DAY)
                     .concentrationRate(Float.parseFloat(String.format("%.1f", ((timer.getSetTime() - timer.getRemainTime()) / (60 - startMinute) * 100))))
                     .concentrationTime(Math.round(startHour))
                     .startDate(timer.getStartDate())
@@ -91,7 +92,7 @@ public class ConcentrationService {
             //시작 시간 = 끝난 시간 = 목표 시간
             Concentration concentration = Concentration.builder()
                     .member(member)
-                    .period(ConcentrationPeriodCode.DAY)
+                    .period(StatisticPeriodCode.DAY)
                     .concentrationRate(Float.parseFloat(String.format("%.1f", ((float) (timer.getSetTime() - timer.getRemainTime()) / timer.getSetTime() * 100))))
                     .concentrationTime(Math.round(startHour))
                     .startDate(timer.getStartDate())

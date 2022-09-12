@@ -1,5 +1,5 @@
-package com.team4.planit.statistic.concentration;
+package com.team4.planit.statistic;
 
-public enum ConcentrationPeriodCode {
+public enum StatisticPeriodCode {
     DAY, WEEK, MONTH, YEAR
 }
