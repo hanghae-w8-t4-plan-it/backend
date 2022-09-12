@@ -23,18 +23,22 @@ public class Timer{
     @Column(name = "timer_remain_time", nullable = false)
     private Integer remainTime;
 
-    @Column(name = "timer_date")
-    private String date;
+    @Column(name = "timer_start_date")
+    private String startDate;
+
+    @Column(name = "timer_last_date")
+    private String lastDate;
 
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     @Builder
-    public Timer(Integer setTime, Integer remainTime, String date, Member member) {
+    public Timer(Integer setTime, Integer remainTime, String startDate, String lastDate, Member member) {
         this.setTime = setTime;
         this.remainTime = remainTime;
-        this.date = date;
+        this.startDate = startDate;
+        this.lastDate = lastDate;
         this.member = member;
     }
 }

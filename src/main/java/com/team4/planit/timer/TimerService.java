@@ -3,6 +3,7 @@ package com.team4.planit.timer;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
+import com.team4.planit.statistic.concentrate.ConcentrationService;
 import com.team4.planit.timer.dto.TimerRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class TimerService {
     private final Check check;
-//    private final ConcentrateRateService concentrateRateService;
+    private final ConcentrationService concentrationService;
     private final TimerRepository timerRepository;
 
     @Transactional
@@ -29,12 +30,11 @@ public class TimerService {
                 .member(member)
                 .setTime(timerRequestDto.getSetTime())
                 .remainTime(timerRequestDto.getRemainTime())
-                .date(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(startTime))
+                .startDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(startTime))
+                .lastDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
                 .build();
         timerRepository.save(timer);
-//        concentrateRateService.createConcentrateRate(timer);
+        concentrationService.createConcentrateRate(timer, member);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
-
-// 분데이터로만 받고
