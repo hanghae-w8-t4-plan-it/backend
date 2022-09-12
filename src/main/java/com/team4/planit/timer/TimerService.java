@@ -36,7 +36,7 @@ public class TimerService {
                 .targetDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
                 .build();
         timerRepository.save(timer);
-        concentrationService.createConcentrateRate(timer, member);
+        concentrationService.createConcentration(timer, member);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }

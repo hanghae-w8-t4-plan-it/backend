@@ -31,7 +31,7 @@ public class Concentration {
     @Column(name = "conncentration_time")
     private Integer concentrationTime;
 
-    @Column(name = "conncentration_rate_start_date")
+    @Column(name = "conncentration_start_date")
     private String startDate;
 
     @Builder

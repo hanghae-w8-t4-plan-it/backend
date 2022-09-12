@@ -13,7 +13,7 @@ public class ConcentrationService {
     private final ConcentrationRepository concentrationRepository;
 
     @Transactional
-    public void createConcentrateRate(Timer timer, Member member) {
+    public void createConcentration(Timer timer, Member member) {
         Float startHour = Float.parseFloat(timer.getStartDate().substring(11, 13));
         Float startMinute = Float.parseFloat(timer.getStartDate().substring(14, 16));
         Float lastHour = Float.parseFloat(timer.getLastDate().substring(11, 13));
