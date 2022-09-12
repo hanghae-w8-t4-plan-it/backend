@@ -1,5 +1,6 @@
-package com.team4.planit.category;
+package com.team4.planit.category.dto;
 
+import com.team4.planit.category.CategoryStatusCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

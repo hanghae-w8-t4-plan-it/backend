@@ -3,6 +3,7 @@ package com.team4.planit.todo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team4.planit.category.Category;
+import com.team4.planit.todo.dto.TodoResponseDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 

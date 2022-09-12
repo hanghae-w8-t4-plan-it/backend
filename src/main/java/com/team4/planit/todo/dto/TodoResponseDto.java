@@ -1,4 +1,4 @@
-package com.team4.planit.todo;
+package com.team4.planit.todo.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

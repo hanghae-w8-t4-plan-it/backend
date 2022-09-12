@@ -1,5 +1,6 @@
 package com.team4.planit.category;
 
+import com.team4.planit.category.dto.CategoryRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

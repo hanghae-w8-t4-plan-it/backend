@@ -1,4 +1,4 @@
-package com.team4.planit.todo;
+package com.team4.planit.todo.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

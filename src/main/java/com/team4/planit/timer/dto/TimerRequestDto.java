@@ -1,4 +1,4 @@
-package com.team4.planit.timer;
+package com.team4.planit.timer.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
