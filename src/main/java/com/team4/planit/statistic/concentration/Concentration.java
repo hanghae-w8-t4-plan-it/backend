@@ -1,4 +1,4 @@
-package com.team4.planit.statistic.concentrate;
+package com.team4.planit.statistic.concentration;
 
 import com.team4.planit.member.Member;
 import lombok.Builder;
