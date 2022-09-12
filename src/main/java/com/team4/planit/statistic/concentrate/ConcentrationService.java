@@ -14,8 +14,11 @@ public class ConcentrationService {
     @Transactional
     public void createConcentrateRate(Timer timer, Member member) {
         Float startHour = Float.parseFloat(timer.getStartDate().substring(11, 13));
+        Float startMinute = Float.parseFloat(timer.getStartDate().substring(14, 16));
         Float lastHour = Float.parseFloat(timer.getLastDate().substring(11, 13));
         Float lastMinute = Float.parseFloat(timer.getLastDate().substring(14, 16));
+        Float targetHour = Float.parseFloat(timer.getTargetDate().substring(11, 13));
+        Float targetMinute = Float.parseFloat(timer.getTargetDate().substring(14, 16));
         if (!startHour.equals(lastHour)) {
             Concentration concentrationFirst = Concentration.builder()
                     .member(member)
@@ -38,27 +41,55 @@ public class ConcentrationService {
                     concentrationRepository.save(concentrationMiddle);
                 }
             } else if (lastHour < startHour) {
-                for (int i = 1; i <= lastHour + 24 - startHour; i++) {
-                    if (lastHour + 24 == (startHour + i)) break;
+                for (int i = 1; i <= lastHour + 23 - startHour; i++) {
+                    float maxHour = 0;
+                    if (startHour + i > 23) {
+                        maxHour = startHour + i - 24;
+                    } else {
+                        maxHour = startHour + i;
+                    }
                     Concentration concentrationMiddle = Concentration.builder()
                             .member(member)
                             .period(ConcentrationPeriodCode.DAY)
                             .concentrationRate(100f)
-                            .concentrationTime(Math.round(startHour + i))
+                            .concentrationTime(Math.round(maxHour))
                             .startDate(timer.getStartDate())
                             .build();
                     concentrationRepository.save(concentrationMiddle);
                 }
             }
-            Concentration concentrationLast = Concentration.builder()
+            if (lastHour.equals(targetHour)) {
+                Concentration concentrationLast = Concentration.builder()
+                        .member(member)
+                        .period(ConcentrationPeriodCode.DAY)
+                        .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / targetMinute * 100))))
+                        .concentrationTime(Math.round(lastHour))
+                        .startDate(timer.getStartDate())
+                        .build();
+                concentrationRepository.save(concentrationLast);
+            } else {
+                // 시작 시간 != 끝난 시간 != 목표 시간
+                Concentration concentrationLast = Concentration.builder()
+                        .member(member)
+                        .period(ConcentrationPeriodCode.DAY)
+                        .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / 60 * 100))))
+                        .concentrationTime(Math.round(lastHour))
+                        .startDate(timer.getStartDate())
+                        .build();
+                concentrationRepository.save(concentrationLast);
+            }
+        } else if (!startHour.equals(targetHour)) {
+            // 시작 시간 = 끝난 시간 != 목표 시간
+            Concentration concentration = Concentration.builder()
                     .member(member)
                     .period(ConcentrationPeriodCode.DAY)
-                    .concentrationRate(Float.parseFloat(String.format("%.1f", ((lastMinute - (timer.getRemainTime()%60)) / lastMinute * 100))))
-                    .concentrationTime(Math.round(lastHour))
+                    .concentrationRate(Float.parseFloat(String.format("%.1f", ((timer.getSetTime() - timer.getRemainTime()) / (60 - startMinute) * 100))))
+                    .concentrationTime(Math.round(startHour))
                     .startDate(timer.getStartDate())
                     .build();
-            concentrationRepository.save(concentrationLast);
+            concentrationRepository.save(concentration);
         } else {
+            //시작 시간 = 끝난 시간 = 목표 시간
             Concentration concentration = Concentration.builder()
                     .member(member)
                     .period(ConcentrationPeriodCode.DAY)

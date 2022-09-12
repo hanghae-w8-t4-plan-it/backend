@@ -29,16 +29,20 @@ public class Timer{
     @Column(name = "timer_last_date")
     private String lastDate;
 
+    @Column(name = "timer_target_date")
+    private String targetDate;
+
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     @Builder
-    public Timer(Integer setTime, Integer remainTime, String startDate, String lastDate, Member member) {
+    public Timer(Integer setTime, Integer remainTime, String startDate, String lastDate, String targetDate, Member member) {
         this.setTime = setTime;
         this.remainTime = remainTime;
         this.startDate = startDate;
         this.lastDate = lastDate;
+        this.targetDate = targetDate;
         this.member = member;
     }
 }
