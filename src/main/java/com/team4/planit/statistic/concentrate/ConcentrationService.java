@@ -29,8 +29,7 @@ public class ConcentrationService {
                     .build();
             concentrationRepository.save(concentrationFirst);
             if (lastHour > startHour) {
-                for (int i = 1; i <= lastHour - startHour; i++) {
-                    if (lastHour.equals(startHour + i)) break;
+                for (int i = 1; i < lastHour - startHour; i++) {
                     Concentration concentrationMiddle = Concentration.builder()
                             .member(member)
                             .period(ConcentrationPeriodCode.DAY)
