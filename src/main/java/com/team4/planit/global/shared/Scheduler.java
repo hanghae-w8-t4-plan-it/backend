@@ -1,6 +1,7 @@
 package com.team4.planit.global.shared;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -18,6 +19,7 @@ import java.util.Map;
 @EnableScheduling
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class Scheduler {
 
 
