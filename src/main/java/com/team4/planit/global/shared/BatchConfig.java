@@ -69,11 +69,11 @@ public class BatchConfig {
         reader.setQueryString("select s From Concentration s where s.startDate like :startDate");
         reader.setParameterValues(parameters);
         reader.setPageSize(chunkSize);
-
         return reader;
     }
 
     public ItemProcessor<Concentration, Concentration> processor() {
+
         return concentration -> new Concentration(concentration.getMember(), concentration.getPeriod(), concentration.getConcentrationRate(),concentration.getConcentrationTime(),concentration.getStartDate());
     }
 
