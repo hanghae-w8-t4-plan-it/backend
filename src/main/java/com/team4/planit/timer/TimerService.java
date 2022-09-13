@@ -25,15 +25,13 @@ public class TimerService {
     @Transactional
     public ResponseEntity<?> createTimer(TimerRequestDto timerRequestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        LocalDateTime startTime = LocalDateTime.now().minusMinutes(timerRequestDto.getSetTime());
-        LocalDateTime lastTime = LocalDateTime.now().minusMinutes(timerRequestDto.getRemainTime());
+        LocalDateTime startTime = LocalDateTime.now().minusMinutes(timerRequestDto.getSetTime() - timerRequestDto.getRemainTime());
         Timer timer = Timer.builder()
                 .member(member)
                 .setTime(timerRequestDto.getSetTime())
                 .remainTime(timerRequestDto.getRemainTime())
                 .startDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(startTime))
-                .lastDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(lastTime))
-                .targetDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
+                .lastDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
                 .build();
         timerRepository.save(timer);
         concentrationService.createConcentration(timer, member);

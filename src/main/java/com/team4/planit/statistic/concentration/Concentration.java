@@ -22,16 +22,16 @@ public class Concentration {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column(name = "conncentration_period")
+    @Column(name = "concentration_period")
     private StatisticPeriodCode period;
 
-    @Column(name = "conncentration_rate")
+    @Column(name = "concentration_rate")
     private Float concentrationRate;
 
-    @Column(name = "conncentration_time")
+    @Column(name = "concentration_time")
     private Integer concentrationTime;
 
-    @Column(name = "conncentration_start_date")
+    @Column(name = "concentration_start_date")
     private String startDate;
 
     @Builder
