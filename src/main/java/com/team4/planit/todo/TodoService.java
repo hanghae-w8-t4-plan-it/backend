@@ -7,6 +7,7 @@ import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
+import com.team4.planit.statistic.achievement.AchievementService;
 import com.team4.planit.todo.dto.TodoRequestDto;
 import com.team4.planit.todo.dto.TodoResponseDto;
 import com.team4.planit.todoList.TodoList;
@@ -27,6 +28,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final TodoListRepository todoListRepository;
     private final Check check;
+    private final AchievementService achievementService;
 
     @Transactional
     public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
@@ -45,6 +47,7 @@ public class TodoService {
                 .isAchieved(false)
                 .build();
         todoRepository.save(todo);
+        achievementService.updateAchievement(member, todo);
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
                         .todoListId(todo.getTodoList().getTodoListId())
@@ -65,10 +68,11 @@ public class TodoService {
 
     @Transactional
     public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
-        check.validateMember(request);
+        Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todo.updateTodo(requestDto);
+        achievementService.updateAchievement(member, todo);
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
                         .todoListId(todo.getTodoList().getTodoListId())
@@ -87,6 +91,7 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todoRepository.delete(todo);
+        achievementService.updateAchievement(member, todo);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
