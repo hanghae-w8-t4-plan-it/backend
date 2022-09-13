@@ -15,7 +15,7 @@ public class AchievementService {
     private final TodoRepository todoRepository;
 
     @Transactional
-    public void createAcievement(Member member, Todo todo) {
+    public void createAchievement(Member member, Todo todo) {
         Integer achievementCnt = todoRepository.countAllByDueDateAndIsAchieved(todo, true);
         Integer unAchievementCnt = todoRepository.countAllByDueDateAndIsAchieved(todo, false);
         Achievement achievement = Achievement.builder()

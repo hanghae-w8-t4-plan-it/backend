@@ -25,11 +25,11 @@ public class TimerService {
     @Transactional
     public ResponseEntity<?> createTimer(TimerRequestDto timerRequestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        LocalDateTime startTime = LocalDateTime.now().minusMinutes(timerRequestDto.getSetTime() - timerRequestDto.getRemainTime());
+        LocalDateTime startTime = LocalDateTime.now().minusMinutes(timerRequestDto.getElapsedTime());
         Timer timer = Timer.builder()
                 .member(member)
                 .setTime(timerRequestDto.getSetTime())
-                .remainTime(timerRequestDto.getRemainTime())
+                .elapsedTime(timerRequestDto.getElapsedTime())
                 .startDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(startTime))
                 .lastDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
                 .build();

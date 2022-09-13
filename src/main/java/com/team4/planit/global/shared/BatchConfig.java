@@ -1,7 +1,8 @@
 package com.team4.planit.global.shared;
 
+import com.team4.planit.statistic.concentration.Concentration;
+import com.team4.planit.statistic.concentration.ConcentrationHistory;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.Store;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -49,7 +50,7 @@ public class BatchConfig {
     @JobScope
     public Step step() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<Store, StoreHistory>chunk(chunkSize)
+                .<Concentration, ConcentrationHistory>chunk(chunkSize)
                 .reader(reader(ADDRESS_PARAM))
                 .processor(processor())
                 .writer(writer())
@@ -58,27 +59,27 @@ public class BatchConfig {
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<Store> reader (
-            @Value("#{jobParameters[address]}") String address) {
+    public JpaPagingItemReader<Concentration> reader (
+            @Value("#{jobParameters[startDate]}") String startDate) {
 
         Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("address", address+"%");
+        parameters.put("startDate", startDate+"%");
 
-        JpaPagingItemReader<Store> reader = new JpaPagingItemReader<>();
+        JpaPagingItemReader<Concentration> reader = new JpaPagingItemReader<>();
         reader.setEntityManagerFactory(entityManagerFactory);
-        reader.setQueryString("select s From Store s where s.address like :address");
+        reader.setQueryString("select s From Concentration s where s.startDate like :startDate");
         reader.setParameterValues(parameters);
         reader.setPageSize(chunkSize);
 
         return reader;
     }
 
-    public ItemProcessor<Store, StoreHistory> processor() {
-        return item -> new StoreHistory(item, item.getProducts(), item.getEmployees());
+    public ItemProcessor<Concentration, ConcentrationHistory> processor() {
+        return concentration -> new ConcentrationHistory(concentration.getMember(), concentration.getPeriod(), concentration.getConcentrationRate(),concentration.getConcentrationTime(),concentration.getStartDate());
     }
 
-    public JpaItemWriter<StoreHistory> writer() {
-        JpaItemWriter<StoreHistory> writer = new JpaItemWriter<>();
+    public JpaItemWriter<ConcentrationHistory> writer() {
+        JpaItemWriter<ConcentrationHistory> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
