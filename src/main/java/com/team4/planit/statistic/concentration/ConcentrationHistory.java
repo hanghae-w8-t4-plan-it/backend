@@ -2,16 +2,10 @@ package com.team4.planit.statistic.concentration;
 
 import com.team4.planit.member.Member;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Concentration {
-
+public class ConcentrationHistory {
     @Id
     @Column(name = "concentration_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +28,7 @@ public class Concentration {
     private String startDate;
 
     @Builder
-    public Concentration(Member member, String period, Float concentrationRate, Integer concentrationTime, String startDate) {
+    public ConcentrationHistory(Member member, String period, Float concentrationRate, Integer concentrationTime, String startDate) {
         this.member = member;
         this.period = period;
         this.concentrationRate = concentrationRate;
