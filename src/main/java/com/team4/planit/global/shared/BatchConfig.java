@@ -1,7 +1,6 @@
 package com.team4.planit.global.shared;
 
 import com.team4.planit.statistic.concentration.Concentration;
-import com.team4.planit.statistic.concentration.ConcentrationHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -50,7 +49,7 @@ public class BatchConfig {
     @JobScope
     public Step step() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<Concentration, ConcentrationHistory>chunk(chunkSize)
+                .<Concentration, Concentration>chunk(chunkSize)
                 .reader(reader(ADDRESS_PARAM))
                 .processor(processor())
                 .writer(writer())
@@ -74,12 +73,12 @@ public class BatchConfig {
         return reader;
     }
 
-    public ItemProcessor<Concentration, ConcentrationHistory> processor() {
-        return concentration -> new ConcentrationHistory(concentration.getMember(), concentration.getPeriod(), concentration.getConcentrationRate(),concentration.getConcentrationTime(),concentration.getStartDate());
+    public ItemProcessor<Concentration, Concentration> processor() {
+        return concentration -> new Concentration(concentration.getMember(), concentration.getPeriod(), concentration.getConcentrationRate(),concentration.getConcentrationTime(),concentration.getStartDate());
     }
 
-    public JpaItemWriter<ConcentrationHistory> writer() {
-        JpaItemWriter<ConcentrationHistory> writer = new JpaItemWriter<>();
+    public JpaItemWriter<Concentration> writer() {
+        JpaItemWriter<Concentration> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }

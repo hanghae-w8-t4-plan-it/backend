@@ -26,7 +26,7 @@ public class Scheduler {
     private final Job job;
     private final JobLauncher jobLauncher;
 
-    @Scheduled(cron = "* * * * * 1")
+    @Scheduled(cron = "* 50 11 * * *")
     public void startJob() {
         try {
             Map<String, JobParameter> jobParametersMap = new HashMap<>();
