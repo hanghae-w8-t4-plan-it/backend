@@ -28,4 +28,3 @@ public class AchievementService {
         achievementRepository.save(achievement);
     }
 }
-//배치 할 때 for문을 돌리면 밑에 createAchievement를 넣어서 하나씩 저장(?)
