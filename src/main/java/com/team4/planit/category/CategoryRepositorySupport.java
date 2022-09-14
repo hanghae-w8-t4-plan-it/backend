@@ -24,7 +24,7 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
                 .select(category.categoryName)
                 .from(category)
                 .innerJoin(todo)
-                .on(category.categoryId.eq(todo.category.categoryId))
+                .on(category.eq(todo.category))
                 .where(category.member.eq(member),
                         todo.todoList.dueDate.contains(month),
                         todo.isAchieved.eq(true))
@@ -32,5 +32,4 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(category.count().desc())
                 .fetch();
     }
-
 }
