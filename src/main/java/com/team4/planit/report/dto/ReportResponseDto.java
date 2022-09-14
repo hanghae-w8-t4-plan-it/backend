@@ -1,6 +1,5 @@
 package com.team4.planit.report.dto;
 
-import com.team4.planit.category.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ReportResponseDto {
 
-    private List<Category> categoryRank;
+    private List<String> categoryRank;
 
     @Builder
-    public ReportResponseDto(List<Category> categoryRank) {
+    public ReportResponseDto(List<String> categoryRank) {
         this.categoryRank = categoryRank;
     }
+
 }
