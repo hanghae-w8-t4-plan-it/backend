@@ -39,4 +39,8 @@ public class Achievement {
         this.achievementCnt = achievementCnt;
         this.startDate = startDate;
     }
+    public void update(float achievementRate,Integer achievementCnt){
+        this.achievementRate = achievementRate;
+        this.achievementCnt = achievementCnt;
+    }
 }
