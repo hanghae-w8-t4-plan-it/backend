@@ -43,6 +43,10 @@ public class Category {
         this.categoryStatus = categoryStatus;
     }
 
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     public void update(CategoryRequestDto requestDto) {
         if(requestDto.getCategoryName()!=null) this.categoryName = requestDto.getCategoryName();
         if(requestDto.getCategoryColor()!=null) this.categoryColor = requestDto.getCategoryColor();
