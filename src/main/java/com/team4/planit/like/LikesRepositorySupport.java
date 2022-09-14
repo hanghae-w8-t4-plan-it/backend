@@ -17,26 +17,24 @@ public class LikesRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-//    public Integer findMonthlyTotalLikes(Member member, String month) {
-//        Long monthlyTotalLikes = queryFactory
+    public Integer findMonthlyTotalLikes(Member member, String month) {
+        return Math.toIntExact(queryFactory
+                .select(likes.count())
+                .from(likes)
+                .innerJoin(todoList)
+                .on(likes.todoList.eq(todoList))
+                .where(todoList.member.eq(member), todoList.dueDate.contains(month))
+                .fetchFirst());
+    }
+
+//    public Long findMonthlyTotalLikes(Member member, String month) {
+//        return queryFactory
 //                .select(likes.count())
 //                .from(likes)
 //                .innerJoin(todoList)
 //                .on(likes.todoList.eq(todoList))
 //                .where(todoList.member.eq(member), todoList.dueDate.contains(month))
 //                .fetchFirst();
-//
-//        return Math.toIntExact(monthlyTotalLikes);
 //    }
-
-    public Long findMonthlyTotalLikes(Member member, String month) {
-        return queryFactory
-                .select(likes.count())
-                .from(likes)
-                .innerJoin(todoList)
-                .on(likes.todoList.eq(todoList))
-                .where(todoList.member.eq(member), todoList.dueDate.contains(month))
-                .fetchFirst();
-    }
 
 }

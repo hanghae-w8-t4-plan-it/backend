@@ -24,9 +24,7 @@ public class ReportService {
     public ResponseEntity<?> getReport(String month, HttpServletRequest request) {
         Member member = check.validateMember(request);
         List<String> categoryRank = categoryRepositorySupport.findAllCategoryRank(member, month);
-//        Long monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
-//        Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
-        Integer monthlyTotalLikes = Math.toIntExact(likesRepositorySupport.findMonthlyTotalLikes(member, month));
+        Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
 
         return new ResponseEntity<>(Message.success(monthlyTotalLikes), HttpStatus.OK);
     }
