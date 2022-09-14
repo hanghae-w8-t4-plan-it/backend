@@ -1,7 +1,6 @@
 package com.team4.planit.statistic.achievement;
 
 import com.team4.planit.member.Member;
-import com.team4.planit.statistic.StatisticPeriodCode;
 import com.team4.planit.todo.Todo;
 import com.team4.planit.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class AchievementService {
         Achievement achievement = achievementRepository.findAllByStartDateAndMember(dueDate, member).orElseGet(() ->
                 Achievement.builder()
                         .member(member)
-                        .period(StatisticPeriodCode.DAY.getName())
+                        .period("Day")
                         .achievementRate(Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (achievementCnt + unAchievementCnt) * 100))))
                         .achievementCnt(achievementCnt)
                         .startDate(todo.getDueDate())
