@@ -27,14 +27,4 @@ public class LikesRepositorySupport extends QuerydslRepositorySupport {
                 .fetchFirst());
     }
 
-//    public Long findMonthlyTotalLikes(Member member, String month) {
-//        return queryFactory
-//                .select(likes.count())
-//                .from(likes)
-//                .innerJoin(todoList)
-//                .on(likes.todoList.eq(todoList))
-//                .where(todoList.member.eq(member), todoList.dueDate.contains(month))
-//                .fetchFirst();
-//    }
-
 }
