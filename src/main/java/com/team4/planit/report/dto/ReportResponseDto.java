@@ -11,10 +11,12 @@ import java.util.List;
 public class ReportResponseDto {
 
     private List<String> categoryRank;
+    private Integer monthlyTotalLikes;
 
     @Builder
-    public ReportResponseDto(List<String> categoryRank) {
+    public ReportResponseDto(List<String> categoryRank, Integer monthlyTotalLikes) {
         this.categoryRank = categoryRank;
+        this.monthlyTotalLikes = monthlyTotalLikes;
     }
 
 }
