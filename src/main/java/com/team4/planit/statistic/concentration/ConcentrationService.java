@@ -1,7 +1,6 @@
 package com.team4.planit.statistic.concentration;
 
 import com.team4.planit.member.Member;
-import com.team4.planit.statistic.StatisticPeriodCode;
 import com.team4.planit.timer.Timer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class ConcentrationService {
     private void lastMinute(Member member, float lastMinute, String date, int lastHour) {
         Concentration concentration = Concentration.builder()
                 .member(member)
-                .period(StatisticPeriodCode.DAY.getName())
+                .period("Day")
                 .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / 60 * 100))))
                 .concentrationTime((int) lastMinute)
                 .startDate(date + String.format("%02d", lastHour))
