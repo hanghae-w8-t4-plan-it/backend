@@ -15,16 +15,20 @@ public class AchievementService {
     private final TodoRepository todoRepository;
 
     @Transactional
-    public void createAcievement(Member member, Todo todo) {
-        Integer achievementCnt = todoRepository.countAllByDueDateAndIsAchieved(todo, true);
-        Integer unAchievementCnt = todoRepository.countAllByDueDateAndIsAchieved(todo, false);
-        Achievement achievement = Achievement.builder()
-                .member(member)
-                .period(StatisticPeriodCode.DAY)
-                .achievementRate(Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (achievementCnt + unAchievementCnt) * 100))))
-                .achievementCnt(achievementCnt)
-                .startDate(todo.getDueDate())
-                .build();
+    public void updateAchievement(Member member, Todo todo) {
+        String dueDate = todo.getDueDate();
+        Integer achievementCnt = todoRepository.countAllByDueDateAndIsAchieved(dueDate, true);
+        Integer unAchievementCnt = todoRepository.countAllByDueDateAndIsAchieved(dueDate, false);
+        Achievement achievement = achievementRepository.findAllByStartDateAndMember(dueDate, member).orElseGet(() ->
+                Achievement.builder()
+                        .member(member)
+                        .period(StatisticPeriodCode.DAY.getName())
+                        .achievementRate(Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (achievementCnt + unAchievementCnt) * 100))))
+                        .achievementCnt(achievementCnt)
+                        .startDate(todo.getDueDate())
+                        .build());
         achievementRepository.save(achievement);
+        float achievementRate = Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (achievementCnt + unAchievementCnt) * 100)));
+        achievement.update(achievementRate, achievementCnt);
     }
 }

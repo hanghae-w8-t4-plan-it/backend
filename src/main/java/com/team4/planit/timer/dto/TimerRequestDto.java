@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TimerRequestDto {
     private Integer setTime;
-    private Integer remainTime;
+    private Integer elapsedTime;
 
     @Builder
-    public TimerRequestDto(Integer setTime, Integer remainTime) {
+    public TimerRequestDto(Integer setTime, Integer elapsedTime) {
         this.setTime = setTime;
-        this.remainTime = remainTime;
+        this.elapsedTime = elapsedTime;
     }
 }

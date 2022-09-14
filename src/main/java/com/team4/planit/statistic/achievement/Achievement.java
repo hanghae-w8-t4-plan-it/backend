@@ -1,7 +1,6 @@
 package com.team4.planit.statistic.achievement;
 
 import com.team4.planit.member.Member;
-import com.team4.planit.statistic.StatisticPeriodCode;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +20,7 @@ public class Achievement {
     private Member member;
 
     @Column(name = "achievement_period")
-    private StatisticPeriodCode period;
+    private String period;
 
     @Column(name = "achievement_rate")
     private Float achievementRate;
@@ -33,11 +32,15 @@ public class Achievement {
     private String startDate;
 
     @Builder
-    public Achievement(Member member, StatisticPeriodCode period, Float achievementRate, Integer achievementCnt, String startDate) {
+    public Achievement(Member member, String period, Float achievementRate, Integer achievementCnt, String startDate) {
         this.member = member;
         this.period = period;
         this.achievementRate = achievementRate;
         this.achievementCnt = achievementCnt;
         this.startDate = startDate;
+    }
+    public void update(float achievementRate,Integer achievementCnt){
+        this.achievementRate = achievementRate;
+        this.achievementCnt = achievementCnt;
     }
 }

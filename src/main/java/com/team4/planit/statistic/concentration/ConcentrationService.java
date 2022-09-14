@@ -14,65 +14,50 @@ public class ConcentrationService {
 
     @Transactional
     public void createConcentration(Timer timer, Member member) {
-        Float startHour = Float.parseFloat(timer.getStartDate().substring(11, 13));
-        Float startMinute = Float.parseFloat(timer.getStartDate().substring(14, 16));
-        Float lastHour = Float.parseFloat(timer.getLastDate().substring(11, 13));
-        Float lastMinute = Float.parseFloat(timer.getLastDate().substring(14, 16));
-        if (startHour.equals(lastHour)) {
-            Concentration concentrationFrist = Concentration.builder()
-                    .member(member)
-                    .period(StatisticPeriodCode.DAY)
-                    .concentrationRate(Float.parseFloat(String.format("%.1f", ((lastMinute - startMinute) / 60 * 100))))
-                    .concentrationTime(Math.round(startHour))
-                    .startDate(timer.getStartDate())
-                    .build();
-            concentrationRepository.save(concentrationFrist);
-        } else {
-            Concentration concentrationFrist = Concentration.builder()
-                    .member(member)
-                    .period(StatisticPeriodCode.DAY)
-                    .concentrationRate(Float.parseFloat(String.format("%.1f", ((60 - startMinute) / 60 * 100))))
-                    .concentrationTime(Math.round(startHour))
-                    .startDate(timer.getStartDate())
-                    .build();
-            concentrationRepository.save(concentrationFrist);
-            if (lastHour > startHour) {
-                for (int i = 1; i <= lastHour - startHour; i++) {
-                    Concentration concentrationMiddle = Concentration.builder()
-                            .member(member)
-                            .period(StatisticPeriodCode.DAY)
-                            .concentrationRate(100f)
-                            .concentrationTime(Math.round(startHour + i))
-                            .startDate(timer.getStartDate())
-                            .build();
-                    concentrationRepository.save(concentrationMiddle);
+        String start = timer.getStartDate();
+        String last = timer.getLastDate();
+        String date = timer.getLastDate().substring(0, 11);
+        String startDate = start.substring(0, 11);
+        float startHour = Float.parseFloat((start.substring(start.length() - 5, start.length() - 3)));
+        float startMinute = Float.parseFloat((start.substring(start.length() - 2)));
+        float lastHour = Float.parseFloat((last.substring(last.length() - 5, last.length() - 3)));
+        float lastMinute = Float.parseFloat((last.substring(last.length() - 2)));
+        if (!startDate.equals(date)) {
+            if (lastHour != startHour) {
+                while (startHour < 24) {
+                    lastMinute(member, (60 - startMinute), startDate, (int) startHour);
+                    startHour += 1;
+                    startMinute = 0;
                 }
-            } else if (lastHour < startHour) {
-                for (int i = 1; i <= lastHour + 23 - startHour; i++) {
-                    float maxHour = 0;
-                    if (startHour + i > 23) {
-                        maxHour = startHour + i - 24;
-                    } else {
-                        maxHour = startHour + i;
-                    }
-                    Concentration concentrationMiddle = Concentration.builder()
-                            .member(member)
-                            .period(StatisticPeriodCode.DAY)
-                            .concentrationRate(100f)
-                            .concentrationTime(Math.round(maxHour))
-                            .startDate(timer.getStartDate())
-                            .build();
-                    concentrationRepository.save(concentrationMiddle);
+                startHour = 0;
+                while (lastHour - startHour > 0) {
+                    lastMinute(member, lastMinute, date, (int) lastHour);
+                    lastMinute = 60;
+                    lastHour -= 1;
+
                 }
             }
-            Concentration concentrationLast = Concentration.builder()
-                    .member(member)
-                    .period(StatisticPeriodCode.DAY)
-                    .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / 60 * 100))))
-                    .concentrationTime(Math.round(lastHour))
-                    .startDate(timer.getStartDate())
-                    .build();
-            concentrationRepository.save(concentrationLast);
         }
+        if (lastHour != startHour) {
+            while (lastHour - startHour > 0) {
+                lastMinute(member, lastMinute, date, (int) lastHour);
+                lastMinute = 60;
+                lastHour -= 1;
+            }
+            lastMinute(member, (60 - startMinute), date, (int) lastHour);
+            return;
+        }
+        lastMinute(member, (lastMinute - startMinute), date, (int) lastHour);
+    }
+
+    private void lastMinute(Member member, float lastMinute, String date, int lastHour) {
+        Concentration concentration = Concentration.builder()
+                .member(member)
+                .period(StatisticPeriodCode.DAY.getName())
+                .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / 60 * 100))))
+                .concentrationTime((int) lastMinute)
+                .startDate(date + String.format("%02d", lastHour))
+                .build();
+        concentrationRepository.save(concentration);
     }
 }
