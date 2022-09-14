@@ -1,5 +1,6 @@
 package com.team4.planit.statistic.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,10 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConcentrationResponseDto {
     private Float concentrationRate;
-    private Integer concentrationTime;
+    private String startDate;
 
-    public ConcentrationResponseDto(Float concentrationRate, Integer concentrationTime) {
+    @Builder
+    public ConcentrationResponseDto(Float concentrationRate, String startDate) {
         this.concentrationRate = concentrationRate;
-        this.concentrationTime = concentrationTime;
+        this.startDate = startDate;
     }
 }
