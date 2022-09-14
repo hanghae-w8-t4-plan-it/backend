@@ -90,8 +90,8 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
-        todoRepository.delete(todo);
         achievementService.updateAchievement(member, todo);
+        todoRepository.delete(todo);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
