@@ -62,9 +62,6 @@ public class Check {
     }
 
     public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
-        if (refreshTokenConfirm == null) {
-            throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
-        }
         if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("RefreshToken"))) {
             tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.INVALID_TOKEN);

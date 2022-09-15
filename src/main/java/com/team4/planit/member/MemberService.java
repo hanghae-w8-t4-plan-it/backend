@@ -67,7 +67,8 @@ public class MemberService {
         Member member = memberRepository.findByMemberId(requestDto.getMemberId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_INFO));
         long accessTokenExpiration = Long.parseLong(request.getHeader("AccessTokenExpireTime"));
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
-        RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member).orElse(null);
+        RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member)
+                .orElseThrow(()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
         return check.reissueAccessToken(request, response, member, refreshTokenConfirm);
     }
 
