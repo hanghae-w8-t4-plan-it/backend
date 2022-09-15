@@ -57,7 +57,7 @@ public class Check {
         long now = (new Date().getTime());
         if (now < accessTokenExpiration) {
             tokenProvider.deleteRefreshToken(member);
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            throw new CustomException(ErrorCode.TOKEN_HIJACKED);
         }
     }
 

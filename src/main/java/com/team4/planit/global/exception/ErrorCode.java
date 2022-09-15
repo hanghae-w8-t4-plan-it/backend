@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.BAD_REQUEST.value(), "M005", "유효하지 않은 토큰 입니다."),
     DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST.value(), "M006", "이미 사용되고 있는 이메일입니다."),
     INVALID_MEMBER_INFO(HttpStatus.BAD_REQUEST.value(), "M007", "잘못된 사용자 정보입니다."),
+    TOKEN_HIJACKED(HttpStatus.BAD_REQUEST.value(), "M008", "탈취된 토큰입니다."),
 
     //CATEGORY
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C001", "해당 카테고리를 찾을 수 없습니다."),
