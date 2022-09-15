@@ -56,8 +56,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
-            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
-                    category.getCategoryStatus().equals(CategoryStatusCode.RESTART)) {
+            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)) {
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
                                 .categoryId(category.getCategoryId())
@@ -83,8 +82,7 @@ public class CategoryService {
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
             if (category.getIsPublic() && (check.countByCategory(category) != 0 ||
-                    category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP) ||
-                    category.getCategoryStatus().equals(CategoryStatusCode.RESTART))
+                    category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP))
             ) {
                 categoryResponseDtoList.add(
                         CategoryResponseDto.builder()
