@@ -21,7 +21,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'  
-        ## gradle caching
+        
+    # gradle caching
     - name: Gradle Caching
       uses: actions/cache@v3
       with:
@@ -31,16 +32,8 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-    
-#     - name: Setup MySQL
-#       uses: samin/mysql-action@v1
-#       with:
-#           character set server: 'utf8'
-#           mysql database: planit
-#           mysql user: whddlrs
-#           mysql password: ${{ secrets.MYSQL_PASSWORD }} 
           
-    ## create application-dev.properties
+    # create application-dev.properties
     - name: make application.properties
       run: |
         cd ./src/main/resources
@@ -90,7 +83,6 @@ jobs:
 
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 ./planit.zip s3://$S3_BUCKET_NAME/
-      
       
     # Deploy
     - name: Deploy
