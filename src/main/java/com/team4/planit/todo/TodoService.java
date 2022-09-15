@@ -47,7 +47,7 @@ public class TodoService {
                 .isAchieved(false)
                 .build();
         todoRepository.save(todo);
-        achievementService.updateAchievement(member, todo);
+        achievementService.updateAchievement(member,todo.getDueDate() );
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
                         .todoListId(todo.getTodoList().getTodoListId())
@@ -72,7 +72,7 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
         todo.updateTodo(requestDto);
-        achievementService.updateAchievement(member, todo);
+        achievementService.updateAchievement(member, todo.getDueDate());
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
                         .todoListId(todo.getTodoList().getTodoListId())
@@ -90,8 +90,9 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
-        achievementService.updateAchievement(member, todo);
+        String dueDate=todo.getDueDate();
         todoRepository.delete(todo);
+        achievementService.updateAchievement(member, dueDate);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
