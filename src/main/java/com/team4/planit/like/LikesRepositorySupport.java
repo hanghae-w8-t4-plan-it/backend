@@ -26,5 +26,4 @@ public class LikesRepositorySupport extends QuerydslRepositorySupport {
                 .where(todoList.member.eq(member), todoList.dueDate.contains(month))
                 .fetchFirst());
     }
-
 }
