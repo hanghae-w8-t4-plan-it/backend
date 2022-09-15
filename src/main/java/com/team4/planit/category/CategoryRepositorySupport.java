@@ -1,8 +1,7 @@
 package com.team4.planit.category;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.team4.planit.category.dto.CategoryResponseDto;
+import com.team4.planit.member.Member;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
@@ -20,22 +19,17 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
         this.queryFactory = queryFactory;
     }
 
-    public List<CategoryResponseDto> findAllCategories() {
+    public List<String> findAllCategoryRank(Member member, String month) {
         return queryFactory
-                .select(Projections.fields(
-                        CategoryResponseDto.class,
-                        category.categoryId,
-                        category.categoryName,
-                        category.categoryColor,
-                        category.isPublic,
-                        category.categoryStatus,
-                        todo
-                ))
+                .select(category.categoryName)
                 .from(category)
-                .leftJoin(todo)
-                .on(category.categoryId.eq(todo.category.categoryId))
-                .where(category.categoryId.eq(todo.category.categoryId))
-                .groupBy(category)
+                .innerJoin(todo)
+                .on(category.eq(todo.category))
+                .where(category.member.eq(member),
+                        todo.todoList.dueDate.contains(month),
+                        todo.isAchieved.eq(true))
+                .groupBy(category.categoryName)
+                .orderBy(category.count().desc())
                 .fetch();
     }
 }
