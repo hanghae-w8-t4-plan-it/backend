@@ -1,16 +1,18 @@
 package com.team4.planit.timer.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 public class TimerRequestDto {
-    private String setTime;
-    private String remainTime;
+    private Integer setTime;
+    private Integer elapsedTime;
 
-    public TimerRequestDto(String setTime, String remainTime) {
+    @Builder
+    public TimerRequestDto(Integer setTime, Integer elapsedTime) {
         this.setTime = setTime;
-        this.remainTime = remainTime;
+        this.elapsedTime = elapsedTime;
     }
 }
