@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -66,14 +69,19 @@ public class TodoService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) throws ParseException {
+        String dueDate = requestDto.getDueDate();
         Member member = check.validateMember(request);
-        Todo todo = todoRepository.findById(todoId).orElseThrow(
-                ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(()->new CustomException(ErrorCode.TODO_NOT_FOUND));
+//        지난 날짜 변경시 막는 부분 프론트 되는지 확인 후 지우기
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+        if(sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0)
+            throw new CustomException(ErrorCode.PAST_DATE);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(()-> new TodoList(member, requestDto.getDueDate()));
         todo.updateTodo(requestDto);
-        if(!requestDto.getDueDate().isEmpty()) todo.updateTodo(todoList);
+        if(!dueDate.isEmpty()) todo.updateTodo(todoList);
         achievementService.updateAchievement(member, todo.getDueDate());
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()

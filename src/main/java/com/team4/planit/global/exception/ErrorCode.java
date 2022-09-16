@@ -32,8 +32,12 @@ public enum ErrorCode {
     FILE_SIZE_INVALID(HttpStatus.BAD_REQUEST.value(), "F002", "파일 크기가 너무 큽니다."),
 
     //FOLLOW
-    FOLLOW_SELF_ERROR(HttpStatus.BAD_REQUEST.value(), "W001", "자기 자신을 팔로우 할 수 없습니다.");
+    FOLLOW_SELF_ERROR(HttpStatus.BAD_REQUEST.value(), "W001", "자기 자신을 팔로우 할 수 없습니다."),
 
+    //DAY
+    DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST.value(), "D001","날짜 형식이 맞지 않습니다."),
+    PAST_DATE(HttpStatus.BAD_REQUEST.value(), "D002","지난 날짜를 변경할 수 없습니다."),
+;
 
     private final int httpStatus;
     private final String code;

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class TodoController {
 
     @PatchMapping("/categories/todos/{todoId}")
     public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto,
-                                        HttpServletRequest request) {
+                                        HttpServletRequest request) throws ParseException {
         return todoService.updateTodo(todoId, requestDto, request);
     }
 
