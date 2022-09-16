@@ -67,5 +67,9 @@ public class Todo {
         if (requestDto.getTitle() != null) this.title = requestDto.getTitle();
         if (requestDto.getMemo() != null) this.memo = requestDto.getMemo();
         if (requestDto.getIsAchieved() != null) this.isAchieved = requestDto.getIsAchieved();
+        if (requestDto.getDueDate() != null) this.dueDate = requestDto.getDueDate();
+    }
+    public void updateTodo(TodoList todoList){
+        this.todoList=todoList;
     }
 }

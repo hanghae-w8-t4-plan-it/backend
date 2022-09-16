@@ -34,9 +34,8 @@ public class TodoService {
     public ResponseEntity<?> createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
-        TodoList todoList = todoListRepository
-                        .findByMemberAndDueDate(member, requestDto.getDueDate()).orElseThrow(
-                                ()->new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
+                .orElseGet(()-> new TodoList(member, requestDto.getDueDate()));
         Todo todo = Todo.builder()
                 .todoList(todoList)
                 .member(member)
@@ -71,7 +70,10 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
+                .orElseGet(()-> new TodoList(member, requestDto.getDueDate()));
         todo.updateTodo(requestDto);
+        if(!requestDto.getDueDate().isEmpty()) todo.updateTodo(todoList);
         achievementService.updateAchievement(member, todo.getDueDate());
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()

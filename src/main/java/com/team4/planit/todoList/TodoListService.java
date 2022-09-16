@@ -27,8 +27,8 @@ public class TodoListService {
 
     public ResponseEntity<?> createTodoList(String dueDate, String planet, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseGet(
-                ()-> new TodoList(member, dueDate, planet));
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
+                .orElseGet(()-> new TodoList(member, dueDate));
         todoList.update(planet);
         todoListRepository.save(todoList);
         return categoryService.getAllCategories(dueDate, request);
