@@ -73,7 +73,7 @@ public class TodoService {
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(()-> new TodoList(member, requestDto.getDueDate()));
         todo.updateTodo(requestDto);
-        if(!requestDto.getDueDate().isEmpty()) todo.updateTodo(todoList);
+        if(requestDto.getDueDate()!=null) todo.updateTodo(todoList);
         achievementService.updateAchievement(member, todo.getDueDate());
         return new ResponseEntity<>(Message.success(
                 TodoResponseDto.builder()
