@@ -43,8 +43,7 @@ public class Check {
     }
 
     public void checkEmail(String email) {
-        memberRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(ErrorCode.DUPLICATED_EMAIL));
+        if(memberRepository.findByEmail(email).isPresent()) throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
     }
 
     public void checkPassword(PasswordEncoder passwordEncoder, String password, Member member) {
