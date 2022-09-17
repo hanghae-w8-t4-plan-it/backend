@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -55,10 +58,15 @@ public class TodoService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) throws ParseException {
+        String dueDate = requestDto.getDueDate();
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+                .orElseThrow(()->new CustomException(ErrorCode.TODO_NOT_FOUND));
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+        if(sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0
+                    ||sdf.parse(dueDate).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0)
+            throw new CustomException(ErrorCode.PAST_DATE);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
         todo.updateTodo(requestDto);

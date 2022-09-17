@@ -72,7 +72,6 @@ public class KakaoLoginService {
 
         Member member = check.isPresentMember(kakaoMember.getEmail());
         return tokenProvider.generateTokenDto(member);
-
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -128,7 +127,7 @@ public class KakaoLoginService {
         String nickname = jsonNode.get("kakao_account").get("profile")
                 .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
-                .get("email").asText();
+                .get("email").asText()+"#kakao";
         String profileImgUrl = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
         return new KakaoMemberInfoDto(nickname, email, profileImgUrl, id);
     }
