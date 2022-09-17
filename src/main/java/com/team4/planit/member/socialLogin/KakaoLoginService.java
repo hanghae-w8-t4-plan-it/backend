@@ -83,7 +83,7 @@ public class KakaoLoginService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", myKaKaoRestAplKey);
-        body.add("redirect_uri", "http://localhost:3000/kakao");
+        body.add("redirect_uri", "http://treavelrecommend.s3-website-us-east-1.amazonaws.com/kakako");
         body.add("code", code);
 
         // HTTP 요청 보내기

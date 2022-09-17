@@ -1,4 +1,4 @@
-package com.team4.planit.like;
+package com.team4.planit.todoList.like;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team4.planit.member.Member;

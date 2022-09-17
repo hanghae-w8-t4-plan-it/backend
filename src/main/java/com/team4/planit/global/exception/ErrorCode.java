@@ -20,6 +20,7 @@ public enum ErrorCode {
     //CATEGORY
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "C001", "해당 카테고리를 찾을 수 없습니다."),
     CATEGORY_END(HttpStatus.BAD_REQUEST.value(), "COO2", "해당 카테고리는 종료되었습니다."),
+    CATEGORY_CANNOT_DELETE(HttpStatus.BAD_REQUEST.value(), "COO3", "투두가 있는 카테고리는 삭제할 수 없습니다."),
 
     //TODO_LIST
     TODO_LIST_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "T001", "해당 투두 리스트가 없습니다."),

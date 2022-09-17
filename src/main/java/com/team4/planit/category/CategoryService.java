@@ -117,6 +117,7 @@ public class CategoryService {
     public ResponseEntity<?> deleteCategory(Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
+        if(check.countByCategory(category)!=0) throw new CustomException(ErrorCode.CATEGORY_CANNOT_DELETE);
         check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);

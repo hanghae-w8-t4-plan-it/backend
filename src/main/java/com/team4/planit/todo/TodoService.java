@@ -1,7 +1,6 @@
 package com.team4.planit.todo;
 
 import com.team4.planit.category.Category;
-import com.team4.planit.category.CategoryRepository;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
@@ -27,7 +26,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class TodoService {
 
-    private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
     private final TodoListRepository todoListRepository;
     private final Check check;
@@ -38,7 +36,7 @@ public class TodoService {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
-                .orElseGet(()-> new TodoList(member, requestDto.getDueDate()));
+                .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
         Todo todo = Todo.builder()
                 .todoList(todoList)
                 .member(member)
@@ -49,22 +47,13 @@ public class TodoService {
                 .isAchieved(false)
                 .build();
         todoRepository.save(todo);
-        achievementService.updateAchievement(member,todo.getDueDate() );
-        return new ResponseEntity<>(Message.success(
-                TodoResponseDto.builder()
-                        .todoListId(todo.getTodoList().getTodoListId())
-                        .todoId(todo.getTodoId())
-                        .title(todo.getTitle())
-                        .memo(todo.getMemo())
-                        .dueDate(todo.getDueDate())
-                        .isAchieved(todo.getIsAchieved())
-                        .build()
-        ), HttpStatus.OK);
+        achievementService.updateAchievement(member, todo.getDueDate());
+        return new ResponseEntity<>(Message.success(buildTodoResponseDto(todo)), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> getAllTodos(HttpServletRequest request) {
-        Member member = check.validateMember(request);
+        check.validateMember(request);
         return new ResponseEntity<>(Message.success(todoRepository.findAll()), HttpStatus.OK);
     }
 
@@ -74,35 +63,40 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(()->new CustomException(ErrorCode.TODO_NOT_FOUND));
-//        지난 날짜 변경시 막는 부분 프론트 되는지 확인 후 지우기
         SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
-        if(sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0)
+        if(sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0
+                    ||sdf.parse(dueDate).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0)
             throw new CustomException(ErrorCode.PAST_DATE);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
-                .orElseGet(()-> new TodoList(member, requestDto.getDueDate()));
+                .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
         todo.updateTodo(requestDto);
-        if(!dueDate.isEmpty()) todo.updateTodo(todoList);
+        if (requestDto.getDueDate() != null) todo.updateTodo(todoList);
+        todoListRepository.save(todoList);
         achievementService.updateAchievement(member, todo.getDueDate());
-        return new ResponseEntity<>(Message.success(
-                TodoResponseDto.builder()
-                        .todoListId(todo.getTodoList().getTodoListId())
-                        .todoId(todo.getTodoId())
-                        .title(todo.getTitle())
-                        .memo(todo.getMemo())
-                        .dueDate(todo.getDueDate())
-                        .isAchieved(todo.getIsAchieved())
-                        .build()
-        ), HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(buildTodoResponseDto(todo)), HttpStatus.OK);
     }
+
 
     @Transactional
     public ResponseEntity<?> deleteTodo(Long todoId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
-                ()->new CustomException(ErrorCode.TODO_NOT_FOUND));
-        String dueDate=todo.getDueDate();
+                () -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+        String dueDate = todo.getDueDate();
         todoRepository.delete(todo);
         achievementService.updateAchievement(member, dueDate);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
+
+    private TodoResponseDto buildTodoResponseDto(Todo todo) {
+        return TodoResponseDto.builder()
+                .todoListId(todo.getTodoList().getTodoListId())
+                .todoId(todo.getTodoId())
+                .title(todo.getTitle())
+                .memo(todo.getMemo())
+                .dueDate(todo.getDueDate())
+                .isAchieved(todo.getIsAchieved())
+                .build();
+    }
+
 }
