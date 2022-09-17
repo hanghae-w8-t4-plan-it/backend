@@ -1,6 +1,8 @@
 package com.team4.planit.follow;
 
+import com.team4.planit.global.shared.Message;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +16,8 @@ public class FollowController {
 
     @PostMapping
     public ResponseEntity<?> follow(@PathVariable Long memberId, HttpServletRequest request) {
-        return followService.upDownFollow(memberId, request);
+        Boolean isSuccess = followService.upDownFollow(memberId, request);
+        return new ResponseEntity<>(Message.success(isSuccess), HttpStatus.OK);
     }
 
     @GetMapping("/followers")

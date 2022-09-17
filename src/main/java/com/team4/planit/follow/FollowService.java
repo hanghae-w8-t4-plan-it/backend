@@ -2,6 +2,7 @@ package com.team4.planit.follow;
 
 import com.team4.planit.follow.dto.FollowedResponseDto;
 import com.team4.planit.follow.dto.FollowingResponseDto;
+import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.global.shared.Message;
@@ -23,17 +24,17 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public ResponseEntity<?> upDownFollow(Long memberId, HttpServletRequest request) {
+    public Boolean upDownFollow(Long memberId, HttpServletRequest request) {
         Member followingMember = check.validateMember(request);
         Member followedMember = check.isPresentMemberByMemberId(memberId);
-        if(followingMember.getMemberId().equals(memberId)) { return new ResponseEntity<>(Message.success(ErrorCode.FOLLOW_SELF_ERROR), HttpStatus.OK); }
+        if(followingMember.getMemberId().equals(memberId)) { throw new CustomException(ErrorCode.FOLLOW_SELF_ERROR); }
         Follow findFollowing = followRepository.findByMemberAndFollowedMember(followingMember, followedMember).orElse(null);
         if(findFollowing==null) {
             followRepository.save(new Follow(followingMember, followedMember));
-            return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
+            return true;
         }
             followRepository.deleteById(findFollowing.getFollowId());
-            return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
+            return false;
     }
 
     @Transactional(readOnly = true)
