@@ -1,4 +1,4 @@
-package com.team4.planit.like;
+package com.team4.planit.todoList.like;
 
 import com.team4.planit.member.Member;
 import com.team4.planit.todoList.TodoList;
