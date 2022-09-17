@@ -1,4 +1,4 @@
-package com.team4.planit.like;
+package com.team4.planit.todoList.like;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
