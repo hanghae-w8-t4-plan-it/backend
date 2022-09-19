@@ -1,7 +1,7 @@
 package com.team4.planit.todoList;
 
 import com.team4.planit.category.CategoryService;
-import com.team4.planit.category.dto.CategoryResponseDto;
+import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import com.team4.planit.todo.TodoRepository;
@@ -24,7 +24,8 @@ public class TodoListService {
     private final CategoryService categoryService;
     private final TodoRepository todoRepository;
 
-    public List<CategoryResponseDto> createTodoList(String dueDate, Byte planetType, HttpServletRequest request) {
+
+    public List<CategoryDetailResponseDto> createTodoList(String dueDate, Byte planetType, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseGet(()-> new TodoList(member, dueDate));

@@ -1,5 +1,6 @@
 package com.team4.planit.todoList;
 
+import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.todoList.dto.TodoListRequestDto;
@@ -29,8 +30,8 @@ public class TodoListController {
     public ResponseEntity<?> createTodoList(@RequestParam String dueDate,
                                             @RequestParam(required = false) Byte planetType,
                                             HttpServletRequest request) {
-        List<CategoryResponseDto> categoryResponseDtoList = todoListService.createTodoList(dueDate, planetType, request);
-        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
+        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = todoListService.createTodoList(dueDate, planetType, request);
+        return new ResponseEntity<>(Message.success(categoryDetailResponseDtoList), HttpStatus.OK);
     }
 
     @PatchMapping()
