@@ -19,8 +19,8 @@ public class FollowController {
 
     @PostMapping
     public ResponseEntity<?> follow(@PathVariable Long memberId, HttpServletRequest request) {
-        Boolean isSuccess = followService.upDownFollow(memberId, request);
-        return new ResponseEntity<>(Message.success(isSuccess), HttpStatus.OK);
+        Boolean isFollowSuccess = followService.upDownFollow(memberId, request);
+        return new ResponseEntity<>(Message.success(isFollowSuccess), HttpStatus.OK);
     }
 
     @GetMapping("/followers")
