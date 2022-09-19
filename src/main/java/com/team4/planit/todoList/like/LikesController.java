@@ -18,6 +18,6 @@ public class LikesController {
     @PostMapping("/todo-list/{todoListId}/likes")
     public ResponseEntity<?> todoListLike(@PathVariable Long todoListId, HttpServletRequest request) {
         Boolean isLikeSucces = likesService.todoListLike(todoListId, request);
-        return new ResponseEntity(Message.success(isLikeSucces), HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(isLikeSucces), HttpStatus.OK);
     }
 }
