@@ -1,6 +1,8 @@
 package com.team4.planit.todoList.like;
 
+import com.team4.planit.global.shared.Message;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,7 @@ public class LikesController {
 
     @PostMapping("/todo-list/{todoListId}/likes")
     public ResponseEntity<?> todoListLike(@PathVariable Long todoListId, HttpServletRequest request) {
-        return likesService.todoListLike(todoListId, request);
+        Boolean isLikeSucces = likesService.todoListLike(todoListId, request);
+        return new ResponseEntity(Message.success(isLikeSucces), HttpStatus.OK);
     }
 }
