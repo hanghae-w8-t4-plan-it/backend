@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.text.ParseException;
+
 @RestControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(CustomException.class)
@@ -26,5 +28,9 @@ public class CustomExceptionHandler {
     @ExceptionHandler(InvalidFormatException.class)
     protected ResponseEntity<?> handlingInvalidFormatException(InvalidFormatException e) {
         return new ResponseEntity<>(Message.fail("INVALID_FORMAT", "잘못된 값을 입력하셨습니다."), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ParseException.class)
+    protected ResponseEntity<?> handlingInvalidDateFormatException(ParseException e) {
+        return new ResponseEntity<>(Message.fail("DATE_FORMAT_INVALID","날짜 형식이 맞지 않습니다."), HttpStatus.BAD_REQUEST);
     }
 }

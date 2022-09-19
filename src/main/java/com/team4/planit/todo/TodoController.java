@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,21 +18,24 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping("/categories/{categoryId}/todos")
-    public ResponseEntity<?> createTodo(@PathVariable Long categoryId, @RequestBody TodoRequestDto requestDto,
-                                        HttpServletRequest request) {
+    public ResponseEntity<?> createTodo(@PathVariable Long categoryId,
+                                        @RequestBody TodoRequestDto requestDto,
+                                        HttpServletRequest request) throws ParseException {
         TodoResponseDto todoResponseDto = todoService.createTodo(categoryId, requestDto, request);
         return new ResponseEntity<>(Message.success(todoResponseDto), HttpStatus.OK);
     }
 
     @PatchMapping("/categories/todos/{todoId}")
-    public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto,
+    public ResponseEntity<?> updateTodo(@PathVariable Long todoId,
+                                        @RequestBody TodoRequestDto requestDto,
                                         HttpServletRequest request) throws ParseException {
         TodoResponseDto todoResponseDto = todoService.updateTodo(todoId, requestDto, request);
         return new ResponseEntity<>(Message.success(todoResponseDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/categories/todos/{todoId}")
-    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, HttpServletRequest request) {
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId,
+                                        HttpServletRequest request) throws ParseException {
         todoService.deleteTodo(todoId, request);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }

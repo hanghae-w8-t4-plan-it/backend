@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -41,6 +44,7 @@ public class Check {
     }
 
     public void checkEmail(String email) {
+
         if(memberRepository.findByEmail(email).isPresent()) throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
     }
 
@@ -58,7 +62,8 @@ public class Check {
         }
     }
 
-    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
+    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response,
+                                   Member member, RefreshToken refreshTokenConfirm) {
         if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("RefreshToken"))) {
             tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.INVALID_TOKEN);
@@ -99,6 +104,15 @@ public class Check {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.addHeader("RefreshToken", tokenDto.getRefreshToken());
         response.addHeader("AccessTokenExpireTime", tokenDto.getAccessTokenExpiresIn().toString());
+    }
+
+    public void checkPastDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = sdf.parse(date);
+        if (date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0 ||
+                date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
+            throw new CustomException(ErrorCode.PAST_DATE);
+
     }
 
 }

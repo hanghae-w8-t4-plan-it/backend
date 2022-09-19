@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class MemberController {
     private final Check check;
 
     @PostMapping("/register")
-    public ResponseEntity<?> signup(@RequestBody MemberRequestDto requestDto) {
-        memberService.creatMember(requestDto);
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberRequestDto requestDto, HttpServletResponse response) {
+        memberService.creatMember(requestDto, response);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
@@ -36,7 +37,7 @@ public class MemberController {
     }
 
     @PostMapping("/register/check-email")
-    public ResponseEntity<?> checkEmail(@RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<?> checkEmail(@Valid @RequestBody MemberRequestDto requestDto) {
         check.checkEmail(requestDto.getEmail());
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
