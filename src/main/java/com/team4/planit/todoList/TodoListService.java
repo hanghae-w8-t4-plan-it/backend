@@ -5,6 +5,7 @@ import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import com.team4.planit.todo.TodoRepository;
+import com.team4.planit.todoList.dto.TodoListRequestDto;
 import com.team4.planit.todoList.dto.TodoListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,12 @@ public class TodoListService {
     private final CategoryService categoryService;
     private final TodoRepository todoRepository;
 
-    public List<CategoryDetailResponseDto> createTodoList(String dueDate, String planet, HttpServletRequest request) {
+
+    public List<CategoryDetailResponseDto> createTodoList(String dueDate, Byte planetType, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseGet(()-> new TodoList(member, dueDate));
-        todoList.update(planet);
+        todoList.update(planetType);
         todoListRepository.save(todoList);
         return categoryService.getAllCategories(dueDate, null, request);
     }
@@ -46,4 +48,17 @@ public class TodoListService {
         return todoListResponseDtoList;
     }
 
+    @Transactional
+    public TodoListResponseDto updatePlanet(TodoListRequestDto requestDto, HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
+        todoList.update(requestDto.getPlanetSize(), requestDto.getPlanetColor());
+        return TodoListResponseDto.builder()
+                .dueDate(todoList.getDueDate())
+                .planetType(todoList.getPlanetType())
+                .planetSize(todoList.getPlanetSize())
+                .planetColor(todoList.getPlanetColor())
+                .planetLevel(todoList.getPlanetLevel())
+                .build();
+    }
 }

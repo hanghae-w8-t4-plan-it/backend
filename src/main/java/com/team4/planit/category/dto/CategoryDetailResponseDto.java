@@ -16,16 +16,16 @@ public class CategoryDetailResponseDto {
     private String categoryColor;
     private Boolean isPublic;
     private CategoryStatusCode categoryStatus;
-    private String planetType;
-    private Integer planetSize;
-    private String planetColor;
-    private Integer planetLevel;
+    private Byte planetType;
+    private Short planetSize;
+    private Byte planetColor;
+    private Byte planetLevel;
     private List<TodoResponseDto> todos;
 
     @Builder
     public CategoryDetailResponseDto(Long categoryId, String categoryName, String categoryColor,
                                      Boolean isPublic, CategoryStatusCode categoryStatus, List<TodoResponseDto> todos,
-                                     String planetType, Integer planetSize, String planetColor, Integer planetLevel) {
+                                     Byte planetType, Short planetSize, Byte planetColor, Byte planetLevel) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
