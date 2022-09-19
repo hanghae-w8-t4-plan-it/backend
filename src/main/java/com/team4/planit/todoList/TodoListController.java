@@ -1,7 +1,6 @@
 package com.team4.planit.todoList;
 
 import com.team4.planit.category.dto.CategoryDetailResponseDto;
-import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.todoList.dto.TodoListRequestDto;
 import com.team4.planit.todoList.dto.TodoListResponseDto;
@@ -20,9 +19,9 @@ public class TodoListController {
     private final TodoListService todoListService;
 
     @GetMapping("/{year}/{month}")
-    public ResponseEntity<?> getTodoList(@PathVariable String year, @PathVariable String month,
+    public ResponseEntity<?> getUnAchievedDueDates(@PathVariable String year, @PathVariable String month,
                                          HttpServletRequest request) {
-        List<TodoListResponseDto> todoListResponseDtoList = todoListService.getTodoListByYearAndMonth(year, month, request);
+        List<String> todoListResponseDtoList = todoListService.getUnAchievedDueDatesByYearAndMonth(year, month, request);
         return new ResponseEntity<>(Message.success(todoListResponseDtoList), HttpStatus.OK);
     }
 
