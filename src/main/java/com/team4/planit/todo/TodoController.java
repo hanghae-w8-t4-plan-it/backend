@@ -25,12 +25,6 @@ public class TodoController {
         return new ResponseEntity<>(Message.success(todoResponseDto), HttpStatus.OK);
     }
 
-    @GetMapping("/categories/todos")
-    public ResponseEntity<?> getAllTodos(HttpServletRequest request) {
-        List<Todo> todos = todoService.getAllTodos(request);
-        return new ResponseEntity<>(Message.success(todos), HttpStatus.OK);
-    }
-
     @PatchMapping("/categories/todos/{todoId}")
     public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto,
                                         HttpServletRequest request) throws ParseException {

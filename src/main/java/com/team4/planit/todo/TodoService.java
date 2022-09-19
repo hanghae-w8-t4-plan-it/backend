@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,12 +46,6 @@ public class TodoService {
         todoRepository.save(todo);
         achievementService.updateAchievement(member, todo.getDueDate());
         return buildTodoResponseDto(todo);
-    }
-
-    @Transactional
-    public List<Todo> getAllTodos(HttpServletRequest request) {
-        check.validateMember(request);
-        return todoRepository.findAll();
     }
 
     @Transactional
