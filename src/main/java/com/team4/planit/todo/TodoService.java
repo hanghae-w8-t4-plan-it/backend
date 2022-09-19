@@ -53,7 +53,7 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
-        check.checkPastDate(dueDate);
+        if(dueDate!=null) check.checkPastDate(dueDate);
         check.checkPastDate(todo.getDueDate());
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseGet(() -> new TodoList(member, dueDate));
