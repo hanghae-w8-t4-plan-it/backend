@@ -15,25 +15,49 @@ public class TodoList {
     @Column(name = "todo_list_id")
     private Long todoListId;
 
-    @Column(name = "todo_list_due_date")
-    private String dueDate;
-    @Column(name = "todo_list_planet")
-    private String planet;
-
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    @Column(name = "todo_list_due_date")
+    private String dueDate;
+
+    @Column(name = "todo_list_planet_type")
+    private Byte planetType;
+
+    @Column(name = "todo_list_planet_size")
+    private Short planetSize;
+
+    @Column(name = "todo_list_planet_color")
+    private Byte planetColor;
+
+    @Column(name = "todo_list_planet_level")
+    private Byte planetLevel;
 
     public TodoList(Member member, String dueDate) {
         this.member = member;
         this.dueDate = dueDate;
     }
-    public TodoList(Member member, String dueDate, String planet) {
+    public TodoList(Member member, String dueDate, Byte planetType) {
         this.member = member;
         this.dueDate = dueDate;
-        this.planet = planet;
+        this.planetType = planetType;
     }
-    public void update(String planet) {
-        this.planet = planet;
+    public TodoList(Member member, String dueDate, Byte planetType, Short planetSize, Byte planetColor) {
+        this.member = member;
+        this.dueDate = dueDate;
+        this.planetType = planetType;
+        this.planetSize = planetSize;
+        this.planetColor = planetColor;
+    }
+
+    public void update(Byte planetType) {
+        this.planetType = planetType;
+        this.planetLevel = 1;
+    }
+
+    public void update(Short planetSize, Byte planetColor) {
+        this.planetSize = planetSize;
+        this.planetColor = planetColor;
     }
 }
