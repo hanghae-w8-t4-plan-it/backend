@@ -1,10 +1,14 @@
 package com.team4.planit.category;
 
 import com.team4.planit.category.dto.CategoryRequestDto;
+import com.team4.planit.category.dto.CategoryResponseDto;
+import com.team4.planit.global.shared.Message;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,24 +19,27 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequestDto requestDto, HttpServletRequest request) {
-        return categoryService.createCategory(requestDto, request);
+        CategoryResponseDto categoryResponseDto = categoryService.createCategory(requestDto, request);
+        return new ResponseEntity<>(Message.success(categoryResponseDto), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllCategoriesOfOther(@RequestParam String date,
-                                                     @RequestParam(required = false) Long member,
+                                                     @RequestParam(required = false) Long memberId,
                                                      HttpServletRequest request) {
-        if(member==null) return categoryService.getAllCategories(date, request);
-        return categoryService.getAllCategoriesOfOther(date,member, request);
+        List<CategoryResponseDto> categoryResponseDtoList = categoryService.getAllCategories(date, memberId, request);
+        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
 
     @PatchMapping("/{categoryId}")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryRequestDto requestDto, @PathVariable Long categoryId, HttpServletRequest request) {
-        return categoryService.updateCategory(requestDto, categoryId, request);
+        CategoryResponseDto categoryResponseDto = categoryService.updateCategory(requestDto, categoryId, request);
+        return new ResponseEntity<>(Message.success(categoryResponseDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId, HttpServletRequest request) {
-        return categoryService.deleteCategory(categoryId, request);
+        categoryService.deleteCategory(categoryId, request);
+        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }

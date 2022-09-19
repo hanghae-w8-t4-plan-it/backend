@@ -28,7 +28,7 @@ public class CategoryService {
     private final TodoListRepository todoListRepository;
 
     @Transactional
-    public ResponseEntity<?> createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
+    public CategoryResponseDto createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = Category.builder()
                 .member(member)
@@ -38,17 +38,18 @@ public class CategoryService {
                 .categoryStatus(CategoryStatusCode.NOT_STOP)
                 .build();
         categoryRepository.save(category);
-        return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
-                        .categoryId(category.getCategoryId())
-                        .categoryName(category.getCategoryName())
-                        .categoryColor(category.getCategoryColor())
-                        .isPublic(category.getIsPublic())
-                        .categoryStatus(category.getCategoryStatus())
-                .build()), HttpStatus.OK);
+        return CategoryResponseDto.builder()
+                .categoryId(category.getCategoryId())
+                .categoryName(category.getCategoryName())
+                .categoryColor(category.getCategoryColor())
+                .isPublic(category.getIsPublic())
+                .categoryStatus(category.getCategoryStatus())
+                .build();
     }
 
     @Transactional
-    public ResponseEntity<?> getAllCategories(String dueDate, HttpServletRequest request) {
+    public List<CategoryResponseDto> getAllCategories(String dueDate, Long memberId, HttpServletRequest request) {
+        if (memberId != null) getAllCategoriesOfOther(dueDate,memberId, request);
         Member member = check.validateMember(request);
         if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
             throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
@@ -69,10 +70,10 @@ public class CategoryService {
                 );
             }
         }
-        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
+        return categoryResponseDtoList;
     }
     @Transactional
-    public ResponseEntity<?> getAllCategoriesOfOther(String dueDate,Long memberId, HttpServletRequest request) {
+    public List<CategoryResponseDto> getAllCategoriesOfOther(String dueDate, Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);
         if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
@@ -96,30 +97,29 @@ public class CategoryService {
                 );
             }
         }
-        return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
+        return categoryResponseDtoList;
     }
 
     @Transactional
-    public ResponseEntity<?> updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
+    public CategoryResponseDto updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
         check.checkCategoryAuthor(member, category);
         category.update(requestDto);
-        return new ResponseEntity<>(Message.success(CategoryResponseDto.builder()
+        return CategoryResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
                 .isPublic(category.getIsPublic())
                 .categoryStatus(category.getCategoryStatus())
-                .build()), HttpStatus.OK);
+                .build();
     }
 
-    public ResponseEntity<?> deleteCategory(Long categoryId, HttpServletRequest request) {
+    public void deleteCategory(Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
         if(check.countByCategory(category)!=0) throw new CustomException(ErrorCode.CATEGORY_CANNOT_DELETE);
         check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
