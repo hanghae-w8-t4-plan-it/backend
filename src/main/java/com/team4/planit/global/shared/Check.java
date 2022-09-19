@@ -9,12 +9,10 @@ import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
+import com.team4.planit.todo.TodoRepository;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
-import com.team4.planit.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,14 +58,13 @@ public class Check {
         }
     }
 
-    public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
+    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
         if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("RefreshToken"))) {
             tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         TokenDto tokenDto = tokenProvider.generateAccessToken(member);
         tokenToHeaders(tokenDto, response);
-        return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
     }
 
     public Member isPresentMember(String email) {
