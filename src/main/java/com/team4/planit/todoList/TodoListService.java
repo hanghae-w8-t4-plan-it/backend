@@ -2,9 +2,10 @@ package com.team4.planit.todoList;
 
 import com.team4.planit.category.CategoryService;
 import com.team4.planit.category.dto.CategoryDetailResponseDto;
+import com.team4.planit.global.exception.CustomException;
+import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
-import com.team4.planit.todo.TodoRepository;
 import com.team4.planit.todoList.dto.TodoListRequestDto;
 import com.team4.planit.todoList.dto.TodoListResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,8 @@ public class TodoListService {
     private final TodoListRepositorySupport todoListRepositorySupport;
     private final TodoListRepository todoListRepository;
     private final CategoryService categoryService;
-    private final TodoRepository todoRepository;
 
-
+    @Transactional
     public List<CategoryDetailResponseDto> createTodoList(String dueDate, Byte planetType, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
@@ -36,14 +36,15 @@ public class TodoListService {
     @Transactional(readOnly = true)
     public List<String> getUnAchievedDueDatesByYearAndMonth(String year, String month, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        List<String> dueDates = todoListRepositorySupport.findUnAchievedDueDatesByMemberAndYearAndMonth(member, year, month);
-        return dueDates;
+        return todoListRepositorySupport.findUnAchievedDueDatesByMemberAndYearAndMonth(member, year, month);
     }
 
     @Transactional
     public TodoListResponseDto updatePlanet(TodoListRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate()).orElse(null);
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate()).orElseThrow(
+                () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
+        );
         todoList.update(requestDto.getPlanetSize(), requestDto.getPlanetColor());
         return TodoListResponseDto.builder()
                 .dueDate(todoList.getDueDate())
