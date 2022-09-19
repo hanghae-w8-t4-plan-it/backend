@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,17 +34,10 @@ public class TodoListService {
     }
 
     @Transactional(readOnly = true)
-    public List<TodoListResponseDto> getTodoListByYearAndMonth(String year, String month, HttpServletRequest request) {
-        check.validateMember(request);
-        List<TodoList> todoLists = todoListRepositorySupport.findAllByYearAndMonth(year, month);
-        List<TodoListResponseDto> todoListResponseDtoList = new ArrayList<>();
-        for (TodoList todoList : todoLists) {
-            todoListResponseDtoList.add(
-                    new TodoListResponseDto(todoList.getDueDate(),
-                            todoRepository.countAllByTodoListAndIsAchieved(todoList, false))
-            );
-        }
-        return todoListResponseDtoList;
+    public List<String> getUnAchievedDueDatesByYearAndMonth(String year, String month, HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        List<String> dueDates = todoListRepositorySupport.findUnAchievedDueDatesByMemberAndYearAndMonth(member, year, month);
+        return dueDates;
     }
 
     @Transactional
