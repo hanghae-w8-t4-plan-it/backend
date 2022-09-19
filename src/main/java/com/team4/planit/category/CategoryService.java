@@ -77,20 +77,19 @@ public class CategoryService {
             if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)) {
                 categoryDetailResponseDtoList.add(
                         CategoryDetailResponseDto.builder()
+                                .todoListId(todoList.getTodoListId())
                                 .categoryId(category.getCategoryId())
                                 .categoryName(category.getCategoryName())
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
-                                .planetType(todoList.getPlanetType())
-                                .planetSize(todoList.getPlanetSize())
-                                .planetColor(todoList.getPlanetColor())
-                                .planetLevel(todoList.getPlanetLevel())
                                 .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
                                 .build()
                 );
             }
         }
+
+
         return categoryDetailResponseDtoList;
     }
 
@@ -109,15 +108,12 @@ public class CategoryService {
             ) {
                 categoryDetailResponseDtoList.add(
                         CategoryDetailResponseDto.builder()
+                                .todoListId(todoList.getTodoListId())
                                 .categoryId(category.getCategoryId())
                                 .categoryName(category.getCategoryName())
                                 .categoryColor(category.getCategoryColor())
                                 .isPublic(category.getIsPublic())
                                 .categoryStatus(category.getCategoryStatus())
-                                .planetType(todoList.getPlanetType())
-                                .planetSize(todoList.getPlanetSize())
-                                .planetColor(todoList.getPlanetColor())
-                                .planetLevel(todoList.getPlanetLevel())
                                 .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
                                 .build()
                 );
