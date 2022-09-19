@@ -62,10 +62,10 @@ public class TodoService {
         String dueDate = requestDto.getDueDate();
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
-                .orElseThrow(()->new CustomException(ErrorCode.TODO_NOT_FOUND));
-        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
-        if(sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0
-                    ||sdf.parse(dueDate).compareTo(sdf.parse(String.valueOf(LocalDateTime.now())))<0)
+                .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0 ||
+                sdf.parse(dueDate).compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
             throw new CustomException(ErrorCode.PAST_DATE);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
