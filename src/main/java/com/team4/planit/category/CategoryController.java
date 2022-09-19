@@ -1,6 +1,7 @@
 package com.team4.planit.category;
 
 import com.team4.planit.category.dto.CategoryRequestDto;
+import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.global.shared.Message;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +20,28 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequestDto requestDto, HttpServletRequest request) {
-        CategoryResponseDto categoryResponseDto = categoryService.createCategory(requestDto, request);
-        return new ResponseEntity<>(Message.success(categoryResponseDto), HttpStatus.OK);
+        CategoryDetailResponseDto categoryDetailResponseDto = categoryService.createCategory(requestDto, request);
+        return new ResponseEntity<>(Message.success(categoryDetailResponseDto), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllCategoriesOfOther(@RequestParam String date,
                                                      @RequestParam(required = false) Long memberId,
                                                      HttpServletRequest request) {
-        List<CategoryResponseDto> categoryResponseDtoList = categoryService.getAllCategories(date, memberId, request);
+        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = categoryService.getAllCategories(date, memberId, request);
+        return new ResponseEntity<>(Message.success(categoryDetailResponseDtoList), HttpStatus.OK);
+    }
+
+    @GetMapping("/menu")
+    public ResponseEntity<?> getCategoryMenus(HttpServletRequest request) {
+        List<CategoryResponseDto> categoryResponseDtoList = categoryService.getCategoryMenus(request);
         return new ResponseEntity<>(Message.success(categoryResponseDtoList), HttpStatus.OK);
     }
 
     @PatchMapping("/{categoryId}")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryRequestDto requestDto, @PathVariable Long categoryId, HttpServletRequest request) {
-        CategoryResponseDto categoryResponseDto = categoryService.updateCategory(requestDto, categoryId, request);
-        return new ResponseEntity<>(Message.success(categoryResponseDto), HttpStatus.OK);
+        CategoryDetailResponseDto categoryDetailResponseDto = categoryService.updateCategory(requestDto, categoryId, request);
+        return new ResponseEntity<>(Message.success(categoryDetailResponseDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{categoryId}")

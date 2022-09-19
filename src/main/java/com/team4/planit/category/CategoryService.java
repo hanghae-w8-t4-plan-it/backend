@@ -1,17 +1,16 @@
 package com.team4.planit.category;
 
+import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.category.dto.CategoryRequestDto;
 import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
-import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
-import com.team4.planit.todoList.TodoListRepository;
 import com.team4.planit.todo.TodoRepositorySupport;
+import com.team4.planit.todoList.TodoList;
+import com.team4.planit.todoList.TodoListRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,7 @@ public class CategoryService {
     private final TodoListRepository todoListRepository;
 
     @Transactional
-    public CategoryResponseDto createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
+    public CategoryDetailResponseDto createCategory(CategoryRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = Category.builder()
                 .member(member)
@@ -38,7 +37,7 @@ public class CategoryService {
                 .categoryStatus(CategoryStatusCode.NOT_STOP)
                 .build();
         categoryRepository.save(category);
-        return CategoryResponseDto.builder()
+        return CategoryDetailResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
@@ -47,66 +46,93 @@ public class CategoryService {
                 .build();
     }
 
-    @Transactional
-    public List<CategoryResponseDto> getAllCategories(String dueDate, Long memberId, HttpServletRequest request) {
-        if (memberId != null) getAllCategoriesOfOther(dueDate,memberId, request);
+    @Transactional(readOnly = true)
+    public List<CategoryResponseDto> getCategoryMenus(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
-            throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
-        }
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
-            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)) {
-                categoryResponseDtoList.add(
-                        CategoryResponseDto.builder()
-                                .categoryId(category.getCategoryId())
-                                .categoryName(category.getCategoryName())
-                                .categoryColor(category.getCategoryColor())
-                                .isPublic(category.getIsPublic())
-                                .categoryStatus(category.getCategoryStatus())
-                                .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
-                                .build()
-                );
-            }
-        }
-        return categoryResponseDtoList;
-    }
-    @Transactional
-    public List<CategoryResponseDto> getAllCategoriesOfOther(String dueDate, Long memberId, HttpServletRequest request) {
-        check.validateMember(request);
-        Member member = check.isPresentMemberByMemberId(memberId);
-        if(todoListRepository.findByMemberAndDueDate(member,dueDate).isEmpty()){
-            throw new CustomException(ErrorCode.TODO_LIST_NOT_EXIST);
-        }
-        List<Category> categories = categoryRepository.findAllByMember(member);
-        List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
-        for (Category category : categories) {
-            if (category.getIsPublic() && (check.countByCategory(category) != 0 ||
-                    category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP))
-            ) {
-                categoryResponseDtoList.add(
-                        CategoryResponseDto.builder()
-                                .categoryId(category.getCategoryId())
-                                .categoryName(category.getCategoryName())
-                                .categoryColor(category.getCategoryColor())
-                                .isPublic(category.getIsPublic())
-                                .categoryStatus(category.getCategoryStatus())
-                                .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
-                                .build()
-                );
-            }
+            categoryResponseDtoList.add(
+            CategoryResponseDto.builder()
+                    .categoryId(category.getCategoryId())
+                    .categoryName(category.getCategoryName())
+                    .isPublic(category.getIsPublic())
+                    .categoryColor(category.getCategoryColor())
+                    .categoryStatus(category.getCategoryStatus())
+                    .build());
         }
         return categoryResponseDtoList;
     }
 
+    @Transactional(readOnly = true)
+    public List<CategoryDetailResponseDto> getAllCategories(String dueDate, Long memberId, HttpServletRequest request) {
+        if (memberId != null) return getAllCategoriesOfOther(dueDate, memberId, request);
+        Member member = check.validateMember(request);
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseThrow(
+                () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
+        );
+        List<Category> categories = categoryRepository.findAllByMember(member);
+        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
+        for (Category category : categories) {
+            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)) {
+                categoryDetailResponseDtoList.add(
+                        CategoryDetailResponseDto.builder()
+                                .categoryId(category.getCategoryId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatus(category.getCategoryStatus())
+                                .planetType(todoList.getPlanetType())
+                                .planetSize(todoList.getPlanetSize())
+                                .planetColor(todoList.getPlanetColor())
+                                .planetLevel(todoList.getPlanetLevel())
+                                .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
+                                .build()
+                );
+            }
+        }
+        return categoryDetailResponseDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryDetailResponseDto> getAllCategoriesOfOther(String dueDate, Long memberId, HttpServletRequest request) {
+        check.validateMember(request);
+        Member member = check.isPresentMemberByMemberId(memberId);
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseThrow(
+                () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
+        );
+        List<Category> categories = categoryRepository.findAllByMember(member);
+        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
+        for (Category category : categories) {
+            if (category.getIsPublic() && (check.countByCategory(category) != 0 ||
+                    category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP))
+            ) {
+                categoryDetailResponseDtoList.add(
+                        CategoryDetailResponseDto.builder()
+                                .categoryId(category.getCategoryId())
+                                .categoryName(category.getCategoryName())
+                                .categoryColor(category.getCategoryColor())
+                                .isPublic(category.getIsPublic())
+                                .categoryStatus(category.getCategoryStatus())
+                                .planetType(todoList.getPlanetType())
+                                .planetSize(todoList.getPlanetSize())
+                                .planetColor(todoList.getPlanetColor())
+                                .planetLevel(todoList.getPlanetLevel())
+                                .todos(todoRepositorySupport.findAllTodosByCategoryAndDueDate(category, dueDate))
+                                .build()
+                );
+            }
+        }
+        return categoryDetailResponseDtoList;
+    }
+
     @Transactional
-    public CategoryResponseDto updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
+    public CategoryDetailResponseDto updateCategory(CategoryRequestDto requestDto, Long categoryId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         Category category = check.isPresentCategory(categoryId);
         check.checkCategoryAuthor(member, category);
         category.update(requestDto);
-        return CategoryResponseDto.builder()
+        return CategoryDetailResponseDto.builder()
                 .categoryId(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .categoryColor(category.getCategoryColor())
@@ -122,4 +148,6 @@ public class CategoryService {
         check.checkCategoryAuthor(member, category);
         categoryRepository.delete(category);
     }
+
+
 }
