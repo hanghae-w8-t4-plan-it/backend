@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +27,9 @@ public class TodoService {
     private final AchievementService achievementService;
 
     @Transactional
-    public TodoResponseDto createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) {
+    public TodoResponseDto createTodo(Long categoryId, TodoRequestDto requestDto, HttpServletRequest request) throws ParseException {
         Member member = check.validateMember(request);
+        check.checkPastDate(requestDto.getDueDate());
         Category category = check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
@@ -54,25 +53,24 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if (sdf.parse(todo.getDueDate()).compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0 ||
-                sdf.parse(dueDate).compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
-            throw new CustomException(ErrorCode.PAST_DATE);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
-                .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
+        check.checkPastDate(dueDate);
+        check.checkPastDate(todo.getDueDate());
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
+                .orElseGet(() -> new TodoList(member, dueDate));
         todo.updateTodo(requestDto);
-        if (requestDto.getDueDate() != null) todo.updateTodo(todoList);
+        if (dueDate != null) todo.updateTodo(todoList);
         todoListRepository.save(todoList);
         achievementService.updateAchievement(member, todo.getDueDate());
         return buildTodoResponseDto(todo);
     }
 
     @Transactional
-    public void deleteTodo(Long todoId, HttpServletRequest request) {
+    public void deleteTodo(Long todoId, HttpServletRequest request) throws ParseException {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 () -> new CustomException(ErrorCode.TODO_NOT_FOUND));
         String dueDate = todo.getDueDate();
+        check.checkPastDate(dueDate);
         todoRepository.delete(todo);
         achievementService.updateAchievement(member, dueDate);
     }
