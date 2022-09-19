@@ -9,18 +9,19 @@ import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
+import com.team4.planit.todo.TodoRepository;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
-import com.team4.planit.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -43,6 +44,7 @@ public class Check {
     }
 
     public void checkEmail(String email) {
+
         if(memberRepository.findByEmail(email).isPresent()) throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
     }
 
@@ -60,14 +62,14 @@ public class Check {
         }
     }
 
-    public ResponseEntity<Message> reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Member member, RefreshToken refreshTokenConfirm) {
+    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response,
+                                   Member member, RefreshToken refreshTokenConfirm) {
         if (!Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("RefreshToken"))) {
             tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         TokenDto tokenDto = tokenProvider.generateAccessToken(member);
         tokenToHeaders(tokenDto, response);
-        return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
     }
 
     public Member isPresentMember(String email) {
@@ -102,6 +104,15 @@ public class Check {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.addHeader("RefreshToken", tokenDto.getRefreshToken());
         response.addHeader("AccessTokenExpireTime", tokenDto.getAccessTokenExpiresIn().toString());
+    }
+
+    public void checkPastDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = sdf.parse(date);
+        if (date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0 ||
+                date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
+            throw new CustomException(ErrorCode.PAST_DATE);
+
     }
 
 }

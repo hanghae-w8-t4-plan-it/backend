@@ -1,7 +1,9 @@
 package com.team4.planit.timer;
 
+import com.team4.planit.global.shared.Message;
 import com.team4.planit.timer.dto.TimerRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ public class TimerController {
 
     @PostMapping("/timer")
     public ResponseEntity<?> createTimer(@RequestBody TimerRequestDto timerRequestDto, HttpServletRequest request) {
-        return timerService.createTimer(timerRequestDto, request);
+        timerService.createTimer(timerRequestDto, request);
+        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }

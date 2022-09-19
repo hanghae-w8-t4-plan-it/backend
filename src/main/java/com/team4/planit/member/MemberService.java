@@ -10,11 +10,8 @@ import com.team4.planit.global.jwt.RefreshTokenRepository;
 import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.global.shared.Check;
-import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,40 +36,34 @@ public class MemberService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public ResponseEntity<?> creatMember(MemberRequestDto requestDto) {
+    public void creatMember(MemberRequestDto requestDto, HttpServletResponse response) {
         check.checkEmail(requestDto.getEmail());
         Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), passwordEncoder.encode(requestDto.getPassword()));
         memberRepository.save(member);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(member);
+        check.tokenToHeaders(tokenDto, response);
     }
 
     @Transactional
-    public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
+    public LoginResponseDto login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = check.isPresentMember(requestDto.getEmail());
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
-        LoginResponseDto loginResponseDto = new LoginResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl());
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
-        return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
+        return new LoginResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl());
     }
 
-    @Transactional(readOnly = true)
-    public ResponseEntity<?> checkEmail(String email) {
-        check.checkEmail(email);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
-    }
-
-    public ResponseEntity<?> refreshToken(RefreshRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
+    public void refreshToken(RefreshRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
         tokenProvider.validateToken(request.getHeader("RefreshToken"));
         Member member = memberRepository.findByMemberId(requestDto.getMemberId()).orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_INFO));
         long accessTokenExpiration = Long.parseLong(request.getHeader("AccessTokenExpireTime"));
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member)
                 .orElseThrow(()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
-        return check.reissueAccessToken(request, response, member, refreshTokenConfirm);
+        check.reissueAccessToken(request, response, member, refreshTokenConfirm);
     }
 
-    public ResponseEntity<?> suggestMembers() {
+    public List<MemberResponseDto> suggestMembers() {
         List<Member> memberList = memberRepository.findSuggestMember();
         List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
         for (Member member : memberList) {
@@ -82,18 +73,17 @@ public class MemberService {
                     .profileImgUrl(member.getProfileImgUrl())
                     .build());
         }
-        return new ResponseEntity<>(Message.success(memberResponseDtoList), HttpStatus.OK);
+        return memberResponseDtoList;
     }
 
-    public ResponseEntity<?> deleteMembers(HttpServletRequest request) {
+    public void deleteMembers(HttpServletRequest request) {
         Member member = check.validateMember(request);
         member.updateStatus();
         memberRepository.save(member);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<?> modifyMemberInfo(HttpServletRequest request, MemberRequestDto requestDto, MultipartFile[] image) throws IOException {
+    public void modifyMemberInfo(HttpServletRequest request, MemberRequestDto requestDto, MultipartFile[] image) throws IOException {
         Member member = check.validateMember(request);
         String imgUrl = null;
         if(image!=null) imgUrl = fileService.getImgUrl(image);
@@ -104,19 +94,17 @@ public class MemberService {
                 .build();
         member.update(encodedRequestDto,imgUrl);
         memberRepository.save(member);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> memberProfile(HttpServletRequest request, Long memberId) {
+    public  MemberProfileResponseDto memberProfile(HttpServletRequest request, Long memberId) {
         check.validateMember(request);
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(null);
-        MemberProfileResponseDto memberProfileResponseDto = MemberProfileResponseDto.builder()
+        return MemberProfileResponseDto.builder()
                 .memberId(member.getMemberId())
                 .nickname(member.getNickname())
                 .profileImgUrl(member.getProfileImgUrl())
                 .followerCnt(followRepository.countAllByFollowedMember(member))
                 .followingCnt(followRepository.countAllByMember(member))
                 .build();
-        return new ResponseEntity<>(Message.success(memberProfileResponseDto), HttpStatus.OK);
     }
 }

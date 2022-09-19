@@ -1,7 +1,6 @@
 package com.team4.planit.statistic;
 
 import com.team4.planit.global.shared.Check;
-import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
 import com.team4.planit.statistic.achievement.Achievement;
 import com.team4.planit.statistic.achievement.AchievementRepository;
@@ -10,8 +9,6 @@ import com.team4.planit.statistic.concentration.ConcentrationRepository;
 import com.team4.planit.statistic.dto.ConcentrationResponseDto;
 import com.team4.planit.statistic.dto.StatisticDayResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +22,7 @@ public class StatisticService {
     private final AchievementRepository achievementRepository;
     private final ConcentrationRepository concentrationRepository;
 
-    public ResponseEntity<?> getStatisticDay(String date, HttpServletRequest request) {
+    public StatisticDayResponseDto getStatisticDay(String date, HttpServletRequest request) {
         Member member = check.validateMember(request);
         List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDate(member.getMemberId(), date);
         List<ConcentrationResponseDto> concentrationResponseDtoList = new ArrayList<>();
@@ -38,14 +35,11 @@ public class StatisticService {
             );
         }
         Achievement achievement = achievementRepository.findAllByMemberAndStartDate(member, date).orElse(null);
-        StatisticDayResponseDto statisticDayResponseDto = StatisticDayResponseDto.builder()
+        return StatisticDayResponseDto.builder()
                 .memberId(member.getMemberId())
                 .achievementRate(achievement.getAchievementRate())
                 .achievementCnt(achievement.getAchievementCnt())
                 .concentrationRates(concentrationResponseDtoList)
                 .build();
-        return new ResponseEntity<>(Message.success(statisticDayResponseDto), HttpStatus.OK);
-
     }
-
 }

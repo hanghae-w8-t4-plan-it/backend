@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface TodoListRepository extends JpaRepository<TodoList, Long> {
     Optional<TodoList> findByMemberAndDueDate(Member member, String dueDate);
-
 }

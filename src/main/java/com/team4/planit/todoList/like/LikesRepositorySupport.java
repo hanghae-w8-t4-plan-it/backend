@@ -1,11 +1,11 @@
-package com.team4.planit.like;
+package com.team4.planit.todoList.like;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team4.planit.member.Member;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import static com.team4.planit.like.QLikes.likes;
+import static com.team4.planit.todoList.like.QLikes.likes;
 import static com.team4.planit.todoList.QTodoList.todoList;
 
 @Repository
