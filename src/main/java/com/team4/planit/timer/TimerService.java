@@ -1,13 +1,10 @@
 package com.team4.planit.timer;
 
 import com.team4.planit.global.shared.Check;
-import com.team4.planit.global.shared.Message;
 import com.team4.planit.member.Member;
 import com.team4.planit.statistic.concentration.ConcentrationService;
 import com.team4.planit.timer.dto.TimerRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +20,7 @@ public class TimerService {
     private final TimerRepository timerRepository;
 
     @Transactional
-    public ResponseEntity<?> createTimer(TimerRequestDto timerRequestDto, HttpServletRequest request) {
+    public void createTimer(TimerRequestDto timerRequestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         LocalDateTime startTime = LocalDateTime.now().minusMinutes(timerRequestDto.getElapsedTime());
         Timer timer = Timer.builder()
@@ -35,6 +32,5 @@ public class TimerService {
                 .build();
         timerRepository.save(timer);
         concentrationService.createConcentration(timer, member);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 }
