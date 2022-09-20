@@ -33,6 +33,7 @@ public class TodoService {
         Category category = check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
+        todoListRepository.save(todoList);
         Todo todo = Todo.builder()
                 .todoList(todoList)
                 .member(member)

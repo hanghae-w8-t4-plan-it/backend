@@ -10,6 +10,7 @@ import com.team4.planit.statistic.dto.ConcentrationResponseDto;
 import com.team4.planit.statistic.dto.StatisticDayResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -22,11 +23,12 @@ public class StatisticService {
     private final AchievementRepository achievementRepository;
     private final ConcentrationRepository concentrationRepository;
 
+    @Transactional
     public StatisticDayResponseDto getStatisticDay(String date, HttpServletRequest request) {
         Member member = check.validateMember(request);
         List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDate(member.getMemberId(), date);
         List<ConcentrationResponseDto> concentrationResponseDtoList = new ArrayList<>();
-        for(Concentration concentration : concentrations) {
+        for (Concentration concentration : concentrations) {
             concentrationResponseDtoList.add(
                     ConcentrationResponseDto.builder()
                             .concentrationRate(concentration.getConcentrationRate())
@@ -34,7 +36,16 @@ public class StatisticService {
                             .build()
             );
         }
-        Achievement achievement = achievementRepository.findAllByMemberAndStartDate(member, date).orElse(null);
+        Achievement achievement = achievementRepository.findAllByMemberAndStartDate(member, date).orElseGet(
+                Achievement.builder()
+                        .member(member)
+                        .period("Day")
+                        .achievementRate(0f)
+                        .achievementCnt(0)
+                        .startDate(date)
+                        .todoCnt(0)::build
+        );
+        achievementRepository.save(achievement);
         return StatisticDayResponseDto.builder()
                 .memberId(member.getMemberId())
                 .achievementRate(achievement.getAchievementRate())

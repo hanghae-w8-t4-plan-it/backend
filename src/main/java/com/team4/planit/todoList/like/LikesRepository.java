@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
-    Optional<Likes> findByMemberAndAndTodoList(Member member, TodoList todoList);
+    Optional<Likes> findByMemberAndTodoList(Member member, TodoList todoList);
 
     @Query(value = "select likes_count, todo_list_due_date\n" +
             "from (\n" +
