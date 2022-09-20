@@ -6,13 +6,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ConcentrationMemberResponseDto {
+public class AchievementRankResponseDto {
     private Long memberId;
     private String nickname;
     private String profileImgUrl;
 
     @Builder
-    public ConcentrationMemberResponseDto(Long memberId, String nickname, String profileImgUrl) {
+    public AchievementRankResponseDto(Long memberId, String nickname, String profileImgUrl) {
         this.memberId = memberId;
         this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
