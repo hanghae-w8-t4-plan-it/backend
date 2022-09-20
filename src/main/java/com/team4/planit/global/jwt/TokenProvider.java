@@ -118,7 +118,8 @@ public class TokenProvider {
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        String refreshToken = refreshTokenRepository.findByMember(member).get().getValue();
+        String refreshToken = refreshTokenRepository.findByMember(member)
+                .orElseThrow(()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED)).getValue();
         return TokenDto.builder()
                 .grantType(BEARER_PREFIX)
                 .accessToken(accessToken)

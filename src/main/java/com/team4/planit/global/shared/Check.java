@@ -109,9 +109,9 @@ public class Check {
     public void checkPastDate(String date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date1 = sdf.parse(date);
-        if (date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0 ||
-                date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
+        if (date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
             throw new CustomException(ErrorCode.PAST_DATE);
+        if (!date.equals(sdf.format(date1))) throw new CustomException(ErrorCode.DATE_FORMAT_INVALID);
 
     }
 
