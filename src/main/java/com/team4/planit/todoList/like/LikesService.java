@@ -20,7 +20,7 @@ public class LikesService {
     public Boolean todoListLike(Long todoListId, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = check.isPresentTodoList(todoListId);
-        Optional<Likes> findLike = likesRepository.findByMemberAndAndTodoList(member, todoList);
+        Optional<Likes> findLike = likesRepository.findByMemberAndTodoList(member, todoList);
         if (findLike.isEmpty()) {
             likesRepository.save(new Likes(member, todoList));
             return true;

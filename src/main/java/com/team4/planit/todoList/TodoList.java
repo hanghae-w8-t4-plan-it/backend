@@ -1,5 +1,6 @@
 package com.team4.planit.todoList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team4.planit.member.Member;
 import lombok.*;
 
@@ -15,6 +16,7 @@ public class TodoList {
     @Column(name = "todo_list_id")
     private Long todoListId;
 
+    @JsonIgnore
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

@@ -8,16 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TodoListResponseDto {
     private String dueDate;
-    private Integer unAchievedTodoCnt;
     private Byte planetType;
     private Short planetSize;
     private Byte planetColor;
     private Byte planetLevel;
 
 
-    public TodoListResponseDto(String dueDate, Integer unAchievedTodoCnt) {
+    public TodoListResponseDto(String dueDate) {
         this.dueDate = dueDate;
-        this.unAchievedTodoCnt = unAchievedTodoCnt;
     }
 
     @Builder

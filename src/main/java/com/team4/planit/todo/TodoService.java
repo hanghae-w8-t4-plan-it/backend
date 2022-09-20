@@ -33,6 +33,7 @@ public class TodoService {
         Category category = check.isPresentCategory(categoryId);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate())
                 .orElseGet(() -> new TodoList(member, requestDto.getDueDate()));
+        todoListRepository.save(todoList);
         Todo todo = Todo.builder()
                 .todoList(todoList)
                 .member(member)
@@ -53,6 +54,7 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+        check.checkTodoAuthor(member, todo);
         if(dueDate!=null) check.checkPastDate(dueDate);
         check.checkPastDate(todo.getDueDate());
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
@@ -69,6 +71,7 @@ public class TodoService {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 () -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+        check.checkTodoAuthor(member, todo);
         String dueDate = todo.getDueDate();
         check.checkPastDate(dueDate);
         todoRepository.delete(todo);

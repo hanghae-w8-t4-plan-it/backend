@@ -9,6 +9,7 @@ import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
+import com.team4.planit.todo.Todo;
 import com.team4.planit.todo.TodoRepository;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
@@ -41,6 +42,14 @@ public class Check {
 
     public void checkCategoryAuthor(Member member, Category category) {
         if (!category.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
+    }
+
+    public void checkTodoAuthor(Member member, Todo todo) {
+        if (!todo.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+    }
+
+    public void checkTodoListAuthor(Member member, TodoList todoList) {
+        if (!todoList.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
 
     public void checkEmail(String email) {
@@ -109,9 +118,9 @@ public class Check {
     public void checkPastDate(String date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date1 = sdf.parse(date);
-        if (date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0 ||
-                date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
+        if (date1.compareTo(sdf.parse(String.valueOf(LocalDateTime.now()))) < 0)
             throw new CustomException(ErrorCode.PAST_DATE);
+        if (!date.equals(sdf.format(date1))) throw new CustomException(ErrorCode.DATE_FORMAT_INVALID);
 
     }
 
