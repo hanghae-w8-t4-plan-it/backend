@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,17 +64,41 @@ public class MemberService {
         check.reissueAccessToken(request, response, member, refreshTokenConfirm);
     }
 
-    public List<MemberResponseDto> suggestMembers() {
-        List<Member> memberList = memberRepository.findSuggestMember();
-        List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
-        for (Member member : memberList) {
-            memberResponseDtoList.add(MemberResponseDto.builder()
-                    .id(member.getMemberId())
-                    .nickname(member.getNickname())
-                    .profileImgUrl(member.getProfileImgUrl())
-                    .build());
+    @Transactional(readOnly = true)
+    public MemberResponseDto suggestMembers(HttpServletRequest request) {
+        check.validateMember(request);
+        LocalDate date = LocalDate.now();
+        List<Member> recommendedMemberList = memberRepository.findRecommendedMember();
+        List<Member> achievementMemberList = memberRepository.findAchievementMember(date);
+        List<Member> concentrationMemberList = memberRepository.findConcentrationMember(date);
+        List<RecommendedMemberResponseDto> recommendedMemberResponseDtoList = new ArrayList<>();
+        for (Member member : recommendedMemberList) {
+            recommendedMemberResponseDtoList.add(
+                    RecommendedMemberResponseDto.builder()
+                            .memberId(member.getMemberId())
+                            .nickname(member.getNickname())
+                            .profileImgUrl(member.getProfileImgUrl())
+                            .build());
         }
-        return memberResponseDtoList;
+        List<AchievementMemberResponseDto> achievementMemberResponseDtoList = new ArrayList<>();
+        for (Member member : achievementMemberList) {
+            achievementMemberResponseDtoList.add(
+                    AchievementMemberResponseDto.builder()
+                            .memberId(member.getMemberId())
+                            .nickname(member.getNickname())
+                            .profileImgUrl(member.getProfileImgUrl())
+                            .build());
+        }
+        List<ConcentrationMemberResponseDto> concentrationMemberResponseDtoList = new ArrayList<>();
+        for (Member member : concentrationMemberList) {
+            concentrationMemberResponseDtoList.add(
+                    ConcentrationMemberResponseDto.builder()
+                            .memberId(member.getMemberId())
+                            .nickname(member.getNickname())
+                            .profileImgUrl(member.getProfileImgUrl())
+                            .build());
+        }
+        return new MemberResponseDto(recommendedMemberResponseDtoList, achievementMemberResponseDtoList, concentrationMemberResponseDtoList);
     }
 
     public void deleteMembers(HttpServletRequest request) {

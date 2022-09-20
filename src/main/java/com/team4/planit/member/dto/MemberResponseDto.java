@@ -1,20 +1,20 @@
 package com.team4.planit.member.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class MemberResponseDto {
-    private Long id;
-    private String nickname;
-    private String profileImgUrl;
+    private List<RecommendedMemberResponseDto> recommendedMember;
+    private List<AchievementMemberResponseDto> achievementMember;
+    private List<ConcentrationMemberResponseDto> concentrationMember;
 
-    @Builder
-    public MemberResponseDto(Long id, String nickname, String profileImgUrl) {
-        this.id = id;
-        this.nickname = nickname;
-        this.profileImgUrl = profileImgUrl;
+    public MemberResponseDto(List<RecommendedMemberResponseDto> recommendedMember, List<AchievementMemberResponseDto> achievementMember, List<ConcentrationMemberResponseDto> concentrationMember) {
+        this.recommendedMember = recommendedMember;
+        this.achievementMember = achievementMember;
+        this.concentrationMember = concentrationMember;
     }
 }
