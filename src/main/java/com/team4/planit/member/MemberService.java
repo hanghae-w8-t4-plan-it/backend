@@ -80,25 +80,25 @@ public class MemberService {
                             .profileImgUrl(member.getProfileImgUrl())
                             .build());
         }
-        List<AchievementMemberResponseDto> achievementMemberResponseDtoList = new ArrayList<>();
+        List<AchievementRankResponseDto> achievementRankResponseDtoList = new ArrayList<>();
         for (Member member : achievementMemberList) {
-            achievementMemberResponseDtoList.add(
-                    AchievementMemberResponseDto.builder()
+            achievementRankResponseDtoList.add(
+                    AchievementRankResponseDto.builder()
                             .memberId(member.getMemberId())
                             .nickname(member.getNickname())
                             .profileImgUrl(member.getProfileImgUrl())
                             .build());
         }
-        List<ConcentrationMemberResponseDto> concentrationMemberResponseDtoList = new ArrayList<>();
+        List<ConcentrationRankResponseDto> concentrationRankResponseDtoList = new ArrayList<>();
         for (Member member : concentrationMemberList) {
-            concentrationMemberResponseDtoList.add(
-                    ConcentrationMemberResponseDto.builder()
+            concentrationRankResponseDtoList.add(
+                    ConcentrationRankResponseDto.builder()
                             .memberId(member.getMemberId())
                             .nickname(member.getNickname())
                             .profileImgUrl(member.getProfileImgUrl())
                             .build());
         }
-        return new MemberResponseDto(recommendedMemberResponseDtoList, achievementMemberResponseDtoList, concentrationMemberResponseDtoList);
+        return new MemberResponseDto(recommendedMemberResponseDtoList, achievementRankResponseDtoList, concentrationRankResponseDtoList);
     }
 
     public void deleteMembers(HttpServletRequest request) {
