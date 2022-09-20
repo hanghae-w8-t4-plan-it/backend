@@ -72,6 +72,7 @@ public class TodoListService {
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate()).orElseThrow(
                 () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
         );
+        check.checkTodoListAuthor(member, todoList);
         todoList.update(requestDto.getPlanetSize(), requestDto.getPlanetColor());
         return TodoListResponseDto.builder()
                 .dueDate(todoList.getDueDate())
