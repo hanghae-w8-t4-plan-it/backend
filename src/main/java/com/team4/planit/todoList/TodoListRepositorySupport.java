@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.team4.planit.todo.QTodo.todo;
 import static com.team4.planit.todoList.QTodoList.todoList;
+import static com.team4.planit.todoList.like.QLikes.likes;
 
 @Repository
 public class TodoListRepositorySupport extends QuerydslRepositorySupport {
@@ -32,4 +33,35 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(todoList.dueDate.asc())
                 .fetch();
     }
+
+    public List<TodoList> getWeeklyPlanet(Member member, String startDate, String endDate) {
+        return queryFactory
+                .selectFrom(todoList)
+                .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
+                .orderBy(todoList.todoListId.asc())
+                .fetch();
+    }
+
+    public Integer getWeeklyTotalAchievement(Member member, String startDate, String endDate) {
+        return Math.toIntExact(queryFactory
+                .select(todoList.count())
+                .from(todoList)
+                .innerJoin(todo)
+                .on(todoList.eq(todo.todoList))
+                .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
+                .orderBy(todoList.todoListId.asc())
+                .fetchFirst());
+    }
+
+    public Integer getWeeklyTotalLikes(Member member, String startDate, String endDate) {
+        return Math.toIntExact(queryFactory
+                .select(todoList.count())
+                .from(todoList)
+                .innerJoin(likes)
+                .on(todoList.eq(likes.todoList))
+                .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
+                .orderBy(todoList.todoListId.asc())
+                .fetchFirst());
+    }
+
 }

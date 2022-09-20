@@ -1,13 +1,14 @@
 package com.team4.planit.category;
 
-import com.team4.planit.category.dto.CategoryRequestDto;
 import com.team4.planit.category.dto.CategoryDetailResponseDto;
+import com.team4.planit.category.dto.CategoryRequestDto;
 import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.global.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class CategoryController {
     public ResponseEntity<?> getAllCategories(@RequestParam String date,
                                                      @RequestParam(required = false) Long memberId,
                                                      HttpServletRequest request) {
-        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = categoryService.getAllCategories(date, memberId, request);
+        List<CategoryDetailResponseDto> categoryDetailResponseDtoList =
+                categoryService.getAllCategories(date, memberId, request);
         return new ResponseEntity<>(Message.success(categoryDetailResponseDtoList), HttpStatus.OK);
     }
 
