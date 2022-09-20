@@ -25,7 +25,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCategoriesOfOther(@RequestParam String date,
+    public ResponseEntity<?> getAllCategories(@RequestParam String date,
                                                      @RequestParam(required = false) Long memberId,
                                                      HttpServletRequest request) {
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = categoryService.getAllCategories(date, memberId, request);
