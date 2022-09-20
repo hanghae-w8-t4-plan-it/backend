@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,10 +48,11 @@ public class MemberController {
     }
 
     @GetMapping("/suggest")
-    public ResponseEntity<?> suggestMembers() {
-        List<MemberResponseDto> memberResponseDtoList = memberService.suggestMembers();
+    public ResponseEntity<?> suggestMembers(HttpServletRequest request) {
+        MemberResponseDto memberResponseDtoList = memberService.suggestMembers(request);
         return new ResponseEntity<>(Message.success(memberResponseDtoList), HttpStatus.OK);
     }
+
     @DeleteMapping
     public ResponseEntity<?> deleteMembers(HttpServletRequest request){
         memberService.deleteMembers(request);
