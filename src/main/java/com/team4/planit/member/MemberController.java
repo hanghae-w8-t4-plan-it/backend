@@ -31,7 +31,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
-        LoginResponseDto loginResponseDto = memberService.login(requestDto, response);
+        MemberResponseDto loginResponseDto = memberService.login(requestDto, response);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
     }
 
@@ -49,8 +49,8 @@ public class MemberController {
 
     @GetMapping("/suggest")
     public ResponseEntity<?> suggestMembers(HttpServletRequest request) {
-        MemberResponseDto memberResponseDtoList = memberService.suggestMembers(request);
-        return new ResponseEntity<>(Message.success(memberResponseDtoList), HttpStatus.OK);
+        SuggestMemberResponseDto suggestMemberResponseDtoList = memberService.suggestMembers(request);
+        return new ResponseEntity<>(Message.success(suggestMemberResponseDtoList), HttpStatus.OK);
     }
 
     @DeleteMapping
