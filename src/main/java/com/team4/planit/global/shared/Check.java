@@ -100,6 +100,9 @@ public class Check {
     }
 
     public Member validateMember(HttpServletRequest request) {
+        if (request.getHeader("Authorization")==null) {
+            throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
+        }
         if (request.getHeader("Authorization").length() < 8) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
