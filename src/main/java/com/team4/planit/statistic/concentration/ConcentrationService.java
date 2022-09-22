@@ -16,7 +16,7 @@ public class ConcentrationService {
         String start = timer.getStartDate();
         String last = timer.getLastHour();
         String date = timer.getLastDate();
-        String startDate = start.substring(0, 11);
+        String startDate = start.substring(0, 10);
         float startHour = Float.parseFloat((start.substring(start.length() - 5, start.length() - 3)));
         float startMinute = Float.parseFloat((start.substring(start.length() - 2)));
         float lastHour = Float.parseFloat((last.substring(last.length() - 5, last.length() - 3)));

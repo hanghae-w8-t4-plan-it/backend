@@ -58,4 +58,7 @@ public class TodoList {
         this.planetSize = planetSize;
         this.planetColor = planetColor;
     }
+    public void setPlanetLevel(Byte level){
+        this.planetLevel = level;
+    }
 }

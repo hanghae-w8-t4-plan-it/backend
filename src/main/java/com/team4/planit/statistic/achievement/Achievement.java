@@ -45,7 +45,8 @@ public class Achievement {
         this.startDate = startDate;
         this.todoCnt = todoCnt;
     }
-    public void update(float achievementRate,Integer achievementCnt,Integer todoCnt){
+
+    public void update(float achievementRate, Integer achievementCnt, Integer todoCnt) {
         this.achievementRate = achievementRate;
         this.achievementCnt = achievementCnt;
         this.todoCnt = todoCnt;

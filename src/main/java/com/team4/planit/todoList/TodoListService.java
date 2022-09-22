@@ -8,7 +8,7 @@ import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
 import com.team4.planit.todoList.dto.TodoListRequestDto;
-import com.team4.planit.todoList.dto.TodoListResponseDto;
+import com.team4.planit.todoList.dto.DailyTodoListResponseDto;
 import com.team4.planit.todoList.dto.WeeklyTodoListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,20 +47,11 @@ public class TodoListService {
     }
 
     @Transactional(readOnly = true)
-    public TodoListResponseDto getDailyTodoList(Long memberId, String dueDate, HttpServletRequest request) {
+    public DailyTodoListResponseDto getDailyTodoList(Long memberId, String dueDate, HttpServletRequest request) {
         Member member = check.validateMember(request);
         if (memberId != null) member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
-                .orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
-        return TodoListResponseDto.builder()
-                .todoListId(todoList.getTodoListId())
-                .dueDate(todoList.getDueDate())
-                .planetType(todoList.getPlanetType())
-                .planetSize(todoList.getPlanetSize())
-                .planetColor(todoList.getPlanetColor())
-                .planetLevel(todoList.getPlanetLevel())
-                .build();
+        return todoListRepositorySupport.findDailyTodoListByMemberAndDueDate(member, dueDate);
     }
 
     @Transactional(readOnly = true)
@@ -77,21 +68,21 @@ public class TodoListService {
         String endDate = sdf.format(cal.getTime());
         return WeeklyTodoListResponseDto.builder()
                 .nickname(member.getNickname())
-                .weeklyTotalAchievement(todoListRepositorySupport.getWeeklyTotalAchievement(member, startDate, endDate))
-                .weeklyTotalLikes(todoListRepositorySupport.getWeeklyTotalLikes(member, startDate, endDate))
-                .planets(todoListRepositorySupport.getWeeklyPlanet(member, startDate, endDate))
+                .weeklyTotalAchievement(todoListRepositorySupport.findWeeklyTotalAchievement(member, startDate, endDate))
+                .weeklyTotalLikes(todoListRepositorySupport.findWeeklyTotalLikes(member, startDate, endDate))
+                .planets(todoListRepositorySupport.findWeeklyPlanet(member, startDate, endDate))
                 .build();
     }
 
     @Transactional
-    public TodoListResponseDto updatePlanet(TodoListRequestDto requestDto, HttpServletRequest request) {
+    public DailyTodoListResponseDto updatePlanet(TodoListRequestDto requestDto, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, requestDto.getDueDate()).orElseThrow(
                 () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
         );
         check.checkTodoListAuthor(member, todoList);
         todoList.update(requestDto.getPlanetSize(), requestDto.getPlanetColor());
-        return TodoListResponseDto.builder()
+        return DailyTodoListResponseDto.builder()
                 .dueDate(todoList.getDueDate())
                 .planetType(todoList.getPlanetType())
                 .planetSize(todoList.getPlanetSize())
