@@ -53,7 +53,6 @@ public class Check {
     }
 
     public void checkEmail(String email) {
-
         if(memberRepository.findByEmail(email).isPresent()) throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
     }
 
