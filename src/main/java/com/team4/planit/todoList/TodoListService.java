@@ -47,7 +47,24 @@ public class TodoListService {
     }
 
     @Transactional(readOnly = true)
-    public WeeklyTodoListResponseDto getWeeklyData(Long memberId, String startDate, HttpServletRequest request)
+    public TodoListResponseDto getDailyTodoList(Long memberId, String dueDate, HttpServletRequest request) {
+        Member member = check.validateMember(request);
+        if (memberId != null) member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
+                .orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
+        return TodoListResponseDto.builder()
+                .todoListId(todoList.getTodoListId())
+                .dueDate(todoList.getDueDate())
+                .planetType(todoList.getPlanetType())
+                .planetSize(todoList.getPlanetSize())
+                .planetColor(todoList.getPlanetColor())
+                .planetLevel(todoList.getPlanetLevel())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public WeeklyTodoListResponseDto getWeeklyTodoList(Long memberId, String startDate, HttpServletRequest request)
             throws ParseException {
         Member member = check.validateMember(request);
         if (memberId != null) member = memberRepository.findByMemberId(memberId)

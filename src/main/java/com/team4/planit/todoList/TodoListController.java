@@ -41,11 +41,19 @@ public class TodoListController {
         return new ResponseEntity<>(Message.success(todoListResponseDto), HttpStatus.OK);
     }
 
-    @GetMapping("/planet")
-    public ResponseEntity<?> getWeeklyData(@RequestParam(required = false) Long memberId,
+    @GetMapping("/daily")
+    public ResponseEntity<?> getDailyTodoList(@RequestParam(required = false) Long memberId,
+                                         @RequestParam String dueDate,
+                                         HttpServletRequest request) {
+        TodoListResponseDto todoListResponseDto = todoListService.getDailyTodoList(memberId, dueDate, request);
+        return new ResponseEntity<>(Message.success(todoListResponseDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/weekly")
+    public ResponseEntity<?> getWeeklyTodoList(@RequestParam(required = false) Long memberId,
                                            @RequestParam String startDate,
                                            HttpServletRequest request) throws ParseException {
-        WeeklyTodoListResponseDto temp = todoListService.getWeeklyData(memberId, startDate, request);
-        return new ResponseEntity<>(Message.success(temp), HttpStatus.OK);
+        WeeklyTodoListResponseDto weeklyTodoListResponseDto = todoListService.getWeeklyTodoList(memberId, startDate, request);
+        return new ResponseEntity<>(Message.success(weeklyTodoListResponseDto), HttpStatus.OK);
     }
 }
