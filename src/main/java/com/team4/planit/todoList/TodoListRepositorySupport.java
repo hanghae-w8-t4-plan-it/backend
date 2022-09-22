@@ -38,7 +38,7 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
         return queryFactory
                 .selectFrom(todoList)
                 .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
-                .orderBy(todoList.todoListId.asc())
+                .orderBy(todoList.dueDate.asc())
                 .fetch();
     }
 
@@ -49,7 +49,7 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .innerJoin(todo)
                 .on(todoList.eq(todo.todoList))
                 .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
-                .orderBy(todoList.todoListId.asc())
+                .orderBy(todoList.dueDate.asc())
                 .fetchFirst());
     }
 
@@ -60,7 +60,7 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .innerJoin(likes)
                 .on(todoList.eq(likes.todoList))
                 .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
-                .orderBy(todoList.todoListId.asc())
+                .orderBy(todoList.dueDate.asc())
                 .fetchFirst());
     }
 
