@@ -35,7 +35,7 @@ public class DailyTodoListResponseDto {
         this.planetSize = planetSize;
         this.planetColor = planetColor;
         this.planetLevel = planetLevel;
-        this.achievementCnt = achievementCnt;
+        this.achievementCnt = achievementCnt == null ? 0 : achievementCnt;
         this.likesCnt = likesCnt;
     }
 }
