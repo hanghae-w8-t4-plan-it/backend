@@ -31,10 +31,10 @@ public class TodoListService {
     private final CategoryService categoryService;
 
     @Transactional
-    public List<CategoryDetailResponseDto> createTodoList(String dueDate, Byte planetType, HttpServletRequest request) {
+    public List<CategoryDetailResponseDto> updatePlanetType(String dueDate, Byte planetType, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
-                .orElseGet(() -> new TodoList(member, dueDate));
+                .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
         todoList.update(planetType);
         todoListRepository.save(todoList);
         return categoryService.getAllCategories(dueDate, null, request);
