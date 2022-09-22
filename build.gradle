@@ -48,7 +48,7 @@ dependencies {
             "com.querydsl:querydsl-apt:5.0.0:jpa")
 
     //배치
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
+//    implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
 }
 
