@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TodoListResponseDto {
+public class DailyTodoListResponseDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long todoListId;
     private String dueDate;
@@ -16,19 +16,26 @@ public class TodoListResponseDto {
     private Byte planetColor;
     private Byte planetLevel;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer achievementCnt;
 
-    public TodoListResponseDto(String dueDate) {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long likesCnt;
+
+    public DailyTodoListResponseDto(String dueDate) {
         this.dueDate = dueDate;
     }
 
     @Builder
-    public TodoListResponseDto(Long todoListId, String dueDate, Byte planetType,
-                               Short planetSize, Byte planetColor, Byte planetLevel) {
+    public DailyTodoListResponseDto(Long todoListId, String dueDate, Byte planetType, Short planetSize,
+                                    Byte planetColor, Byte planetLevel, Integer achievementCnt, Long likesCnt) {
         this.todoListId = todoListId;
         this.dueDate = dueDate;
         this.planetType = planetType;
         this.planetSize = planetSize;
         this.planetColor = planetColor;
         this.planetLevel = planetLevel;
+        this.achievementCnt = achievementCnt;
+        this.likesCnt = likesCnt;
     }
 }
