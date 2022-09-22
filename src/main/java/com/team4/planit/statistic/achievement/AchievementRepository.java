@@ -20,7 +20,8 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
             "         where a.member_id = :memberId and a.achievement_start_date like :month%\n" +
             "    ) as result\n" +
             "where achievement_count_rank = 1", nativeQuery = true)
-    List<String> findAchievementCountRank(@Param("memberId") Long memberId, @Param("month") String month);
+    List<String> findAchievementCountTop(@Param("memberId") Long memberId, @Param("month") String month);
+    
     @Query(value = "SELECT * FROM achievement where (member_id = :memberId) and (achievement_start_date between :startDate and :endDate) and (achievement_period='Day')", nativeQuery = true)
     List<Achievement> findAllByMemberDuringPeriod(@Param("memberId") Long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
