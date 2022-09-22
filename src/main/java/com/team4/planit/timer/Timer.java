@@ -26,6 +26,9 @@ public class Timer{
     @Column(name = "timer_start_date")
     private String startDate;
 
+    @Column(name = "timer_last_hour")
+    private String lastHour;
+
     @Column(name = "timer_last_date")
     private String lastDate;
 
@@ -34,10 +37,11 @@ public class Timer{
     private Member member;
 
     @Builder
-    public Timer(Integer setTime, Integer elapsedTime, String startDate, String lastDate, Member member) {
+    public Timer(Integer setTime, Integer elapsedTime, String startDate, String lastHour, String lastDate, Member member) {
         this.setTime = setTime;
         this.elapsedTime = elapsedTime;
         this.startDate = startDate;
+        this.lastHour = lastHour;
         this.lastDate = lastDate;
         this.member = member;
     }
