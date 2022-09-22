@@ -64,12 +64,11 @@ public class CategoryService {
         return categoryResponseDtoList;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<CategoryDetailResponseDto> getAllCategories(String dueDate, Long memberId, HttpServletRequest request) {
         if (memberId != null) return getAllCategoriesOfOther(dueDate, memberId, request);
         Member member = check.validateMember(request);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
-                .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
+        TodoList todoList = getTodoList(dueDate, member);
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
@@ -92,12 +91,18 @@ public class CategoryService {
         return categoryDetailResponseDtoList;
     }
 
-    @Transactional(readOnly = true)
+    private TodoList getTodoList(String dueDate, Member member) {
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
+                .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
+        todoListRepository.save(todoList);
+        return todoList;
+    }
+
+    @Transactional
     public List<CategoryDetailResponseDto> getAllCategoriesOfOther(String dueDate, Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
-                .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
+        TodoList todoList = getTodoList(dueDate, member);
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
