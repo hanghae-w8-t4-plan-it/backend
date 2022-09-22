@@ -25,17 +25,20 @@ public class Scheduler {
     private final ConcentrationRepository concentrationRepository;
     private final AchievementRepository achievementRepository;
 
-    @Scheduled(cron = "0 50 3 * * *")
+    @Scheduled(cron = "*/10 * * * 1 1")//"0 50 3 * * *")
     public void updateStatistic() throws ParseException {
         List<Member> memberList = memberRepository.findAll();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date temp = sdf.parse(String.valueOf(DateTime.now()));
         Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.setTime(temp);
-        cal.get(Calendar.WEEK_OF_YEAR);
+        cal.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+        String startDate = sdf.format(cal.getTime());
+        cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
         String endDate = sdf.format(cal.getTime());
         for (Object member : memberList ) {
-            //집중도 구하기 (%)
+            //집중도 구하기 (%) 월요일부터 일요일
 
 
             //달성률 구하기 (%,개)
