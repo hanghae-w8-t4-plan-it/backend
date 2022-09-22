@@ -28,7 +28,8 @@ public class TimerService {
                 .setTime(timerRequestDto.getSetTime())
                 .elapsedTime(timerRequestDto.getElapsedTime())
                 .startDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(startTime))
-                .lastDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
+                .lastHour(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()))
+                .lastDate(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now()))
                 .build();
         timerRepository.save(timer);
         concentrationService.createConcentration(timer, member);
