@@ -51,18 +51,6 @@ public class TodoListService {
         Member member = check.validateMember(request);
         if (memberId != null) member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-//        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
-//                .orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
-//        return DailyTodoListResponseDto.builder()
-//                .todoListId(todoList.getTodoListId())
-//                .dueDate(todoList.getDueDate())
-//                .planetType(todoList.getPlanetType())
-//                .planetSize(todoList.getPlanetSize())
-//                .planetColor(todoList.getPlanetColor())
-//                .planetLevel(todoList.getPlanetLevel())
-//                .achievementCnt((byte) 3)
-//                .likesCnt((short) 3)
-//                .build();
         return todoListRepositorySupport.findDailyTodoListByMemberAndDueDate(member, dueDate);
     }
 

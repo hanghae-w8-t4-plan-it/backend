@@ -58,15 +58,6 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .where(todoList.member.eq(member), todoList.dueDate.eq(dueDate), achievement.period.eq("Day"))
                 .groupBy(todoList.dueDate)
                 .fetchOne();
-
-//        select tl.member_id, tl.todo_list_id, tl.todo_list_due_date, a.achievement_cnt, count(l.likes_id) as likes_count from todo_list tl
-//        left join achievement a
-//        on tl.member_id = a.member_id and tl.todo_list_due_date = a.achievement_start_date
-//        inner join likes l
-//        on tl.todo_list_id = l.todo_list_id
-//        where tl.member_id = 28 and tl.todo_list_due_date = '2022-09-21' and a.achievement_period = 'Day'
-//        group by tl.todo_list_due_date
-
     }
 
     public List<TodoList> findWeeklyPlanet(Member member, String startDate, String endDate) {
