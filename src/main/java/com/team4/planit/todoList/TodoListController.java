@@ -28,10 +28,10 @@ public class TodoListController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createTodoList(@RequestParam String dueDate,
-                                            @RequestParam(required = false) Byte planetType,
+    public ResponseEntity<?> updatePlanetType(@RequestParam String dueDate,
+                                            @RequestParam Byte planetType,
                                             HttpServletRequest request) {
-        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = todoListService.createTodoList(dueDate, planetType, request);
+        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = todoListService.updatePlanetType(dueDate, planetType, request);
         return new ResponseEntity<>(Message.success(categoryDetailResponseDtoList), HttpStatus.OK);
     }
 

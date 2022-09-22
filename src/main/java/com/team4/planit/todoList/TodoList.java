@@ -36,10 +36,6 @@ public class TodoList {
     @Column(name = "todo_list_planet_level")
     private Byte planetLevel;
 
-    public TodoList(Member member, String dueDate) {
-        this.member = member;
-        this.dueDate = dueDate;
-    }
     public TodoList(Member member, String dueDate, Byte planetType) {
         this.member = member;
         this.dueDate = dueDate;

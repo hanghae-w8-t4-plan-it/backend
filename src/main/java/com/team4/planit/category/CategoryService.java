@@ -68,9 +68,8 @@ public class CategoryService {
     public List<CategoryDetailResponseDto> getAllCategories(String dueDate, Long memberId, HttpServletRequest request) {
         if (memberId != null) return getAllCategoriesOfOther(dueDate, memberId, request);
         Member member = check.validateMember(request);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseThrow(
-                () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
-        );
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
+                .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
@@ -97,9 +96,8 @@ public class CategoryService {
     public List<CategoryDetailResponseDto> getAllCategoriesOfOther(String dueDate, Long memberId, HttpServletRequest request) {
         check.validateMember(request);
         Member member = check.isPresentMemberByMemberId(memberId);
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseThrow(
-                () -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND)
-        );
+        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
+                .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
