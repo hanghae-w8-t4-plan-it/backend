@@ -41,4 +41,12 @@ public class Concentration {
         this.concentrationTime = concentrationTime;
         this.startDate = startDate;
     }
+
+    public void update(Member member, String period, Float concentrationRate, Integer concentrationTime, String startDate) {
+        this.member = member;
+        this.period = period;
+        this.concentrationRate = concentrationRate;
+        this.concentrationTime = concentrationTime;
+        this.startDate = startDate;
+    }
 }
