@@ -6,6 +6,7 @@ import com.team4.planit.member.Member;
 import com.team4.planit.report.dto.MostLikeResponseDto;
 import com.team4.planit.report.dto.ReportResponseDto;
 import com.team4.planit.statistic.achievement.AchievementRepository;
+import com.team4.planit.timer.TimerRepository;
 import com.team4.planit.todoList.like.LikesRepository;
 import com.team4.planit.todoList.like.LikesRepositorySupport;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,21 @@ public class ReportService {
     private final LikesRepository likesRepository;
     private final LikesRepositorySupport likesRepositorySupport;
     private final AchievementRepository achievementRepository;
+    private final TimerRepository timerRepository;
 
     public ReportResponseDto getReport(String month, HttpServletRequest request) {
         Member member = check.validateMember(request);
         List<String> categoryRank = categoryRepositorySupport.findAllCategoryRank(member, month);
-        List<String> achievementCountRank = achievementRepository.findAchievementCountRank(member.getMemberId(), month);
+        List<String> achievementCountTop = achievementRepository.findAchievementCountTop(member.getMemberId(), month);
+        List<String> concentrationTimeTop = timerRepository.findConcentrationTimeTop(member.getMemberId(), month);
         Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
         List<String> topLikeDates = likesRepository.findTopLikeDates(member.getMemberId(), month);
         List<String> topLikeMembers = likesRepository.findTopLikeMembers(member.getMemberId(), month);
 
         return ReportResponseDto.builder()
                 .categoryRank(categoryRank)
-                .achievementCountRank(achievementCountRank)
+                .achievementCountTop(achievementCountTop)
+                .concentrationTimeTop(concentrationTimeTop)
                 .monthlyTotalLikes(monthlyTotalLikes)
                 .mostLikeDates(makeMostLikeResponseDto(topLikeDates))
                 .mostLikeMembers(makeMostLikeResponseDto(topLikeMembers))
