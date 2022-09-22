@@ -53,7 +53,7 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .from(todoList)
                 .leftJoin(achievement)
                 .on(todoList.member.eq(achievement.member), todoList.dueDate.eq(achievement.startDate))
-                .innerJoin(likes)
+                .leftJoin(likes)
                 .on(todoList.eq(likes.todoList))
                 .where(todoList.member.eq(member), todoList.dueDate.eq(dueDate), achievement.period.eq("Day"))
                 .groupBy(todoList.dueDate)
