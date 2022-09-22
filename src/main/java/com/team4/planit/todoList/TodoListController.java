@@ -3,7 +3,7 @@ package com.team4.planit.todoList;
 import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.global.shared.Message;
 import com.team4.planit.todoList.dto.TodoListRequestDto;
-import com.team4.planit.todoList.dto.TodoListResponseDto;
+import com.team4.planit.todoList.dto.DailyTodoListResponseDto;
 import com.team4.planit.todoList.dto.WeeklyTodoListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +23,8 @@ public class TodoListController {
     @GetMapping("/{year}/{month}")
     public ResponseEntity<?> getUnAchievedDueDates(@PathVariable String year, @PathVariable String month,
                                          HttpServletRequest request) {
-        List<String> todoListResponseDtoList = todoListService.getUnAchievedDueDatesByYearAndMonth(year, month, request);
-        return new ResponseEntity<>(Message.success(todoListResponseDtoList), HttpStatus.OK);
+        List<String> UnAchievedDueDates = todoListService.getUnAchievedDueDatesByYearAndMonth(year, month, request);
+        return new ResponseEntity<>(Message.success(UnAchievedDueDates), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -37,16 +37,16 @@ public class TodoListController {
 
     @PatchMapping()
     public ResponseEntity<?> updatePlanet(@RequestBody TodoListRequestDto requestDto, HttpServletRequest request) {
-        TodoListResponseDto todoListResponseDto = todoListService.updatePlanet(requestDto, request);
-        return new ResponseEntity<>(Message.success(todoListResponseDto), HttpStatus.OK);
+        DailyTodoListResponseDto dailyTodoListResponseDto = todoListService.updatePlanet(requestDto, request);
+        return new ResponseEntity<>(Message.success(dailyTodoListResponseDto), HttpStatus.OK);
     }
 
     @GetMapping("/daily")
     public ResponseEntity<?> getDailyTodoList(@RequestParam(required = false) Long memberId,
                                          @RequestParam String dueDate,
                                          HttpServletRequest request) {
-        TodoListResponseDto todoListResponseDto = todoListService.getDailyTodoList(memberId, dueDate, request);
-        return new ResponseEntity<>(Message.success(todoListResponseDto), HttpStatus.OK);
+        DailyTodoListResponseDto dailyTodoListResponseDto = todoListService.getDailyTodoList(memberId, dueDate, request);
+        return new ResponseEntity<>(Message.success(dailyTodoListResponseDto), HttpStatus.OK);
     }
 
     @GetMapping("/weekly")
