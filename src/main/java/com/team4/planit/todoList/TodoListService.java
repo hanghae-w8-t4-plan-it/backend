@@ -87,21 +87,19 @@ public class TodoListService {
                 .build();
     }
 
-    private List<WeeklyPlanetResponseDto> makeWeeklyPlanetResponseDtoList
-            (String startDate, List<TodoList> planets) throws ParseException {
+    private List<WeeklyPlanetResponseDto> makeWeeklyPlanetResponseDtoList(String startDate, List<TodoList> planets) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         List<WeeklyPlanetResponseDto> dailyTodoListResponseDtoList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             cal.setTime(sdf.parse(startDate));
             cal.add(Calendar.DATE, i);
-            System.out.println("cal.getTime() : " + sdf.format(cal.getTime()));
             dailyTodoListResponseDtoList.add(new WeeklyPlanetResponseDto(sdf.format(cal.getTime())));
             for (TodoList planet : planets) {
                 if (dailyTodoListResponseDtoList.get(i).getDueDate().equals(planet.getDueDate())) {
                     dailyTodoListResponseDtoList.set(i, WeeklyPlanetResponseDto.builder()
                             .todoListId(planet.getTodoListId())
-                            .dueDate(sdf.format(cal.getTime()))
+                            .dueDate(planet.getDueDate())
                             .planetType(planet.getPlanetType())
                             .planetSize(planet.getPlanetSize())
                             .planetColor(planet.getPlanetColor())
