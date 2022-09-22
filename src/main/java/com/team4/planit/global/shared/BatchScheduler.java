@@ -1,17 +1,21 @@
-package com.team4.planit.global.shared;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Component;
-
-@EnableScheduling
-@RequiredArgsConstructor
-@Component
-@Slf4j
-public class BatchScheduler {
-
-
+//package com.team4.planit.global.shared;
+//
+//import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.scheduling.annotation.EnableScheduling;
+//import org.springframework.scheduling.annotation.Scheduled;
+//import org.springframework.stereotype.Component;
+//
+//import java.text.SimpleDateFormat;
+//import java.util.HashMap;
+//
+//@EnableScheduling
+//@RequiredArgsConstructor
+//@Component
+//@Slf4j
+//public class BatchScheduler {
+//
+//
 //    private final Job job;
 //    private final JobLauncher jobLauncher;
 //
@@ -40,4 +44,4 @@ public class BatchScheduler {
 //            e.printStackTrace();
 //        }
 //    }
-}
+//}
