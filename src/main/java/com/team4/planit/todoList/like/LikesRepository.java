@@ -19,7 +19,7 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
             "        from likes l\n" +
             "        inner join todo_list tl\n" +
             "        on l.todo_list_id = tl.todo_list_id\n" +
-            "        where tl.member_id = 3 and tl.todo_list_due_date like '2022-09%'\n" +
+            "        where tl.member_id = :memberId and tl.todo_list_due_date like :month%\n" +
             "        group by tl.todo_list_id\n" +
             "    ) as result\n" +
             "where max_likes_rank = 1;", nativeQuery = true)

@@ -14,8 +14,8 @@ public class ConcentrationService {
     @Transactional
     public void createConcentration(Timer timer, Member member) {
         String start = timer.getStartDate();
-        String last = timer.getLastDate();
-        String date = timer.getLastDate().substring(0, 11);
+        String last = timer.getLastHour();
+        String date = timer.getLastDate();
         String startDate = start.substring(0, 11);
         float startHour = Float.parseFloat((start.substring(start.length() - 5, start.length() - 3)));
         float startMinute = Float.parseFloat((start.substring(start.length() - 2)));
@@ -55,7 +55,7 @@ public class ConcentrationService {
                 .period("Day")
                 .concentrationRate(Float.parseFloat(String.format("%.1f", (lastMinute / 60 * 100))))
                 .concentrationTime((int) lastMinute)
-                .startDate(date + String.format("%02d", lastHour))
+                .startDate(date + " " + String.format("%02d", lastHour))
                 .build();
         concentrationRepository.save(concentration);
     }
