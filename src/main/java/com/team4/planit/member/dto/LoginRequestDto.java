@@ -11,6 +11,5 @@ public class LoginRequestDto {
     public LoginRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
-
     }
 }

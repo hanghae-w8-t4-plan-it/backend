@@ -36,8 +36,8 @@ public class MemberController {
     }
 
     @PostMapping("/register/check-email")
-    public ResponseEntity<?> checkEmail(@RequestBody String email) {
-        check.checkEmail(email);
+    public ResponseEntity<?> checkEmail(@Valid @RequestBody EmailRequestDto email) {
+        check.checkEmail(email.getEmail());
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
