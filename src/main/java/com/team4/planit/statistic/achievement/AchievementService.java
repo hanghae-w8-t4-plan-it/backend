@@ -24,15 +24,15 @@ public class AchievementService {
     public void updateAchievement(Member member, String dueDate) {
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
-        List<Todo> todos= todoRepository.findAllByTodoList(todoList);
+        List<Todo> todos = todoRepository.findAllByTodoList(todoList);
         int todoCnt = todos.size();
-        Integer achievementCnt=0;
+        Integer achievementCnt = 0;
         for (Todo todo : todos) {
-            if(todo.getIsAchieved()) achievementCnt++;
+            if (todo.getIsAchieved()) achievementCnt++;
         }
         Integer finalAchievementCnt = achievementCnt;
-        Achievement achievement = achievementRepository.findAllByStartDateAndMember(dueDate, member).orElseGet(
-                () -> Achievement.builder()
+        Achievement achievement = achievementRepository.findAllByStartDateAndMember(dueDate, member)
+                .orElseGet(() -> Achievement.builder()
                         .member(member)
                         .period("Day")
                         .achievementRate((float) 0.0)
@@ -41,8 +41,12 @@ public class AchievementService {
                         .build());
         achievementRepository.save(achievement);
         float achievementRate = 0;
-        if (todoCnt != 0)
+        if (todoCnt != 0) {
             achievementRate = Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (todoCnt) * 100)));
-        achievement.update(achievementRate, achievementCnt, todoCnt);
+            achievement.update(achievementRate, achievementCnt, todoCnt);
+        } else achievement.update(achievementRate, achievementCnt, todoCnt);
+        if (achievementCnt>5) todoList.setPlanetLevel((byte) 2);
+        if (achievementCnt>10) todoList.setPlanetLevel((byte) 3);
+
     }
 }
