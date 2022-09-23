@@ -24,19 +24,23 @@ public class StatisticService {
     private final ConcentrationRepository concentrationRepository;
 
     @Transactional
-    public StatisticDayResponseDto getStatisticDay(String date, HttpServletRequest request) {
+    public StatisticDayResponseDto getStatisticDay(String date, HttpServletRequest request){
         Member member = check.validateMember(request);
-        List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDate(member.getMemberId(), date);
+        List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDateAndDay(member.getMemberId(), date);
         List<ConcentrationResponseDto> concentrationResponseDtoList = new ArrayList<>();
-        for (Concentration concentration : concentrations) {
-            concentrationResponseDtoList.add(
-                    ConcentrationResponseDto.builder()
-                            .concentrationRate(concentration.getConcentrationRate())
-                            .startDate(concentration.getStartDate())
-                            .build()
-            );
+        for (int i = 0; i < 24; i++) {
+            concentrationResponseDtoList.add(new ConcentrationResponseDto(date + " " + String.format("%02d", i)));
+            for (Concentration concentration : concentrations) {
+                if(Integer.parseInt(concentration.getStartDate().substring(11, 13)) == i) {
+                    concentrationResponseDtoList.set(i, ConcentrationResponseDto.builder()
+                                    .concentrationRate(concentration.getConcentrationRate())
+                                    .startDate(concentration.getStartDate())
+                                    .build()
+                    );
+                }
+            }
         }
-        Achievement achievement = achievementRepository.findAllByMemberAndStartDate(member, date).orElseGet(
+        Achievement achievement = achievementRepository.findAllByMemberAndStartDateAndPeriod(member, date, "Day").orElseGet(
                 Achievement.builder()
                         .member(member)
                         .period("Day")
