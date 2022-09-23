@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
     Optional<Achievement> findAllByStartDateAndMember(String startDate, Member member);
-    Optional<Achievement> findAllByMemberAndStartDate(Member member, String date);
 
     @Query(value = "select achivement_start_date\n" +
             "from (\n" +

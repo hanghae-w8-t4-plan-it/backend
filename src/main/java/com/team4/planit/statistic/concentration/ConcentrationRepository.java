@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ConcentrationRepository extends JpaRepository<Concentration, Long> {
-    @Query(value = "SELECT * FROM concentration c where (c.member_id = :memberId) and (c.concentration_start_date like :date%)", nativeQuery = true)
-    List<Concentration> findAllByMemberAndStartDate(@Param("memberId") Long memberId, @Param("date") String date);
+    @Query(value = "SELECT * FROM concentration c where (c.member_id = :memberId) and (c.concentration_start_date like :date%)\n" +
+            "       and (c.concentration_period = 'Day')", nativeQuery = true)
+    List<Concentration> findAllByMemberAndStartDateAndDay(@Param("memberId") Long memberId, @Param("date") String date);
     Optional<Concentration> findConcentrationByMemberAndStartDateAndPeriod(Member member, String startDate, String Period);
 }
