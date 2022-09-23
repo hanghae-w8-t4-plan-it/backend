@@ -31,7 +31,7 @@ public class AchievementService {
             if (todo.getIsAchieved()) achievementCnt++;
         }
         Integer finalAchievementCnt = achievementCnt;
-        Achievement achievement = achievementRepository.findAllByStartDateAndMember(dueDate, member)
+        Achievement achievement = achievementRepository.findAllByMemberAndStartDateAndPeriod(member, dueDate, "Day")
                 .orElseGet(() -> Achievement.builder()
                         .member(member)
                         .period("Day")
