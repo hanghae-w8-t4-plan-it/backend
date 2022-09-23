@@ -12,7 +12,6 @@ public class WeeklyTodoListResponseDto {
     private String nickname;
     private Integer weeklyTotalAchievement;
     private Integer weeklyTotalLikes;
-//    private List<TodoList> planets;
     private List<WeeklyPlanetResponseDto> planets;
 
     @Builder
