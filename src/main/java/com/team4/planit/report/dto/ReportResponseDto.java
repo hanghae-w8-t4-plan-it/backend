@@ -13,17 +13,20 @@ public class ReportResponseDto {
     private List<String> categoryRank;
     private List<String> achievementCountTop;
     private List<String> concentrationTimeTop;
+    private MostConcentrationTimeResponseDto mostConcentrationTime;
     private Integer monthlyTotalLikes;
     private MostLikeResponseDto mostLikeDates;
     private MostLikeResponseDto mostLikeMembers;
 
     @Builder
     public ReportResponseDto(List<String> categoryRank, List<String> achievementCountTop,
-                             List<String> concentrationTimeTop, Integer monthlyTotalLikes,
-                             MostLikeResponseDto mostLikeDates, MostLikeResponseDto mostLikeMembers) {
+                             List<String> concentrationTimeTop, MostConcentrationTimeResponseDto mostConcentrationTime,
+                             Integer monthlyTotalLikes, MostLikeResponseDto mostLikeDates,
+                             MostLikeResponseDto mostLikeMembers) {
         this.categoryRank = categoryRank;
         this.achievementCountTop = achievementCountTop;
         this.concentrationTimeTop = concentrationTimeTop;
+        this.mostConcentrationTime = mostConcentrationTime;
         this.monthlyTotalLikes = monthlyTotalLikes;
         this.mostLikeDates = mostLikeDates;
         this.mostLikeMembers = mostLikeMembers;
