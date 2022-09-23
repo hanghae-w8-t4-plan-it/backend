@@ -45,11 +45,11 @@ public class Check {
     }
 
     public void checkTodoAuthor(Member member, Todo todo) {
-        if (!todo.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+        if (!todo.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
 
     public void checkTodoListAuthor(Member member, TodoList todoList) {
-        if (!todoList.getMember().equals(member)) throw new CustomException(ErrorCode.NOT_AUTHOR);
+        if (!todoList.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
     }
 
     public void checkEmail(String email) {
