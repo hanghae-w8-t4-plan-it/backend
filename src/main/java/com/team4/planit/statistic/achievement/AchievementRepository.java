@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
-    Optional<Achievement> findAllByStartDateAndMember(String startDate, Member member);
-
     @Query(value = "select achivement_start_date\n" +
             "from (\n" +
             "         select rank() over (order by a.achievement_cnt desc) as achievement_count_rank,\n" +
