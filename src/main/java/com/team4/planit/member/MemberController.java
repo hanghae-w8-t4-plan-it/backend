@@ -60,7 +60,7 @@ public class MemberController {
     }
     @PatchMapping
     public ResponseEntity<?> modifyMemberInfo(HttpServletRequest request,
-                                              @RequestPart MemberRequestDto data,
+                                              @Valid @RequestPart MemberRequestDto data,
                                               @RequestPart(required = false) MultipartFile[] image) throws IOException {
         memberService.modifyMemberInfo(request,data,image);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
