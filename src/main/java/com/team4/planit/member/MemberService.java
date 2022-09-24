@@ -35,6 +35,7 @@ public class MemberService {
     private final Check check;
     private final FileService fileService;
     private final FollowRepository followRepository;
+    private final MemberRepositorySupport memberRepositorySupport;
 
     @Transactional
     public void creatMember(MemberRequestDto requestDto, HttpServletResponse response) {
@@ -60,7 +61,7 @@ public class MemberService {
         long accessTokenExpiration = Long.parseLong(request.getHeader("AccessTokenExpireTime"));
         check.checkAccessTokenExpiration(accessTokenExpiration, member);
         RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(member)
-                .orElseThrow(()->new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
+                .orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
         check.reissueAccessToken(request, response, member, refreshTokenConfirm);
     }
 
@@ -68,9 +69,9 @@ public class MemberService {
     public SuggestMemberResponseDto suggestMembers(HttpServletRequest request) {
         check.validateMember(request);
         LocalDate date = LocalDate.now();
-        List<Member> recommendedMemberList = memberRepository.findRecommendedMember();
-        List<Member> achievementMemberList = memberRepository.findAchievementMember(date);
-        List<Member> concentrationMemberList = memberRepository.findConcentrationMember(date);
+        List<Member> recommendedMemberList = memberRepositorySupport.findRecommendedMember();
+        List<Member> achievementMemberList = memberRepositorySupport.findAchievementMember(date);
+        List<MemberConcentrationDto> concentrationMemberList = memberRepositorySupport.findConcentrationMember(date);
         List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
         for (Member member : recommendedMemberList) {
             memberResponseDtoList.add(
@@ -90,7 +91,7 @@ public class MemberService {
                             .build());
         }
         List<MemberResponseDto> concentrationRankResponseDtoList = new ArrayList<>();
-        for (Member member : concentrationMemberList) {
+        for (MemberConcentrationDto member : concentrationMemberList) {
             concentrationRankResponseDtoList.add(
                     MemberResponseDto.builder()
                             .memberId(member.getMemberId())
@@ -111,17 +112,17 @@ public class MemberService {
     public void modifyMemberInfo(HttpServletRequest request, MemberRequestDto requestDto, MultipartFile[] image) throws IOException {
         Member member = check.validateMember(request);
         String imgUrl = null;
-        if(image!=null) imgUrl = fileService.getImgUrl(image);
-        MemberRequestDto encodedRequestDto= MemberRequestDto.builder()
+        if (image != null) imgUrl = fileService.getImgUrl(image);
+        MemberRequestDto encodedRequestDto = MemberRequestDto.builder()
                 .email(requestDto.getEmail())
                 .nickname(requestDto.getNickname())
-                .password(passwordEncoder.encode(requestDto.getPassword()))
+                .password(requestDto.getPassword() == null ? member.getPassword() : passwordEncoder.encode(requestDto.getPassword()))
                 .build();
-        member.update(encodedRequestDto,imgUrl);
+        member.update(encodedRequestDto, imgUrl);
         memberRepository.save(member);
     }
 
-    public  MemberProfileResponseDto memberProfile(HttpServletRequest request, Long memberId) {
+    public MemberProfileResponseDto memberProfile(HttpServletRequest request, Long memberId) {
         check.validateMember(request);
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(null);
         return MemberProfileResponseDto.builder()
