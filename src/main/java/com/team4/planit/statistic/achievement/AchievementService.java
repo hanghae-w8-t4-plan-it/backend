@@ -47,6 +47,6 @@ public class AchievementService {
         } else achievement.update(achievementRate, achievementCnt, todoCnt);
         if (achievementCnt>5) todoList.setPlanetLevel((byte) 2);
         if (achievementCnt>10) todoList.setPlanetLevel((byte) 3);
-
+// 60, 106, 164
     }
 }
