@@ -26,7 +26,7 @@ public class StatisticService {
     @Transactional
     public StatisticDayResponseDto getStatisticDay(String date, HttpServletRequest request){
         Member member = check.validateMember(request);
-        List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDateAndDay(member.getMemberId(), date);
+        List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDateAndDay(member, date);
         List<ConcentrationResponseDto> concentrationResponseDtoList = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             concentrationResponseDtoList.add(new ConcentrationResponseDto(date + " " + String.format("%02d", i)));
