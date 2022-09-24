@@ -51,7 +51,7 @@ public class TodoList {
 
     public void update(Byte planetType) {
         this.planetType = planetType;
-        this.planetSize = 100;
+        this.planetSize = 60;
         this.planetLevel = 1;
     }
 
@@ -59,7 +59,8 @@ public class TodoList {
         this.planetSize = planetSize;
         this.planetColor = planetColor;
     }
-    public void setPlanetLevel(Byte level){
+    public void updatePlanet(Byte level, Short planetSize){
         this.planetLevel = level;
+        this.planetSize = planetSize;
     }
 }
