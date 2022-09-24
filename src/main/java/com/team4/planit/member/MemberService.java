@@ -35,6 +35,7 @@ public class MemberService {
     private final Check check;
     private final FileService fileService;
     private final FollowRepository followRepository;
+    private final MemberRepositorySupport memberRepositorySupport;
 
     @Transactional
     public void creatMember(MemberRequestDto requestDto, HttpServletResponse response) {
@@ -68,9 +69,9 @@ public class MemberService {
     public SuggestMemberResponseDto suggestMembers(HttpServletRequest request) {
         check.validateMember(request);
         LocalDate date = LocalDate.now();
-        List<Member> recommendedMemberList = memberRepository.findRecommendedMember();
-        List<Member> achievementMemberList = memberRepository.findAchievementMember(date);
-        List<Member> concentrationMemberList = memberRepository.findConcentrationMember(date);
+        List<Member> recommendedMemberList = memberRepositorySupport.findRecommendedMember();
+        List<Member> achievementMemberList = memberRepositorySupport.findAchievementMember(date);
+        List<MemberConcentrationDto> concentrationMemberList = memberRepositorySupport.findConcentrationMember(date);
         List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
         for (Member member : recommendedMemberList) {
             memberResponseDtoList.add(
@@ -90,7 +91,7 @@ public class MemberService {
                             .build());
         }
         List<MemberResponseDto> concentrationRankResponseDtoList = new ArrayList<>();
-        for (Member member : concentrationMemberList) {
+        for (MemberConcentrationDto member : concentrationMemberList) {
             concentrationRankResponseDtoList.add(
                     MemberResponseDto.builder()
                             .memberId(member.getMemberId())
