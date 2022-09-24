@@ -24,4 +24,9 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
 
     Optional<Achievement> findAllByMemberAndStartDateAndPeriod(Member member, String startDate, String Period);
 
+    @Query(value = "select a.achievement_start_date, a.achievement_rate from achievement a\n" +
+            "    where a.member_id = :memberId and a.achievement_rate = 100 and a.achievement_start_date like :month%\n" +
+            "    and a.achievement_period = 'Day'\n" +
+            "    order by a.achievement_start_date", nativeQuery = true)
+    List<String> findAllByMemberAndStartDate(@Param("memberId") Long memberId, @Param("month") String month);
 }
