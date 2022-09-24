@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
-    Optional<Achievement> findAllByStartDateAndMember(String startDate, Member member);
-    Optional<Achievement> findAllByMemberAndStartDate(Member member, String date);
-
     @Query(value = "select achivement_start_date\n" +
             "from (\n" +
             "         select rank() over (order by a.achievement_cnt desc) as achievement_count_rank,\n" +
@@ -27,4 +24,9 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
 
     Optional<Achievement> findAllByMemberAndStartDateAndPeriod(Member member, String startDate, String Period);
 
+    @Query(value = "select a.achievement_start_date, a.achievement_rate from achievement a\n" +
+            "    where a.member_id = :memberId and a.achievement_rate = 100 and a.achievement_start_date like :month%\n" +
+            "    and a.achievement_period = 'Day'\n" +
+            "    order by a.achievement_start_date", nativeQuery = true)
+    List<String> findAllByMemberAndStartDate(@Param("memberId") Long memberId, @Param("month") String month);
 }
