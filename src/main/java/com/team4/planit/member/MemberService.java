@@ -69,7 +69,7 @@ public class MemberService {
     public SuggestMemberResponseDto suggestMembers(HttpServletRequest request) {
         check.validateMember(request);
         LocalDate date = LocalDate.now();
-        List<Member> recommendedMemberList = memberRepository.findRecommendedMember();
+        List<Member> recommendedMemberList = memberRepositorySupport.findRecommendedMember();
         List<Member> achievementMemberList = memberRepositorySupport.findAchievementMember(date);
         List<MemberConcentrationDto> concentrationMemberList = memberRepositorySupport.findConcentrationMember(date);
         List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();

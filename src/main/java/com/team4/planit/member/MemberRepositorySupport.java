@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.team4.planit.global.jwt.QRefreshToken.refreshToken;
 import static com.team4.planit.member.QMember.member;
 import static com.team4.planit.statistic.achievement.QAchievement.achievement;
 import static com.team4.planit.statistic.concentration.QConcentration.concentration;
@@ -21,6 +22,16 @@ public class MemberRepositorySupport extends QuerydslRepositorySupport {
     public MemberRepositorySupport(JPAQueryFactory queryFactory) {
         super(Member.class);
         this.queryFactory = queryFactory;
+    }
+
+    public List<Member> findRecommendedMember() {
+        return queryFactory
+                .selectFrom(member)
+                .innerJoin(refreshToken)
+                .on(member.eq(refreshToken.member))
+                .orderBy(refreshToken.modifiedAt.desc())
+                .limit(3)
+                .fetch();
     }
 
     public List<Member> findAchievementMember(LocalDate date) {
