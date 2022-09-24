@@ -47,13 +47,14 @@ public class ReportService {
                 .achievementCountTop(achievementCountTop)
                 .concentrationTimeTop(concentrationTimeTop)
                 .mostConcentrationTime(mostConcentrationTime)
+                .achievementCombo(getMaxCombo(achievementCombo))
                 .monthlyTotalLikes(monthlyTotalLikes)
                 .mostLikeDates(makeMostLikeResponseDto(topLikeDates))
                 .mostLikeMembers(makeMostLikeResponseDto(topLikeMembers))
                 .build();
     }
 
-    private void getMaxCombo(List<String> achievementCombo) {
+    private Integer getMaxCombo(List<String> achievementCombo) {
         int achievementCnt = 1;
         List<Integer> cntList = new ArrayList<>();
         if (achievementCombo.size() == 0) {
@@ -73,7 +74,7 @@ public class ReportService {
                 }
             }
         }
-        int max = Collections.max(cntList);
+        return Collections.max(cntList);
     }
 
     private MostLikeResponseDto makeMostLikeResponseDto(List<String> topLikeData) {
