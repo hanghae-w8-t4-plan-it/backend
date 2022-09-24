@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -35,7 +36,8 @@ public class ReportService {
         Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
         List<String> topLikeDates = likesRepository.findTopLikeDates(member.getMemberId(), month);
         List<String> topLikeMembers = likesRepository.findTopLikeMembers(member.getMemberId(), month);
-
+        List<String> achievementCombo = achievementRepository.findAllByMemberAndStartDate(member.getMemberId(), month);
+        getMaxCombo(achievementCombo);
         return ReportResponseDto.builder()
                 .categoryRank(categoryRank)
                 .achievementCountTop(achievementCountTop)
@@ -46,10 +48,33 @@ public class ReportService {
                 .build();
     }
 
+    private void getMaxCombo(List<String> achievementCombo) {
+        int achievementCnt = 1;
+        List<Integer> cntList = new ArrayList<>();
+        if (achievementCombo.size() == 0) {
+            cntList.add(0);
+        }
+        for (int i = 0; i < achievementCombo.size(); i++) {
+            if(i > 0) {
+                if ((getAnInt(achievementCombo.get(i - 1).substring(8, 10)) + 1) == getAnInt(achievementCombo.get(i).substring(8, 10))) {
+                    achievementCnt += 1;
+                }
+                if ((getAnInt(achievementCombo.get(i - 1).substring(8, 10)) + 1) != getAnInt(achievementCombo.get(i).substring(8, 10))) {
+                    cntList.add(achievementCnt);
+                    achievementCnt = 1;
+                }
+                if (i + 1 == achievementCombo.size()) {
+                    cntList.add(achievementCnt);
+                }
+            }
+        }
+        int max = Collections.max(cntList);
+    }
+
     private MostLikeResponseDto makeMostLikeResponseDto(List<String> topLikeData) {
         List<String> data = new ArrayList<>();
         if (topLikeData.size() != 0) {
-            Integer likesCount = Integer.parseInt(topLikeData.get(0).split(",")[0]);
+            Integer likesCount = getAnInt(topLikeData.get(0).split(",")[0]);
             for (String topLike : topLikeData) {
                 String item = topLike.split(",")[1];
                 data.add(item);
@@ -57,6 +82,10 @@ public class ReportService {
             return new MostLikeResponseDto(likesCount, data);
         }
         return new MostLikeResponseDto(0, data);
+    }
+
+    private int getAnInt(String achievementCombo) {
+        return Integer.parseInt(achievementCombo);
     }
 }
 
