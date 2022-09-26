@@ -7,9 +7,11 @@ import com.team4.planit.report.dto.MostConcentrationTimeResponseDto;
 import com.team4.planit.report.dto.MostLikeResponseDto;
 import com.team4.planit.report.dto.ReportResponseDto;
 import com.team4.planit.statistic.achievement.AchievementRepository;
+import com.team4.planit.statistic.achievement.AchievementRepositorySupport;
 import com.team4.planit.statistic.concentration.ConcentrationRepositorySupport;
-import com.team4.planit.timer.TimerRepository;
-import com.team4.planit.todoList.like.LikesRepository;
+import com.team4.planit.statistic.dto.AchievementCountTopResponseDto;
+import com.team4.planit.timer.TimerRepositorySupport;
+import com.team4.planit.timer.dto.ConcentrationTimeTopResponseDto;
 import com.team4.planit.todoList.like.LikesRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,32 +27,37 @@ public class ReportService {
 
     private final Check check;
     private final CategoryRepositorySupport categoryRepositorySupport;
-    private final LikesRepository likesRepository;
     private final LikesRepositorySupport likesRepositorySupport;
     private final AchievementRepository achievementRepository;
+    private final AchievementRepositorySupport achievementRepositorySupport;
     private final ConcentrationRepositorySupport concentrationRepositorySupport;
-    private final TimerRepository timerRepository;
+    private final TimerRepositorySupport timerRepositorySupport;
 
     public ReportResponseDto getReport(String month, HttpServletRequest request) {
         Member member = check.validateMember(request);
         List<String> categoryRank = categoryRepositorySupport.findAllCategoryRank(member, month);
-        List<String> achievementCountTop = achievementRepository.findAchievementCountTop(member.getMemberId(), month);
-        List<String> concentrationTimeTop = timerRepository.findConcentrationTimeTop(member.getMemberId(), month);
+        Integer maxAchievementCount = achievementRepositorySupport.findMaxAchievementCount(member, month);
+        List<String> achievementCountTop = achievementRepositorySupport.findAchievementCountTop(member, month, maxAchievementCount);
+        Integer maxSumElapsedTime = timerRepositorySupport.findMaxSumElapsedTime(member, month);
+        List<String> concentrationTimeTop = timerRepositorySupport.findConcentrationTimeTop(member, month, maxSumElapsedTime);
         MostConcentrationTimeResponseDto mostConcentrationTime = concentrationRepositorySupport.findMostConcentrationTime(member, month);
         Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
-        List<String> topLikeDates = likesRepository.findTopLikeDates(member.getMemberId(), month);
-        List<String> topLikeMembers = likesRepository.findTopLikeMembers(member.getMemberId(), month);
+        Long maxLikesCountByTodoList = likesRepositorySupport.findMaxLikesCountByTodoList(member, month);
+        List<String> topLikeDates = likesRepositorySupport.findTopLikeDates(member, month, maxLikesCountByTodoList);
+        Long maxLikesCountByMember = likesRepositorySupport.findMaxLikesCountByMember(member, month);
+        List<String> topLikeMembers = likesRepositorySupport.findTopLikeMembers(member, month, maxLikesCountByMember);
         List<String> achievementCombo = achievementRepository.findAllByMemberAndStartDate(member.getMemberId(), month);
         getMaxCombo(achievementCombo);
+
         return ReportResponseDto.builder()
                 .categoryRank(categoryRank)
-                .achievementCountTop(achievementCountTop)
-                .concentrationTimeTop(concentrationTimeTop)
+                .achievementCountTop(new AchievementCountTopResponseDto(maxAchievementCount, achievementCountTop))
+                .concentrationTimeTop(new ConcentrationTimeTopResponseDto(maxSumElapsedTime, concentrationTimeTop))
                 .mostConcentrationTime(mostConcentrationTime)
                 .achievementCombo(getMaxCombo(achievementCombo))
                 .monthlyTotalLikes(monthlyTotalLikes)
-                .mostLikeDates(makeMostLikeResponseDto(topLikeDates))
-                .mostLikeMembers(makeMostLikeResponseDto(topLikeMembers))
+                .mostLikeDates(new MostLikeResponseDto(maxLikesCountByTodoList, topLikeDates))
+                .mostLikeMembers(new MostLikeResponseDto(maxLikesCountByMember, topLikeMembers))
                 .build();
     }
 
@@ -77,18 +84,18 @@ public class ReportService {
         return Collections.max(cntList);
     }
 
-    private MostLikeResponseDto makeMostLikeResponseDto(List<String> topLikeData) {
-        List<String> data = new ArrayList<>();
-        if (topLikeData.size() != 0) {
-            Integer likesCount = getAnInt(topLikeData.get(0).split(",")[0]);
-            for (String topLike : topLikeData) {
-                String item = topLike.split(",")[1];
-                data.add(item);
-            }
-            return new MostLikeResponseDto(likesCount, data);
-        }
-        return new MostLikeResponseDto(0, data);
-    }
+//    private MostLikeResponseDto makeMostLikeResponseDto(List<String> topLikeData) {
+//        List<String> data = new ArrayList<>();
+//        if (topLikeData.size() != 0) {
+//            Integer likesCount = getAnInt(topLikeData.get(0).split(",")[0]);
+//            for (String topLike : topLikeData) {
+//                String item = topLike.split(",")[1];
+//                data.add(item);
+//            }
+//            return new MostLikeResponseDto(likesCount, data);
+//        }
+//        return new MostLikeResponseDto(0, data);
+//    }
 
     private int getAnInt(String achievementCombo) {
         return Integer.parseInt(achievementCombo);

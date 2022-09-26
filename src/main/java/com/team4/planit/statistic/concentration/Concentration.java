@@ -1,5 +1,6 @@
 package com.team4.planit.statistic.concentration;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team4.planit.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class Concentration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long concentrationId;
 
+    @JsonIgnore
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
