@@ -33,7 +33,7 @@ public class CategoryService {
                 .member(member)
                 .categoryName(requestDto.getCategoryName())
                 .categoryColor(requestDto.getCategoryColor())
-                .isPublic(false)
+                .isPublic(requestDto.getIsPublic())
                 .categoryStatus(CategoryStatusCode.NOT_STOP)
                 .build();
         categoryRepository.save(category);
