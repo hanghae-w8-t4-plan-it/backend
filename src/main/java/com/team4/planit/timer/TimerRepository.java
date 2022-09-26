@@ -9,4 +9,7 @@ import java.util.List;
 public interface TimerRepository extends JpaRepository<Timer, Long> {
     @Query(value = "select t from Timer t where t.member.memberId=:memberId and t.lastDate between :startDate and :endDate")
     List<Timer> findTimerDuringPeriod(@Param("memberId") Long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    @Query(value = "select t from Timer t where t.member.memberId=:memberId and t.lastDate like :startDate%")
+    List<Timer> findTimerDaily(@Param("memberId") Long memberId, @Param("startDate") String startDate);
 }
