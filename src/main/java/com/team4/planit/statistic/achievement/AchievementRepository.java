@@ -1,6 +1,7 @@
 package com.team4.planit.statistic.achievement;
 
 import com.team4.planit.member.Member;
+import com.team4.planit.statistic.concentration.Concentration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +24,10 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
     List<Achievement> findAllByMemberDuringPeriod(@Param("memberId") Long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
     Optional<Achievement> findAllByMemberAndStartDateAndPeriod(Member member, String startDate, String Period);
-
+    @Query(value = "SELECT a FROM Achievement a where (a.member.memberId = :memberId) and (a.startDate between :startDate" +
+            "       and :endDate)  and (a.period = :period)")
+    List<Achievement> findAllByMemberAndPeriod(@Param("memberId")Long memberId, @Param("period")String period ,
+                                                 @Param("startDate")String startDate, @Param("endDate")String endDate);
     @Query(value = "select a.startDate, a.achievementRate from Achievement a\n" +
             "    where a.member.memberId = :memberId and a.achievementRate = 100 and a.startDate like :month%\n" +
             "    and a.period = 'Day'\n" +
