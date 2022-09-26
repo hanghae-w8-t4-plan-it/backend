@@ -1,7 +1,10 @@
 package com.team4.planit.todoList.like;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team4.planit.member.Member;
+import com.team4.planit.member.dto.MemberResponseDto;
+import com.team4.planit.todoList.TodoList;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
@@ -81,4 +84,20 @@ public class LikesRepositorySupport extends QuerydslRepositorySupport {
                 .where(todoList.member.eq(member), todoList.dueDate.contains(month))
                 .fetchFirst());
     }
+
+    public List<MemberResponseDto> findMemberByTodoList(TodoList todoList) {
+        return queryFactory
+                .select(Projections.fields(
+                        MemberResponseDto.class,
+                        member.memberId,
+                        member.nickname,
+                        member.profileImgUrl
+                ))
+                .from(likes)
+                .innerJoin(member)
+                .on(likes.member.eq(member))
+                .where(likes.todoList.eq(todoList))
+                .fetch();
+    }
+
 }
