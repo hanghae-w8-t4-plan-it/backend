@@ -84,19 +84,6 @@ public class ReportService {
         return Collections.max(cntList);
     }
 
-//    private MostLikeResponseDto makeMostLikeResponseDto(List<String> topLikeData) {
-//        List<String> data = new ArrayList<>();
-//        if (topLikeData.size() != 0) {
-//            Integer likesCount = getAnInt(topLikeData.get(0).split(",")[0]);
-//            for (String topLike : topLikeData) {
-//                String item = topLike.split(",")[1];
-//                data.add(item);
-//            }
-//            return new MostLikeResponseDto(likesCount, data);
-//        }
-//        return new MostLikeResponseDto(0, data);
-//    }
-
     private int getAnInt(String achievementCombo) {
         return Integer.parseInt(achievementCombo);
     }
