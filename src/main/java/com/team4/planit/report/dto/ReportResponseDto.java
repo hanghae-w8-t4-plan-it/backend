@@ -1,5 +1,7 @@
 package com.team4.planit.report.dto;
 
+import com.team4.planit.statistic.dto.AchievementCountTopResponseDto;
+import com.team4.planit.timer.dto.ConcentrationTimeTopResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +13,8 @@ import java.util.List;
 public class ReportResponseDto {
 
     private List<String> categoryRank;
-    private List<String> achievementCountTop;
-    private List<String> concentrationTimeTop;
+    private AchievementCountTopResponseDto achievementCountTop;
+    private ConcentrationTimeTopResponseDto concentrationTimeTop;
     private MostConcentrationTimeResponseDto mostConcentrationTime;
     private Integer achievementCombo;
     private Integer monthlyTotalLikes;
@@ -20,8 +22,8 @@ public class ReportResponseDto {
     private MostLikeResponseDto mostLikeMembers;
 
     @Builder
-    public ReportResponseDto(List<String> categoryRank, List<String> achievementCountTop,
-                             List<String> concentrationTimeTop, MostConcentrationTimeResponseDto mostConcentrationTime,
+    public ReportResponseDto(List<String> categoryRank, AchievementCountTopResponseDto achievementCountTop,
+                             ConcentrationTimeTopResponseDto concentrationTimeTop, MostConcentrationTimeResponseDto mostConcentrationTime,
                              Integer achievementCombo, Integer monthlyTotalLikes,
                              MostLikeResponseDto mostLikeDates, MostLikeResponseDto mostLikeMembers) {
         this.categoryRank = categoryRank;

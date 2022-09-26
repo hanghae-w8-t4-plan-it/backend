@@ -9,10 +9,10 @@ import java.util.List;
 @NoArgsConstructor
 public class MostLikeResponseDto {
 
-    private Integer likesCount;
+    private Long likesCount;
     private List<String> data;
 
-    public MostLikeResponseDto(Integer likesCount, List<String> data) {
+    public MostLikeResponseDto(Long likesCount, List<String> data) {
         this.likesCount = likesCount;
         this.data = data;
     }
