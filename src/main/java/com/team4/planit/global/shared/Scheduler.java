@@ -37,10 +37,10 @@ public class Scheduler {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.setTime(sdf.parse(String.valueOf(DateTime.now())));
+        cal.add(Calendar.DATE, -1);
         String startDate = sdf.format(cal.getTime());
-        cal.add(Calendar.DATE,1);
         String endDate = sdf.format(cal.getTime());
-        makeStatisticByPeriod(memberList,startDate,endDate,"DayTotal");
+        makeStatisticByPeriod(memberList, startDate, endDate, "DayTotal");
         //week
         cal.setTime(sdf.parse(String.valueOf(DateTime.now())));
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -52,7 +52,7 @@ public class Scheduler {
         cal.setTime(sdf.parse(String.valueOf(DateTime.now())));
         cal.set(Calendar.DAY_OF_MONTH, 1);
         startDate = sdf.format(cal.getTime());
-        cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         endDate = sdf.format(cal.getTime());
         makeStatisticByPeriod(memberList, startDate, endDate, "Month");
     }
@@ -62,6 +62,7 @@ public class Scheduler {
             //집중도 구하기 (%) 월요일부터 일요일
             Long memberId = member.getMemberId();
             List<Timer> timerList = timerRepository.findTimerDuringPeriod(memberId, startDate, endDate);
+            if (period.equals("DayTotal")) timerList = timerRepository.findTimerDaily(memberId, startDate);
             int totalElapsedTime = 0;
             int totalSetTime = 0;
             for (Timer timer : timerList) {
@@ -83,6 +84,8 @@ public class Scheduler {
             }
             //달성률 구하기 (%,개)
             List<Achievement> achievementList = achievementRepository.findAllByMemberDuringPeriod(memberId, startDate, endDate);
+            if (period.equals("DayTotal"))
+                achievementList = achievementRepository.findAllByMemberDaily(memberId, startDate);
             int totalAchievementCnt = 0;
             int totalAchievementTodoCnt = 0;
             for (Achievement achievement : achievementList) {
