@@ -37,13 +37,19 @@ public class Scheduler {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.setTime(sdf.parse(String.valueOf(DateTime.now())));
-        //week
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         String startDate = sdf.format(cal.getTime());
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.add(Calendar.DATE,1);
         String endDate = sdf.format(cal.getTime());
+        makeStatisticByPeriod(memberList,startDate,endDate,"DayTotal");
+        //week
+        cal.setTime(sdf.parse(String.valueOf(DateTime.now())));
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        startDate = sdf.format(cal.getTime());
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        endDate = sdf.format(cal.getTime());
         makeStatisticByPeriod(memberList, startDate, endDate, "Week");
         //month
+        cal.setTime(sdf.parse(String.valueOf(DateTime.now())));
         cal.set(Calendar.DAY_OF_MONTH, 1);
         startDate = sdf.format(cal.getTime());
         cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));

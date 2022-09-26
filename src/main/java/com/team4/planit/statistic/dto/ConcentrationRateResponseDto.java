@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ConcentrationResponseDto {
+public class ConcentrationRateResponseDto {
     private Float concentrationRate;
     private String startDate;
 
-    public ConcentrationResponseDto(String startDate) {
+    public ConcentrationRateResponseDto(String startDate) {
         this.concentrationRate = 0f;
         this.startDate = startDate;
     }
 
     @Builder
-    public ConcentrationResponseDto(Float concentrationRate, String startDate) {
+    public ConcentrationRateResponseDto(Float concentrationRate, String startDate) {
         this.concentrationRate = concentrationRate;
         this.startDate = startDate;
     }
