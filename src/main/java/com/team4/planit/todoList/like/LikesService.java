@@ -9,15 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LikesService {
-    private final LikesRepository likesRepository;
     private final Check check;
+    private final LikesRepository likesRepository;
+    private final LikesRepositorySupport likesRepositorySupport;
+
 
     @Transactional
     public Boolean todoListLike(Long todoListId, HttpServletRequest request) {
@@ -36,17 +37,6 @@ public class LikesService {
     public List<MemberResponseDto> getTodoListLike(Long todoListId, HttpServletRequest request) {
         check.validateMember(request);
         TodoList todoList = check.isPresentTodoList(todoListId);
-        List<Likes> likesList = likesRepository.findAllByTodoList(todoList);
-        List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
-        for (Likes likes : likesList)
-            memberResponseDtoList.add(
-                    MemberResponseDto.builder()
-                            .memberId(likes.getMember().getMemberId())
-                            .nickname(likes.getMember().getNickname())
-                            .profileImgUrl(likes.getMember().getProfileImgUrl())
-                            .build()
-            );
-        return memberResponseDtoList;
-
+        return likesRepositorySupport.findMemberByTodoList(todoList);
     }
 }
