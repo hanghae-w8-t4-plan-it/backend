@@ -62,10 +62,6 @@ public class SecurityConfiguration {
                 .authorizeRequests()
 
                 .antMatchers("/members/**").permitAll()
-                .antMatchers("/categories/**").permitAll()
-//                .antMatchers("/comments/**").permitAll()
-//                .antMatchers("/profiles/**").permitAll()
-                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
 
 
