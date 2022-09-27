@@ -51,7 +51,7 @@ public class TodoList {
 
     public void update(Byte planetType) {
         this.planetType = planetType;
-        this.planetSize = 60;
+        this.planetSize = 44;
         this.planetLevel = 1;
     }
 
