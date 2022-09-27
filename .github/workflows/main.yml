@@ -92,3 +92,4 @@ jobs:
         --file-exists-behavior OVERWRITE 
         --s3-location bucket=mysparta00,bundleType=zip,key=planit.zip
         --region ap-northeast-2
+        --ignore-application-stop-failures
