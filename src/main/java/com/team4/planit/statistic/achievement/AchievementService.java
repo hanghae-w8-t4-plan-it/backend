@@ -45,7 +45,7 @@ public class AchievementService {
             achievementRate = Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (todoCnt) * 100)));
             achievement.update(achievementRate, achievementCnt, todoCnt);
         } else achievement.update(achievementRate, achievementCnt, todoCnt);
-        if (achievementCnt>4) todoList.updatePlanet((byte) 2, (short) 100);
-        if (achievementCnt>9) todoList.updatePlanet((byte) 3, (short) 160);
+        if (achievementCnt>4) todoList.updatePlanet((byte) 2, (short) 60);
+        if (achievementCnt>9) todoList.updatePlanet((byte) 3, (short) 100);
     }
 }
