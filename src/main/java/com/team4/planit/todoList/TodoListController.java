@@ -1,9 +1,8 @@
 package com.team4.planit.todoList;
 
-import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.global.shared.Message;
-import com.team4.planit.todoList.dto.TodoListRequestDto;
 import com.team4.planit.todoList.dto.DailyTodoListResponseDto;
+import com.team4.planit.todoList.dto.TodoListRequestDto;
 import com.team4.planit.todoList.dto.WeeklyTodoListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,7 @@ public class TodoListController {
     public ResponseEntity<?> updatePlanetType(@RequestParam String dueDate,
                                             @RequestParam Byte planetType,
                                             HttpServletRequest request) {
-        List<CategoryDetailResponseDto> categoryDetailResponseDtoList = todoListService.updatePlanetType(dueDate, planetType, request);
+        DailyTodoListResponseDto categoryDetailResponseDtoList = todoListService.updatePlanetType(dueDate, planetType, request);
         return new ResponseEntity<>(Message.success(categoryDetailResponseDtoList), HttpStatus.OK);
     }
 
