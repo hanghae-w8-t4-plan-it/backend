@@ -6,7 +6,7 @@ on:
     types: [closed]
 
 env:
-  S3_BUCKET_NAME: springbucketss
+  S3_BUCKET_NAME: mysparta00
 
 jobs:
   build:
@@ -90,5 +90,5 @@ jobs:
         --application-name planit
         --deployment-group-name planit
         --file-exists-behavior OVERWRITE 
-        --s3-location bucket=springbucketss,bundleType=zip,key=planit.zip
+        --s3-location bucket=mysparta00,bundleType=zip,key=planit.zip
         --region ap-northeast-2
