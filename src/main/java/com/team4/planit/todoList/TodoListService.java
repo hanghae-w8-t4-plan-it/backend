@@ -1,6 +1,5 @@
 package com.team4.planit.todoList;
 
-import com.team4.planit.category.CategoryService;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
@@ -28,7 +27,6 @@ public class TodoListService {
     private final MemberRepository memberRepository;
     private final TodoListRepositorySupport todoListRepositorySupport;
     private final TodoListRepository todoListRepository;
-    private final CategoryService categoryService;
 
     @Transactional
     public DailyTodoListResponseDto updatePlanetType(String dueDate, Byte planetType, HttpServletRequest request) {
