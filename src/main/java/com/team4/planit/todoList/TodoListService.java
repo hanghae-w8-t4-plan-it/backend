@@ -1,15 +1,14 @@
 package com.team4.planit.todoList;
 
 import com.team4.planit.category.CategoryService;
-import com.team4.planit.category.dto.CategoryDetailResponseDto;
 import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
-import com.team4.planit.todoList.dto.WeeklyPlanetResponseDto;
-import com.team4.planit.todoList.dto.TodoListRequestDto;
 import com.team4.planit.todoList.dto.DailyTodoListResponseDto;
+import com.team4.planit.todoList.dto.TodoListRequestDto;
+import com.team4.planit.todoList.dto.WeeklyPlanetResponseDto;
 import com.team4.planit.todoList.dto.WeeklyTodoListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +31,13 @@ public class TodoListService {
     private final CategoryService categoryService;
 
     @Transactional
-    public List<CategoryDetailResponseDto> updatePlanetType(String dueDate, Byte planetType, HttpServletRequest request) {
+    public DailyTodoListResponseDto updatePlanetType(String dueDate, Byte planetType, HttpServletRequest request) {
         Member member = check.validateMember(request);
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
         todoList.update(planetType);
         todoListRepository.save(todoList);
-        return categoryService.getAllCategories(dueDate, null, request);
+        return getDailyTodoList(member.getMemberId(), dueDate,  request);
     }
 
     @Transactional(readOnly = true)
