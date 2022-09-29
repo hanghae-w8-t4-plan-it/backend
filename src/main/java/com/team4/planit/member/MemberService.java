@@ -38,12 +38,13 @@ public class MemberService {
     private final MemberRepositorySupport memberRepositorySupport;
 
     @Transactional
-    public void creatMember(MemberRequestDto requestDto, HttpServletResponse response) {
+    public MemberResponseDto creatMember(MemberRequestDto requestDto, HttpServletResponse response) {
         check.checkEmail(requestDto.getEmail());
         Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), passwordEncoder.encode(requestDto.getPassword()));
         memberRepository.save(member);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
+        return new MemberResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl());
     }
 
     @Transactional
