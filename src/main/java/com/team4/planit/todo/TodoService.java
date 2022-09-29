@@ -5,9 +5,11 @@ import com.team4.planit.global.exception.CustomException;
 import com.team4.planit.global.exception.ErrorCode;
 import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
+import com.team4.planit.statistic.achievement.AchievementResponseDto;
 import com.team4.planit.statistic.achievement.AchievementService;
 import com.team4.planit.todo.dto.TodoRequestDto;
 import com.team4.planit.todo.dto.TodoResponseDto;
+import com.team4.planit.todo.dto.TodoResponseSupportDto;
 import com.team4.planit.todoList.TodoList;
 import com.team4.planit.todoList.TodoListRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,25 +51,25 @@ public class TodoService {
     }
 
     @Transactional
-    public TodoResponseDto updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) throws ParseException {
+    public TodoResponseSupportDto updateTodo(Long todoId, TodoRequestDto requestDto, HttpServletRequest request) throws ParseException {
         String dueDate = requestDto.getDueDate();
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
         check.checkTodoAuthor(member, todo);
-        if(dueDate!=null) check.checkPastDate(dueDate);
+        if (dueDate != null) check.checkPastDate(dueDate);
         check.checkPastDate(todo.getDueDate());
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseGet(() -> new TodoList(member, dueDate, (byte) 0));
         todo.updateTodo(requestDto);
         if (dueDate != null) todo.updateTodo(todoList);
         todoListRepository.save(todoList);
-        achievementService.updateAchievement(member, todo.getDueDate());
-        return buildTodoResponseDto(todo);
+        AchievementResponseDto achievementStatus = achievementService.updateAchievement(member, todo.getDueDate());
+        return new TodoResponseSupportDto(todo, achievementStatus);
     }
 
     @Transactional
-    public void deleteTodo(Long todoId, HttpServletRequest request) throws ParseException {
+    public AchievementResponseDto deleteTodo(Long todoId, HttpServletRequest request) throws ParseException {
         Member member = check.validateMember(request);
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 () -> new CustomException(ErrorCode.TODO_NOT_FOUND));
@@ -75,7 +77,7 @@ public class TodoService {
         String dueDate = todo.getDueDate();
         check.checkPastDate(dueDate);
         todoRepository.delete(todo);
-        achievementService.updateAchievement(member, dueDate);
+        return achievementService.updateAchievement(member, dueDate);
     }
 
     private TodoResponseDto buildTodoResponseDto(Todo todo) {

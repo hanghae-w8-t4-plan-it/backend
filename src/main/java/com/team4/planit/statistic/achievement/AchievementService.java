@@ -21,7 +21,7 @@ public class AchievementService {
     private final TodoListRepository todoListRepository;
 
     @Transactional
-    public void updateAchievement(Member member, String dueDate) {
+    public AchievementResponseDto updateAchievement(Member member, String dueDate) {
         TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate)
                 .orElseThrow(() -> new CustomException(ErrorCode.TODO_LIST_NOT_FOUND));
         List<Todo> todos = todoRepository.findAllByTodoList(todoList);
@@ -45,7 +45,17 @@ public class AchievementService {
             achievementRate = Float.parseFloat(String.format("%.1f", ((float) achievementCnt / (todoCnt) * 100)));
             achievement.update(achievementRate, achievementCnt, todoCnt);
         } else achievement.update(achievementRate, achievementCnt, todoCnt);
-        if (achievementCnt>4) todoList.updatePlanet((byte) 2, (short) 60);
-        if (achievementCnt>9) todoList.updatePlanet((byte) 3, (short) 100);
+        byte planetLevel = 1;
+        short planetSize = 44;
+        if (achievementCnt > 4) {
+            planetLevel = 2;
+            planetSize = 60;
+        }
+        if (achievementCnt > 9) {
+            planetLevel = 3;
+            planetSize = 100;
+        }
+        todoList.updatePlanet(planetLevel, planetSize);
+        return new AchievementResponseDto(planetLevel, achievementCnt);
     }
 }
