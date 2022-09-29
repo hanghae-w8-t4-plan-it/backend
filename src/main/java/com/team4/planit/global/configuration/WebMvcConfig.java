@@ -9,7 +9,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://treavelrecommend.s3-website-us-east-1.amazonaws.com/")
+                .allowedOrigins("http://localhost:3000", "http://planit-todo.com/", "https://planit-todo.com/")
                 .allowedMethods("*")
                 .exposedHeaders("Authorization", "RefreshToken","AccessTokenExpireTime")
                 .allowCredentials(true)//make client read header("jwt-token")
