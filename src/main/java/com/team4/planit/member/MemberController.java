@@ -25,8 +25,8 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> signup(@Valid @RequestBody MemberRequestDto requestDto, HttpServletResponse response) {
-        memberService.creatMember(requestDto, response);
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
+        MemberResponseDto memberResponseDto = memberService.creatMember(requestDto, response);
+        return new ResponseEntity<>(Message.success(memberResponseDto), HttpStatus.OK);
     }
 
     @PostMapping("/login")
