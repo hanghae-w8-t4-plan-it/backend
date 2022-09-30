@@ -51,7 +51,9 @@ public class TodoListService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         DailyTodoListResponseDto dailyTodoListResponseDto = todoListRepositorySupport.findDailyTodoListByMemberAndDueDate(member, dueDate);
         if (dailyTodoListResponseDto == null) {
-            TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElse(null);
+            Member finalMember = member;
+            TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseGet(
+                    ()->new TodoList(finalMember,dueDate,(byte) 0));
             dailyTodoListResponseDto = DailyTodoListResponseDto.builder()
                     .todoListId(todoList.getTodoListId())
                     .dueDate(todoList.getDueDate())
