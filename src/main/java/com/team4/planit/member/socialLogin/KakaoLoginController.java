@@ -2,8 +2,8 @@ package com.team4.planit.member.socialLogin;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.shared.Message;
+import com.team4.planit.member.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,14 @@ public class KakaoLoginController {
 
     @GetMapping("/members/login/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        TokenDto tokenDto = kakaoLoginService.kakaoLogin(code);
-        tokenDto.tokenToHeaders(response);
-        return new ResponseEntity<>(Message.success("로그인에 성공하였습니다."), HttpStatus.OK);
+        kakaoResponseDto responseDto = kakaoLoginService.kakaoLogin(code);
+        responseDto.getTokenDto().tokenToHeaders(response);
+        return new ResponseEntity<>(Message.success(
+                new MemberResponseDto(
+                        responseDto.getMember().getMemberId(),
+                        responseDto.getMember().getNickname(),
+                        responseDto.getMember().getProfileImgUrl())),
+                HttpStatus.OK);
     }
 
 
