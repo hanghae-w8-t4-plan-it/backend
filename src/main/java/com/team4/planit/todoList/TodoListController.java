@@ -21,15 +21,15 @@ public class TodoListController {
 
     @GetMapping("/{year}/{month}")
     public ResponseEntity<?> getUnAchievedDueDates(@PathVariable String year, @PathVariable String month,
-                                         HttpServletRequest request) {
+                                                   HttpServletRequest request) {
         List<String> UnAchievedDueDates = todoListService.getUnAchievedDueDatesByYearAndMonth(year, month, request);
         return new ResponseEntity<>(Message.success(UnAchievedDueDates), HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<?> updatePlanetType(@RequestParam String dueDate,
-                                            @RequestParam Byte planetType,
-                                            HttpServletRequest request) {
+                                              @RequestParam Byte planetType,
+                                              HttpServletRequest request) {
         DailyTodoListResponseDto categoryDetailResponseDtoList = todoListService.updatePlanetType(dueDate, planetType, request);
         return new ResponseEntity<>(Message.success(categoryDetailResponseDtoList), HttpStatus.OK);
     }
@@ -42,16 +42,16 @@ public class TodoListController {
 
     @GetMapping("/daily")
     public ResponseEntity<?> getDailyTodoList(@RequestParam(required = false) Long memberId,
-                                         @RequestParam String dueDate,
-                                         HttpServletRequest request) {
+                                              @RequestParam String dueDate,
+                                              HttpServletRequest request) {
         DailyTodoListResponseDto dailyTodoListResponseDto = todoListService.getDailyTodoList(memberId, dueDate, request);
         return new ResponseEntity<>(Message.success(dailyTodoListResponseDto), HttpStatus.OK);
     }
 
     @GetMapping("/weekly")
     public ResponseEntity<?> getWeeklyTodoList(@RequestParam(required = false) Long memberId,
-                                           @RequestParam String startDate,
-                                           HttpServletRequest request) throws ParseException {
+                                               @RequestParam String startDate,
+                                               HttpServletRequest request) throws ParseException {
         WeeklyTodoListResponseDto weeklyTodoListResponseDto = todoListService.getWeeklyTodoList(memberId, startDate, request);
         return new ResponseEntity<>(Message.success(weeklyTodoListResponseDto), HttpStatus.OK);
     }
