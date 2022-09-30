@@ -27,7 +27,8 @@ public class KakaoLoginController {
                 new MemberResponseDto(
                         responseDto.getMember().getMemberId(),
                         responseDto.getMember().getNickname(),
-                        responseDto.getMember().getProfileImgUrl())),
+                        responseDto.getMember().getProfileImgUrl(),
+                        true)),
                 HttpStatus.OK);
     }
 
