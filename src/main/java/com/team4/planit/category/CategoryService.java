@@ -23,6 +23,7 @@ import java.util.List;
 public class CategoryService {
     private final Check check;
     private final CategoryRepository categoryRepository;
+    private final CategoryRepositorySupport categoryRepositorySupport;
     private final TodoRepositorySupport todoRepositorySupport;
     private final TodoListRepository todoListRepository;
 
@@ -49,19 +50,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryResponseDto> getCategoryMenus(HttpServletRequest request) {
         Member member = check.validateMember(request);
-        List<Category> categories = categoryRepository.findAllByMember(member);
-        List<CategoryResponseDto> categoryResponseDtoList = new ArrayList<>();
-        for (Category category : categories) {
-            categoryResponseDtoList.add(
-            CategoryResponseDto.builder()
-                    .categoryId(category.getCategoryId())
-                    .categoryName(category.getCategoryName())
-                    .isPublic(category.getIsPublic())
-                    .categoryColor(category.getCategoryColor())
-                    .categoryStatus(category.getCategoryStatus())
-                    .build());
-        }
-        return categoryResponseDtoList;
+        return categoryRepositorySupport.findAllCategoryMenus(member);
     }
 
     @Transactional
