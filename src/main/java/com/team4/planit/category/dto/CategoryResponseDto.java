@@ -13,13 +13,16 @@ public class CategoryResponseDto {
     private Boolean isPublic;
     private String categoryColor;
     private CategoryStatusCode categoryStatus;
+    private Boolean isEmpty;
 
     @Builder
-    public CategoryResponseDto(Long categoryId, String categoryName, Boolean isPublic, String categoryColor, CategoryStatusCode categoryStatus) {
+    public CategoryResponseDto(Long categoryId, String categoryName, Boolean isPublic, String categoryColor,
+                               CategoryStatusCode categoryStatus, Long todoCnt) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.isPublic = isPublic;
         this.categoryColor = categoryColor;
         this.categoryStatus = categoryStatus;
+        this.isEmpty = todoCnt == 0;
     }
 }

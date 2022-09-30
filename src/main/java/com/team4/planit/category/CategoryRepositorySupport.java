@@ -1,6 +1,8 @@
 package com.team4.planit.category;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.team4.planit.category.dto.CategoryResponseDto;
 import com.team4.planit.member.Member;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -32,4 +34,24 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(category.count().desc())
                 .fetch();
     }
+
+    public List<CategoryResponseDto> findAllCategoryMenus(Member member) {
+        return queryFactory
+                .select(Projections.constructor(
+                        CategoryResponseDto.class,
+                        category.categoryId,
+                        category.categoryName,
+                        category.isPublic,
+                        category.categoryColor,
+                        category.categoryStatus,
+                        todo.count()
+                ))
+                .from(category)
+                .leftJoin(todo)
+                .on(category.eq(todo.category))
+                .where(category.member.eq(member))
+                .groupBy(category)
+                .fetch();
+    }
+
 }
