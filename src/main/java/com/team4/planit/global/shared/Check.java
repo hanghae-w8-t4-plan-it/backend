@@ -64,7 +64,7 @@ public class Check {
 
     public void checkAccessTokenExpiration(long accessTokenExpiration, Member member) {
         long now = (new Date().getTime());
-        if (now < accessTokenExpiration) {
+        if (now -100000 < accessTokenExpiration) {
             tokenProvider.deleteRefreshToken(member);
             throw new CustomException(ErrorCode.TOKEN_HIJACKED);
         }
