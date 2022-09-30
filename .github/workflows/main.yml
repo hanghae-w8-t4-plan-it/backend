@@ -4,9 +4,9 @@ on:
   pull_request:
     branches: [ main ]
     types: [closed]
-
+    
 env:
-  S3_BUCKET_NAME: springbucketss
+  S3_BUCKET_NAME: mysparta00
 
 jobs:
   build:
@@ -55,9 +55,10 @@ jobs:
     # Jar 파일 복사
     - name: Copy Jar
       run: cp ./build/libs/*.jar ./deploy
+      
 
     - name: Make zip file
-      run: zip -r ./coinTalk.zip ./deploy
+      run: zip -r ./planit-1.zip ./deploy
       shell: bash
           
 
@@ -94,5 +95,6 @@ jobs:
         --application-name planit
         --deployment-group-name planit
         --file-exists-behavior OVERWRITE 
-        --s3-location bucket=springbucketss,bundleType=zip,key=planit.zip
+        --s3-location bucket=mysparta00,bundleType=zip,key=planit.zip
         --region ap-northeast-2
+        --ignore-application-stop-failures
