@@ -4,12 +4,11 @@ package com.team4.planit.member.socialLogin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team4.planit.global.jwt.TokenDto;
 import com.team4.planit.global.jwt.TokenProvider;
 import com.team4.planit.global.jwt.UserDetailsImpl;
+import com.team4.planit.global.shared.Check;
 import com.team4.planit.member.Member;
 import com.team4.planit.member.MemberRepository;
-import com.team4.planit.global.shared.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -40,7 +39,7 @@ public class KakaoLoginService {
     @Value("${myKaKaoRestAplKey}")
     private String myKaKaoRestAplKey;
 
-    public TokenDto kakaoLogin(String code) throws JsonProcessingException {
+    public kakaoResponseDto kakaoLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
@@ -60,7 +59,7 @@ public class KakaoLoginService {
 
             String profileImgUrl = kakaoMemberInfo.getProfileImgUrl();
             String nickname = kakaoMemberInfo.getNickname();
-            Long kakaoId= kakaoMemberInfo.getId();
+            Long kakaoId = kakaoMemberInfo.getId();
             kakaoMember = new Member(email, encodedPassword, profileImgUrl, nickname, kakaoId);
             memberRepository.save(kakaoMember);
         }
@@ -71,7 +70,7 @@ public class KakaoLoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Member member = check.isPresentMember(kakaoMember.getEmail());
-        return tokenProvider.generateTokenDto(member);
+        return new kakaoResponseDto(tokenProvider.generateTokenDto(member),member);
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -127,7 +126,7 @@ public class KakaoLoginService {
         String nickname = jsonNode.get("kakao_account").get("profile")
                 .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
-                .get("email").asText()+"#kakao";
+                .get("email").asText() + "#kakao";
         String profileImgUrl = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
         return new KakaoMemberInfoDto(nickname, email, profileImgUrl, id);
     }

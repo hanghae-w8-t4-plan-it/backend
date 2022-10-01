@@ -44,7 +44,7 @@ public class MemberService {
         memberRepository.save(member);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
-        return new MemberResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl());
+        return new MemberResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl(), false);
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class MemberService {
         check.checkPassword(passwordEncoder, requestDto.getPassword(), member);
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         check.tokenToHeaders(tokenDto, response);
-        return new MemberResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl());
+        return new MemberResponseDto(member.getMemberId(), member.getNickname(), member.getProfileImgUrl(), false);
     }
 
     public void refreshToken(RefreshRequestDto requestDto, HttpServletRequest request, HttpServletResponse response) {
