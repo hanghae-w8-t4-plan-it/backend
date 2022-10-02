@@ -38,7 +38,7 @@ PLANIT은 계획을 뜻하는 PLAN 과 행성을 뜻하는 PLANET의 뜻을 포�
 
 ## :santa: Architecture
 
-![](https://velog.velcdn.com/images/jongleee/post/1c9619c1-1460-42f7-8466-635759e6ff31/image.png)
+![Planit 아키텍쳐](https://user-images.githubusercontent.com/81502140/193481909-30765c17-2a8e-419c-bcfa-bea8736ebd18.png)
 
 <br/>
 
