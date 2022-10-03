@@ -61,7 +61,7 @@ ETC : AWS S3 <br/>
 
 ## 🔐 ERD (Entity Relationship Diagram) 
 
-![항해99 8기 4조 실전프로젝트 (1)](https://user-images.githubusercontent.com/81502140/192084706-88c3dcc3-a07a-40b5-b8f7-3981b9ce2799.png)
+![항해99 8기 4조 실전프로젝트(Planit)](https://user-images.githubusercontent.com/81502140/193482178-64596c72-b759-4140-8b09-186d2742c9e3.png)
 <br/>
 
 ## 📝 API (Application Programming Interface) 
