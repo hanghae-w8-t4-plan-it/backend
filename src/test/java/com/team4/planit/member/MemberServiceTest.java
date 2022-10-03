@@ -44,10 +44,6 @@ class MemberServiceTest {
         });
         // then
         assertEquals(DUPLICATED_EMAIL,exception.getErrorCode());
-//        assertEquals(result.getNickname(), requestDto.getNickname());
-//        System.out.println("-----닉네임체크 성공-----");
-//        assertNotNull(result.getMemberId());
-//        System.out.println("아이디 생성 성공");
     }
     @Test
     @Order(2)
