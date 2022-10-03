@@ -11,17 +11,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AWSConfig {
 
-    // 변수명 을 명확하게
-    /**
-     * Key는 중요정보이기 때문에 properties 파일에 저장한 뒤 가져와 사용하는 방법이 좋습니다.
-     */
     @Value("${iamAccessKey}")
     private String iamAccessKey;
     @Value("${iamSecretKey}")
     private String iamSecretKey;
-    //properties 파일에   iamAccessKey=액세스 키
-    //iamSecretKey=시크릿 키 추가
-    private String region = "ap-northeast-2"; // Bucket Region
+    private String region = "ap-northeast-2";
 
     @Bean
     public AmazonS3Client amazonS3Client() {
