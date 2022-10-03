@@ -108,15 +108,15 @@ public class StatisticService {
         }
         List<Concentration> concentrations = concentrationRepository.findAllByMemberAndPeriod(member.getMemberId(), period, startDate, endDate);
         List<Achievement> achievements = achievementRepository.findAllByMemberAndPeriod(member.getMemberId(), period, startDate, endDate);
-        List<ConcentrationRateResponseDto> ConcentrationRateResponseDtoList = new ArrayList<>();
+        List<ConcentrationRateResponseDto> concentrationRateResponseDtoList = new ArrayList<>();
         List<AchievementRateResponseDto> achievementRateResponseDtoList = new ArrayList<>();
         cal.setTime(sdf.parse(startDate));
         for (int i = 0; i < periodName.length; i++) {
-            ConcentrationRateResponseDtoList.add(new ConcentrationRateResponseDto(periodName[i]));
+            concentrationRateResponseDtoList.add(new ConcentrationRateResponseDto(periodName[i]));
             achievementRateResponseDtoList.add(new AchievementRateResponseDto(periodName[i]));
             for (Concentration concentration : concentrations) {
                 if (concentration.getStartDate().equals(startDate)) {
-                    ConcentrationRateResponseDtoList.set(i, ConcentrationRateResponseDto.builder()
+                    concentrationRateResponseDtoList.set(i, ConcentrationRateResponseDto.builder()
                             .concentrationRate(concentration.getConcentrationRate())
                             .startDate(periodName[i])
                             .build()
@@ -135,6 +135,6 @@ public class StatisticService {
             cal.add(periodCode, periodNum);
             startDate = sdf.format(cal.getTime());
         }
-        return new StatisticPeriodResponseDto(achievementRateResponseDtoList, ConcentrationRateResponseDtoList);
+        return new StatisticPeriodResponseDto(achievementRateResponseDtoList, concentrationRateResponseDtoList);
     }
 }
