@@ -74,7 +74,7 @@ public class StatisticService {
         int periodCode = Calendar.DATE;
         int periodNum = 1;
         switch (period) {
-            case "Week":
+            case "week":
                 cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                 endDate = sdf.format(cal.getTime());
                 cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -82,7 +82,7 @@ public class StatisticService {
                 period = "DayTotal";
                 periodName = new String[]{"월", "화", "수", "목", "금", "토", "일"};
                 break;
-            case "Month":
+            case "month":
                 cal.set(Calendar.DAY_OF_MONTH, 1);
                 cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                 startDate = sdf.format(cal.getTime());
@@ -92,7 +92,7 @@ public class StatisticService {
                 periodName = new String[]{"1주", "2주", "3주", "4주", "5주"};
                 periodNum=7;
                 break;
-            case "Year":
+            case "year":
                 cal.set(Integer.parseInt(startDate.substring(0,4)), Calendar.JANUARY, 1);
                 startDate = sdf.format(cal.getTime());
                 cal.add(Calendar.DATE, 365);

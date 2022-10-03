@@ -40,20 +40,12 @@ public class KakaoLoginService {
     private String myKaKaoRestAplKey;
 
     public kakaoResponseDto kakaoLogin(String code) throws JsonProcessingException {
-        // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
-
-        // 2. "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
         KakaoMemberInfoDto kakaoMemberInfo = getKakaoMemberInfo(accessToken);
-
-        // DB 에 중복된 Kakao Id 가 있는지 확인
         String email = kakaoMemberInfo.getEmail();
         Member kakaoMember = memberRepository.findByEmail(email)
                 .orElse(null);
         if (kakaoMember == null) {
-            // 회원가입
-            // username: kakao nickname
-            // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
@@ -64,7 +56,6 @@ public class KakaoLoginService {
             memberRepository.save(kakaoMember);
         }
 
-        // 4. 강제 로그인 처리
         UserDetails userDetails = new UserDetailsImpl(kakaoMember);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -74,18 +65,15 @@ public class KakaoLoginService {
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
-        // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", myKaKaoRestAplKey);
         body.add("redirect_uri", "https://planit-todo.com/login/kakao");
         body.add("code", code);
 
-        // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
@@ -96,7 +84,6 @@ public class KakaoLoginService {
                 String.class
         );
 
-        // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
@@ -104,12 +91,10 @@ public class KakaoLoginService {
     }
 
     private KakaoMemberInfoDto getKakaoMemberInfo(String accessToken) throws JsonProcessingException {
-        // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoMemberInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
