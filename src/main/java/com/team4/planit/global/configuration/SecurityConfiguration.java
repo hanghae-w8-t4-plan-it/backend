@@ -62,7 +62,6 @@ public class SecurityConfiguration {
                 .authorizeRequests()
 
                 .antMatchers("/members/**").permitAll()
-                .antMatchers("/statistic/**").permitAll()
                 .anyRequest().authenticated()
 
 
