@@ -74,7 +74,9 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .from(todoList)
                 .innerJoin(todo)
                 .on(todoList.eq(todo.todoList))
-                .where(todoList.member.eq(member), todoList.dueDate.between(startDate, endDate))
+                .where(todoList.member.eq(member),
+                        todoList.dueDate.between(startDate, endDate),
+                        todo.isAchieved.eq(true))
                 .orderBy(todoList.dueDate.asc())
                 .fetchFirst());
     }
