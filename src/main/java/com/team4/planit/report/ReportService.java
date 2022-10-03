@@ -39,12 +39,15 @@ public class ReportService {
         Integer maxAchievementCount = achievementRepositorySupport.findMaxAchievementCount(member, month);
         List<String> achievementCountTop = achievementRepositorySupport.findAchievementCountTop(member, month, maxAchievementCount);
         Integer maxSumElapsedTime = timerRepositorySupport.findMaxSumElapsedTime(member, month);
+        if(maxSumElapsedTime == null) maxSumElapsedTime = 0;
         List<String> concentrationTimeTop = timerRepositorySupport.findConcentrationTimeTop(member, month, maxSumElapsedTime);
         MostConcentrationTimeResponseDto mostConcentrationTime = concentrationRepositorySupport.findMostConcentrationTime(member, month);
         Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
         Long maxLikesCountByTodoList = likesRepositorySupport.findMaxLikesCountByTodoList(member, month);
+        if(maxLikesCountByTodoList == null) maxLikesCountByTodoList = 0L;
         List<String> topLikeDates = likesRepositorySupport.findTopLikeDates(member, month, maxLikesCountByTodoList);
         Long maxLikesCountByMember = likesRepositorySupport.findMaxLikesCountByMember(member, month);
+        if(maxLikesCountByMember == null) maxLikesCountByMember = 0L;
         List<String> topLikeMembers = likesRepositorySupport.findTopLikeMembers(member, month, maxLikesCountByMember);
         List<String> achievementCombo = achievementRepository.findAllByMemberAndStartDate(member.getMemberId(), month);
         getMaxCombo(achievementCombo);
