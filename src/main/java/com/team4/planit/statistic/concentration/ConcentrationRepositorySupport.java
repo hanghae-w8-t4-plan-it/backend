@@ -34,4 +34,18 @@ public class ConcentrationRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(concentration.concentrationTime.sum().desc())
                 .fetchFirst();
     }
+
+//    public List<ConcentrationRateResponseDto> findAllByMemberAndStartDateAndDay(Member member, String date) {
+//        return queryFactory
+//                .select(Projections.constructor(
+//                        ConcentrationRateResponseDto.class,
+//                        concentration.concentrationRate,
+//                        concentration.startDate.substring(11, 14)
+//                ))
+//                .from(concentration)
+//                .where(concentration.member.eq(member),
+//                        concentration.period.eq("Day"),
+//                        concentration.startDate.contains(date))
+//                .fetch();
+//    }
 }

@@ -12,7 +12,6 @@ public interface ConcentrationRepository extends JpaRepository<Concentration, Lo
     @Query(value = "SELECT c FROM Concentration c where (c.member = :member) and (c.startDate like :date%)\n" +
             "       and (c.period = 'Day')")
     List<Concentration> findAllByMemberAndStartDateAndDay(@Param("member") Member member, @Param("date") String date);
-
     @Query(value = "SELECT c FROM Concentration c where (c.member.memberId = :memberId) and (c.startDate between :startDate" +
             "       and :endDate)  and (c.period = :period)")
     List<Concentration> findAllByMemberAndPeriod(@Param("memberId")Long memberId,  @Param("period")String period ,
