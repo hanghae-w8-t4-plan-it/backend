@@ -52,7 +52,7 @@ ETC : AWS S3 <br/>
 
 ## 💥 Troubleshooting
 
-- count() 값 Integer 타입으로 return 하기 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/count()-%EA%B0%92-Integer-%ED%83%80%EC%9E%85%EC%9C%BC%EB%A1%9C-return-%ED%95%98%EA%B8%B0))
+- count() 값 Integer 타입으로 return 하기 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/count()-%EA%B0%92-Integer-%ED%83%80%EC%9E%85%EC%9C%BC%EB%A1%9C-return-%ED%95%98%EA%B8%B0)
 - dto null값 오류 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/dto-null%EA%B0%92-%EC%98%A4%EB%A5%98)
 - 공동 1등 찾기 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/%EA%B3%B5%EB%8F%99-1%EB%93%B1-%EC%B0%BE%EA%B8%B0)
 - 네이티브쿼리를 쿼리DSL로 변경 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%EC%BF%BC%EB%A6%AC%EB%A5%BC-%EC%BF%BC%EB%A6%ACDSL%EB%A1%9C-%EB%B3%80%EA%B2%BD)
