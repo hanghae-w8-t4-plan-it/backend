@@ -58,6 +58,8 @@ ETC : AWS S3 <br/>
 - 네이티브쿼리를 쿼리DSL로 변경 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%EC%BF%BC%EB%A6%AC%EB%A5%BC-%EC%BF%BC%EB%A6%ACDSL%EB%A1%9C-%EB%B3%80%EA%B2%BD)
 - 멤버 정보 수정시 수정이 되지 않음 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/%EB%A9%A4%EB%B2%84-%EC%A0%95%EB%B3%B4-%EC%88%98%EC%A0%95%EC%8B%9C-%EC%88%98%EC%A0%95%EC%9D%B4-%EB%90%98%EC%A7%80-%EC%95%8A%EC%9D%8C)
 - 상황별 카테고리 조회 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/%EC%83%81%ED%99%A9%EB%B3%84-%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC-%EC%A1%B0%ED%9A%8C)
+- AWS 이미지 업로드시 파일 유형과 용량 제한 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/AWS-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C%EC%8B%9C-%ED%8C%8C%EC%9D%BC-%EC%9C%A0%ED%98%95%EA%B3%BC-%EC%9A%A9%EB%9F%89-%EC%A0%9C%ED%95%9C)
+- CI CD [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/CI-CD)
 
 ## 🔐 ERD (Entity Relationship Diagram) 
 
