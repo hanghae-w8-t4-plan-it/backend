@@ -19,8 +19,8 @@ public class StatisticDayResponseDto {
     public StatisticDayResponseDto(Long memberId, Float achievementRate, Integer achievementCnt, Integer achievementTotalTodoCnt, List<ConcentrationRateResponseDto> concentrationRates) {
         this.memberId = memberId;
         this.achievementRate = achievementRate;
-        this.achievementTotalTodoCnt = achievementTotalTodoCnt;
         this.achievementCnt = achievementCnt;
+        this.achievementTotalTodoCnt = achievementTotalTodoCnt;
         this.concentrationRates = concentrationRates;
     }
 }

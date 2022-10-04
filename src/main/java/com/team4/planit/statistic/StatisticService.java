@@ -36,7 +36,7 @@ public class StatisticService {
         for (int i = 0; i < 24; i++) {
             concentrationRateResponseDtoList.add(new ConcentrationRateResponseDto(String.format("%02d", i)));
             for (Concentration concentration : concentrations) {
-                if (Integer.parseInt(concentration.getStartDate()) == i) {
+                if (Integer.parseInt(concentration.getStartDate().substring(11, 13)) == i) {
                     concentrationRateResponseDtoList.set(i, ConcentrationRateResponseDto.builder()
                             .concentrationRate(concentration.getConcentrationRate())
                             .startDate(concentration.getStartDate())
