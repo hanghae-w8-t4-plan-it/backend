@@ -12,12 +12,14 @@ public class StatisticDayResponseDto {
     private Long memberId;
     private Float achievementRate;
     private Integer achievementCnt;
+    private Integer achievementTotalTodoCnt;
     private List<ConcentrationRateResponseDto> concentrationRates;
 
     @Builder
-    public StatisticDayResponseDto(Long memberId, Float achievementRate, Integer achievementCnt, List<ConcentrationRateResponseDto> concentrationRates) {
+    public StatisticDayResponseDto(Long memberId, Float achievementRate, Integer achievementCnt, Integer achievementTotalTodoCnt, List<ConcentrationRateResponseDto> concentrationRates) {
         this.memberId = memberId;
         this.achievementRate = achievementRate;
+        this.achievementTotalTodoCnt = achievementTotalTodoCnt;
         this.achievementCnt = achievementCnt;
         this.concentrationRates = concentrationRates;
     }

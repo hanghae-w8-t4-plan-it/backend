@@ -6,7 +6,10 @@ import com.team4.planit.statistic.achievement.Achievement;
 import com.team4.planit.statistic.achievement.AchievementRepository;
 import com.team4.planit.statistic.concentration.Concentration;
 import com.team4.planit.statistic.concentration.ConcentrationRepository;
-import com.team4.planit.statistic.dto.*;
+import com.team4.planit.statistic.dto.AchievementRateResponseDto;
+import com.team4.planit.statistic.dto.ConcentrationRateResponseDto;
+import com.team4.planit.statistic.dto.StatisticDayResponseDto;
+import com.team4.planit.statistic.dto.StatisticPeriodResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +34,9 @@ public class StatisticService {
         List<Concentration> concentrations = concentrationRepository.findAllByMemberAndStartDateAndDay(member, date);
         List<ConcentrationRateResponseDto> concentrationRateResponseDtoList = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
-            concentrationRateResponseDtoList.add(new ConcentrationRateResponseDto(date + " " + String.format("%02d", i)));
+            concentrationRateResponseDtoList.add(new ConcentrationRateResponseDto(String.format("%02d", i)));
             for (Concentration concentration : concentrations) {
-                if (Integer.parseInt(concentration.getStartDate().substring(11, 13)) == i) {
+                if (Integer.parseInt(concentration.getStartDate()) == i) {
                     concentrationRateResponseDtoList.set(i, ConcentrationRateResponseDto.builder()
                             .concentrationRate(concentration.getConcentrationRate())
                             .startDate(concentration.getStartDate())
@@ -48,6 +51,7 @@ public class StatisticService {
                         .period("Day")
                         .achievementRate(0f)
                         .achievementCnt(0)
+                        .todoCnt(0)
                         .startDate(date)
                         .todoCnt(0)::build
         );
@@ -56,6 +60,7 @@ public class StatisticService {
                 .memberId(member.getMemberId())
                 .achievementRate(achievement.getAchievementRate())
                 .achievementCnt(achievement.getAchievementCnt())
+                .achievementTotalTodoCnt(achievement.getTodoCnt())
                 .concentrationRates(concentrationRateResponseDtoList)
                 .build();
     }
