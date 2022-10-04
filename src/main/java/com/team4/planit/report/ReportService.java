@@ -42,6 +42,7 @@ public class ReportService {
         if(maxSumElapsedTime == null) maxSumElapsedTime = 0;
         List<String> concentrationTimeTop = timerRepositorySupport.findConcentrationTimeTop(member, month, maxSumElapsedTime);
         MostConcentrationTimeResponseDto mostConcentrationTime = concentrationRepositorySupport.findMostConcentrationTime(member, month);
+        if(mostConcentrationTime == null) mostConcentrationTime = new MostConcentrationTimeResponseDto("0", 0);
         Integer monthlyTotalLikes = likesRepositorySupport.findMonthlyTotalLikes(member, month);
         Long maxLikesCountByTodoList = likesRepositorySupport.findMaxLikesCountByTodoList(member, month);
         if(maxLikesCountByTodoList == null) maxLikesCountByTodoList = 0L;
