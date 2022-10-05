@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(indexes = @Index(name = "c_member", columnList = "member_id"))
 @NoArgsConstructor
 public class Category {
 

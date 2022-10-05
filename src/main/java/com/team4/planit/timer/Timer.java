@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(indexes = {@Index(name = "ti_member", columnList = "member_id"), @Index(name = "ti_last_date", columnList = "timer_last_date")})
 @NoArgsConstructor
 public class Timer{
 
