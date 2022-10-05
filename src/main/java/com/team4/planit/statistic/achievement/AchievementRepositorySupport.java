@@ -31,7 +31,8 @@ public class AchievementRepositorySupport extends QuerydslRepositorySupport {
         return queryFactory
                 .select(achievement.startDate)
                 .from(achievement)
-                .where(achievement.member.eq(member), achievement.startDate.contains(month), achievement.achievementCnt.eq(maxAchievementCount))
+                .where(achievement.member.eq(member), achievement.startDate.contains(month), achievement.achievementCnt.eq(maxAchievementCount), achievement.achievementCnt.gt(0))
+                .limit(3)
                 .fetch();
     }
 }
