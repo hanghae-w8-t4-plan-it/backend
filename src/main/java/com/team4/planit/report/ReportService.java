@@ -37,6 +37,7 @@ public class ReportService {
         Member member = check.validateMember(request);
         List<String> categoryRank = categoryRepositorySupport.findAllCategoryRank(member, month);
         Integer maxAchievementCount = achievementRepositorySupport.findMaxAchievementCount(member, month);
+        if(maxAchievementCount==null) maxAchievementCount=0;
         List<String> achievementCountTop = achievementRepositorySupport.findAchievementCountTop(member, month, maxAchievementCount);
         Integer maxSumElapsedTime = timerRepositorySupport.findMaxSumElapsedTime(member, month);
         if(maxSumElapsedTime == null) maxSumElapsedTime = 0;

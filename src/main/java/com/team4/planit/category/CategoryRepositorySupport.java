@@ -32,6 +32,7 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
                         todo.isAchieved.eq(true))
                 .groupBy(category.categoryName)
                 .orderBy(category.count().desc())
+                .limit(3)
                 .fetch();
     }
 
