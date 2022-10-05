@@ -10,6 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(indexes = {@Index(name = "a_member", columnList = "member_id"), @Index(name = "a_period", columnList = "achievement_period")
+        , @Index(name = "a_start_date", columnList = "achievement_start_date")})
 @NoArgsConstructor
 public class Achievement {
 
