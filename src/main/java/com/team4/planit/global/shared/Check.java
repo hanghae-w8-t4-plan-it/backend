@@ -39,6 +39,10 @@ public class Check {
         return todoRepository.countAllByCategory(category);
     }
 
+    public Integer countByCategory(Category category, String dueDate) {
+        return todoRepository.countAllByCategoryAndDueDate(category, dueDate);
+    }
+
 
     public void checkCategoryAuthor(Member member, Category category) {
         if (!category.getMember().getEmail().equals(member.getEmail())) throw new CustomException(ErrorCode.NOT_AUTHOR);
