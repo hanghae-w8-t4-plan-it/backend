@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     Optional<Likes> findByMemberAndTodoList(Member member, TodoList todoList);
-    Long countByMemberAndTodoList(Member member, TodoList todoList);
 }
