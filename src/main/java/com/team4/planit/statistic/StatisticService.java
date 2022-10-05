@@ -35,15 +35,13 @@ public class StatisticService {
         List<ConcentrationRateResponseDto> concentrationRateResponseDtoList = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             concentrationRateResponseDtoList.add(new ConcentrationRateResponseDto(String.format("%02d", i)));
-            for (Concentration concentration : concentrations) {
-                if (Integer.parseInt(concentration.getStartDate().substring(11, 13)) == i) {
-                    concentrationRateResponseDtoList.set(i, ConcentrationRateResponseDto.builder()
-                            .concentrationRate(concentration.getConcentrationRate())
-                            .startDate(concentration.getStartDate())
-                            .build()
-                    );
-                }
-            }
+        }
+        for (Concentration concentration : concentrations) {
+            concentrationRateResponseDtoList.set(Integer.parseInt(concentration.getStartDate().substring(11, 13)), ConcentrationRateResponseDto.builder()
+                    .concentrationRate(concentration.getConcentrationRate())
+                    .startDate(concentration.getStartDate())
+                    .build()
+            );
         }
         Achievement achievement = achievementRepository.findAllByMemberAndStartDateAndPeriod(member, date, "Day").orElseGet(
                 Achievement.builder()
@@ -95,16 +93,16 @@ public class StatisticService {
                 endDate = sdf.format(cal.getTime());
                 period = "Week";
                 periodName = new String[]{"1주", "2주", "3주", "4주", "5주"};
-                periodNum=7;
+                periodNum = 7;
                 break;
             case "year":
-                cal.set(Integer.parseInt(startDate.substring(0,4)), Calendar.JANUARY, 1);
+                cal.set(Integer.parseInt(startDate.substring(0, 4)), Calendar.JANUARY, 1);
                 startDate = sdf.format(cal.getTime());
                 cal.add(Calendar.DATE, 365);
                 endDate = sdf.format(cal.getTime());
                 period = "Month";
                 periodName = new String[]{"1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"};
-                periodCode=Calendar.MONTH;
+                periodCode = Calendar.MONTH;
                 break;
             default:
                 period = "Month";
