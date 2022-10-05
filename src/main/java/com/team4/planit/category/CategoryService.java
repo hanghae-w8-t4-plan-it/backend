@@ -61,7 +61,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
-            if (check.countByCategory(category) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)) {
+            if (check.countByCategory(category, dueDate) != 0 || category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP)) {
                 categoryDetailResponseDtoList.add(
                         CategoryDetailResponseDto.builder()
                                 .todoListId(todoList.getTodoListId())
@@ -75,8 +75,6 @@ public class CategoryService {
                 );
             }
         }
-
-
         return categoryDetailResponseDtoList;
     }
 
@@ -95,7 +93,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAllByMember(member);
         List<CategoryDetailResponseDto> categoryDetailResponseDtoList = new ArrayList<>();
         for (Category category : categories) {
-            if (category.getIsPublic() && (check.countByCategory(category) != 0 ||
+            if (category.getIsPublic() && (check.countByCategory(category, dueDate) != 0 ||
                     category.getCategoryStatus().equals(CategoryStatusCode.NOT_STOP))
             ) {
                 categoryDetailResponseDtoList.add(

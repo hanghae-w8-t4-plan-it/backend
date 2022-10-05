@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(indexes = @Index(name = "c_member", columnList = "member_id"))
+@Table(indexes = {@Index(name = "c_member", columnList = "member_id"), @Index(name = "c_period", columnList = "concentration_period")})
 @NoArgsConstructor
 public class Concentration {
 
