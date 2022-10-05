@@ -28,8 +28,4 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
             "    and a.period = 'Day'\n" +
             "    order by a.startDate")
     List<String> findAllByMemberAndStartDate(@Param("memberId") Long memberId, @Param("month") String month);
-
-    @Query(value = "select a.achievementCnt from Achievement a where (a.member = :member) and" +
-            "(a.startDate = :dueDate) and (a.period = 'Day')")
-    Integer findAchievementByMemberAndStartDate(@Param("member") Member member, @Param("dueDate") String dueDate);
 }

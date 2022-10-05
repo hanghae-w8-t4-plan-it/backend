@@ -1,12 +1,15 @@
 package com.team4.planit.todoList;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team4.planit.member.Member;
+import com.team4.planit.todoList.dto.DailyTodoListResponseDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.team4.planit.statistic.achievement.QAchievement.achievement;
 import static com.team4.planit.todo.QTodo.todo;
 import static com.team4.planit.todoList.QTodoList.todoList;
 import static com.team4.planit.todoList.like.QLikes.likes;
@@ -33,6 +36,30 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .orderBy(todoList.dueDate.asc())
                 .fetch();
     }
+
+    public DailyTodoListResponseDto findDailyTodoListByMemberAndDueDate(Member member, String dueDate) {
+        return queryFactory
+                .select(Projections.constructor(
+                        DailyTodoListResponseDto.class,
+                        todoList.todoListId,
+                        todoList.dueDate,
+                        todoList.planetType,
+                        todoList.planetSize,
+                        todoList.planetColor,
+                        todoList.planetLevel,
+                        achievement.achievementCnt,
+                        likes.count()
+                ))
+                .from(todoList)
+                .leftJoin(achievement)
+                .on(todoList.member.eq(achievement.member), todoList.dueDate.eq(achievement.startDate))
+                .leftJoin(likes)
+                .on(todoList.eq(likes.todoList))
+                .where(todoList.member.eq(member), todoList.dueDate.eq(dueDate), achievement.period.eq("Day"))
+                .groupBy(todoList.dueDate)
+                .fetchOne();
+    }
+
 
     public List<TodoList> findWeeklyPlanet(Member member, String startDate, String endDate) {
         return queryFactory

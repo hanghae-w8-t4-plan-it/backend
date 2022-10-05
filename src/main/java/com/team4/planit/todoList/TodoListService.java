@@ -54,20 +54,22 @@ public class TodoListService {
         if (memberId != null) member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Member finalMember = member;
-        TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseGet(
-                () -> new TodoList(finalMember, dueDate, (byte) 0));
-        Integer achievementCnt = achievementRepository.findAchievementByMemberAndStartDate(member, dueDate);
-        Long likesCnt = likesRepository.countByMemberAndTodoList(member, todoList);
-        return DailyTodoListResponseDto.builder()
-                .todoListId(todoList.getTodoListId())
-                .dueDate(todoList.getDueDate())
-                .planetType(todoList.getPlanetType())
-                .planetSize(todoList.getPlanetSize())
-                .planetColor(todoList.getPlanetColor())
-                .planetLevel(todoList.getPlanetLevel())
-                .achievementCnt(achievementCnt)
-                .likesCnt(likesCnt)
-                .build();
+        DailyTodoListResponseDto dailyTodoListResponseDto = todoListRepositorySupport.findDailyTodoListByMemberAndDueDate(member, dueDate);
+        if (dailyTodoListResponseDto == null) {
+            TodoList todoList = todoListRepository.findByMemberAndDueDate(member, dueDate).orElseGet(
+                    () -> new TodoList(finalMember, dueDate, (byte) 0));
+            dailyTodoListResponseDto = DailyTodoListResponseDto.builder()
+                    .todoListId(todoList.getTodoListId())
+                    .dueDate(todoList.getDueDate())
+                    .planetType(todoList.getPlanetType())
+                    .planetSize(todoList.getPlanetSize())
+                    .planetColor(todoList.getPlanetColor())
+                    .planetLevel(todoList.getPlanetLevel())
+                    .achievementCnt(0)
+                    .likesCnt(0L)
+                    .build();
+        }
+        return dailyTodoListResponseDto;
     }
 
     @Transactional(readOnly = true)
