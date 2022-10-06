@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(indexes = {@Index(name = "tl_member", columnList = "member_id"), @Index(name = "tl_start_date", columnList = "todo_list_due_date")})
+@Table(indexes = @Index(name = "tl_member_start_date", columnList = "member_id, todo_list_due_date"))
 @NoArgsConstructor
 public class TodoList {
 

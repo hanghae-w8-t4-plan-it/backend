@@ -1,7 +1,6 @@
 package com.team4.planit.statistic.achievement;
 
 import com.team4.planit.member.Member;
-import com.team4.planit.statistic.concentration.Concentration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

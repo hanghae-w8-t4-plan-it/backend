@@ -60,6 +60,7 @@ public class TodoListRepositorySupport extends QuerydslRepositorySupport {
                 .fetchOne();
     }
 
+
     public List<TodoList> findWeeklyPlanet(Member member, String startDate, String endDate) {
         return queryFactory
                 .selectFrom(todoList)
