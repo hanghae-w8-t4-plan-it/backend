@@ -67,6 +67,8 @@ ETC : AWS S3 <br/>
 ![항해99 8기 4조 실전프로젝트(Planit)](https://user-images.githubusercontent.com/81502140/193482178-64596c72-b759-4140-8b09-186d2742c9e3.png)
 <br/>
 
-## 📝 API (Application Programming Interface) 
+## 📝 API (Application Programming Interface)
+
+- API 명세서 [상세보기 - Notion 이동](https://sweltering-cord-bd3.notion.site/1c4a96627bf74288901618a1de857aa5?v=869e5e1976fb4e25992394381aa662c6)
 
 <br/> 
