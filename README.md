@@ -1,12 +1,16 @@
+# 🪐 PLAN IT!
+![big thumb](https://user-images.githubusercontent.com/48500149/194043247-2e5d5751-10da-437b-8892-921b19126b2a.png)
+<br/>
+
 ## 투두작성을 통해 목표를 달성할 수 있게 도와주는 서비스
 PLANIT은 계획을 뜻하는 PLAN 과 행성을 뜻하는 PLANET의 뜻을 포함한 이름으로, 목표를 계획하고 달성하는 기쁨을 줄 수 있도록 도와주는 서비스
-<br/>
-<br/>
 
-## 🔗 Site
-### [Planit](https://planit.co.kr/)
+## 📌 링크
+[Planit 링크](https://planit-todo.com)    
+[Notion 링크](https://www.notion.so/4-d8656c9684f5477c917a81a0747e5144)
 
-<br/>
+## 🎬 프로젝트 소개
+-  우리는 하루에도 수 많은 일들을 합니다. 할 일을 쉽게 기록하고 얼마나 잘 했는지 확인할 수 있는 것이 있다면 얼마나 좋을까요? 우리의 서비스 Planit은 TODO를 수행할 원동력을 제공할 수 있도록 도와주는 여러분들의 친구입니다.
 
 ## 💻 Stack
 <div>
