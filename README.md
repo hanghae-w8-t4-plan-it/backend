@@ -60,6 +60,7 @@ ETC : AWS S3 <br/>
 - 상황별 카테고리 조회 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/%EC%83%81%ED%99%A9%EB%B3%84-%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC-%EC%A1%B0%ED%9A%8C)
 - AWS 이미지 업로드시 파일 유형과 용량 제한 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/AWS-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C%EC%8B%9C-%ED%8C%8C%EC%9D%BC-%EC%9C%A0%ED%98%95%EA%B3%BC-%EC%9A%A9%EB%9F%89-%EC%A0%9C%ED%95%9C)
 - CI CD [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/CI-CD)
+- Index를 활용한 속도 개선 [상세보기 - WIKI 이동](https://github.com/hanghae-w8-t4-plan-it/backend/wiki/Index%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
 
 ## 🔐 ERD (Entity Relationship Diagram) 
 
