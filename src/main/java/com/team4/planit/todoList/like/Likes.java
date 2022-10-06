@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
+@Table(indexes = @Index(name = "likes_todo_list_id", columnList = "todo_list_id"))
 @NoArgsConstructor
 public class Likes {
 

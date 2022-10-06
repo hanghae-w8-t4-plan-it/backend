@@ -10,8 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(indexes = {@Index(name = "t_category", columnList = "category_id"), @Index(name = "t_due_date", columnList = "todo_due_date"),
-        @Index(name = "t_is_achieved", columnList = "todo_is_achieved")})
+@Table(indexes = {@Index(name = "t_category", columnList = "category_id"),
+        @Index(name = "t_due_date", columnList = "todo_due_date")})
 @NoArgsConstructor
 public class Todo {
 

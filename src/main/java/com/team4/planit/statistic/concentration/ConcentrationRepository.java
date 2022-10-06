@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ConcentrationRepository extends JpaRepository<Concentration, Long> {
-    @Query(value = "SELECT c FROM Concentration c where (c.member = :member) and (c.period = 'Day')" +
-            "and (c.startDate like :date%)")
+    @Query(value = "SELECT c FROM Concentration c where (c.member = :member) and (c.period = 'Day') and " +
+            "(c.startDate like :date%)")
     List<Concentration> findAllByMemberAndStartDateAndDay(@Param("member") Member member, @Param("date") String date);
     @Query(value = "SELECT c FROM Concentration c where (c.member.memberId = :memberId) and (c.startDate between :startDate" +
             "       and :endDate)  and (c.period = :period)")
