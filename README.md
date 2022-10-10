@@ -81,6 +81,16 @@ ETC : AWS S3 <br/>
 ## 📝 API (Application Programming Interface)
 
 - API 명세서 [상세보기 - Notion 이동](https://sweltering-cord-bd3.notion.site/1c4a96627bf74288901618a1de857aa5?v=869e5e1976fb4e25992394381aa662c6)
+<details>
+<summary>해결방안</summary>
+<div markdown="1">
+
 ![image](https://user-images.githubusercontent.com/108917552/194852598-471889d3-585a-492d-b8dd-c60004ab8176.png)
+</details>
+<details>
+<summary>해결방안</summary>
+<div markdown="1">
+![image](https://user-images.githubusercontent.com/108917552/194852988-19aa8d00-5e5c-4f5f-b33f-4a0531bd1008.png)
+</details>
 
 <br/> 
