@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [ main ]
     types: [closed]
+  push:
+    branches: [ main ]
     
 env:
   S3_BUCKET_NAME: god1hyuk
