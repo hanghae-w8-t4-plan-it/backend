@@ -6,7 +6,7 @@ on:
     types: [closed]
     
 env:
-  S3_BUCKET_NAME: mysparta00
+  S3_BUCKET_NAME: god1hyuk
 
 jobs:
   build:
@@ -92,9 +92,9 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.IAMSECRETKEY }}
       run: 
         aws deploy create-deployment 
-        --application-name planit
-        --deployment-group-name planit
+        --application-name god1hyuk
+        --deployment-group-name god1hyuk
         --file-exists-behavior OVERWRITE 
-        --s3-location bucket=mysparta00,bundleType=zip,key=planit.zip
+        --s3-location bucket=god1hyuk,bundleType=zip,key=planit.zip
         --region ap-northeast-2
         --ignore-application-stop-failures
