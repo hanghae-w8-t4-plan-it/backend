@@ -93,10 +93,10 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.IAMACCESSKEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.IAMSECRETKEY }}
       run: 
-        aws deploy create-deployment 
+        aws deploy create-deployment
         --application-name god1hyuk
         --deployment-group-name god1hyuk
-        --file-exists-behavior OVERWRITE 
+        --file-exists-behavior OVERWRITE
         --s3-location bucket=god1hyuk,bundleType=zip,key=planit.zip
         --region ap-northeast-2
         --ignore-application-stop-failures
